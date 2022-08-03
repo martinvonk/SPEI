@@ -72,7 +72,6 @@ def spi(series, dist=None):
 
     if dist == None:
         dist = gamma
-        print('Please note that the Gamma distribution is not defined for 0 (no precipitation)')
 
     return get_si_ppf(series, dist)
 
