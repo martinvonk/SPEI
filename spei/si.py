@@ -1,7 +1,7 @@
 from pandas import Series
 from numpy import linspace
 from scipy.stats import norm, gamma, fisk
-from util import check_series
+from .utils import check_series
 
 
 def get_si_ppf(series, dist, sgi=False):

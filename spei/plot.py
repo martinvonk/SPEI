@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 from numpy import meshgrid, linspace
 from calendar import month_name
-from utils import check_series
+from .utils import check_series
 
-def si(si, figsize=(8, 4)):
+def si(si, figsize=(8, 4), ax=None):
 
-    _, ax = plt.subplots(figsize=figsize)
+    if ax is None:
+        _, ax = plt.subplots(figsize=figsize)
 
     ax.plot(si, color='k', label='SGI')
     ax.axhline(0, linestyle="--", color="k")
