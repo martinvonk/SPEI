@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from numpy import meshgrid, linspace
 from calendar import month_name
-
+from util import check_series
 
 def si(si, figsize=(8, 4)):
 
@@ -28,6 +28,8 @@ def si(si, figsize=(8, 4)):
 
 
 def dist(series, dist, cumulative=False, cmap='Set3', figsize=(8, 10), legend=True):
+
+    check_series(series)
 
     _, axs = plt.subplots(4, 3, figsize=figsize, sharey=True, sharex=True)
     ax = axs.ravel()

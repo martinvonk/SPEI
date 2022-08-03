@@ -1,9 +1,12 @@
 from pandas import Series
 from numpy import linspace
 from scipy.stats import norm, gamma, fisk
+from util import check_series
 
 
 def get_si_ppf(series, dist, sgi=False):
+
+    check_series(series)
 
     si = Series(index=series.index, dtype='float')
     for month in range(1, 13):
