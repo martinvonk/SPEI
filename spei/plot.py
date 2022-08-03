@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from numpy import meshgrid, linspace
 from calendar import month_name
-from util import check_series
+from utils import check_series
 
 def si(si, figsize=(8, 4)):
 
