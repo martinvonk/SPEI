@@ -5,7 +5,7 @@ Note that this package does not calculate potential evaporation, we refer to [py
 
 
 ## To Do
-- [x] Check Gamma distribution for x=0
+- [ ] Check distribution correction for x = 0
 
 - [ ] Check SGI for other distributions
 
