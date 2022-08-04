@@ -16,7 +16,7 @@ def get_si_ppf(series, dist, sgi=False):
             pmax = 1 - pmin
             cdf = linspace(pmin, pmax, data.size)
         else:
-            *pars, loc, scale = dist.fit(data)
+            *pars, loc, scale = dist.fit(data, scale=data.std())
             cdf = dist.cdf(data, pars, loc=loc, scale=scale)
         ppf = norm.ppf(cdf)
         si.loc[data.index] = ppf

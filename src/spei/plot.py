@@ -42,16 +42,16 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
 
     for i, month in enumerate(range(1, 13)):
         data = series[series.index.month == month].sort_values()
-        *pars, loc, scale = dist.fit(data)
+        *pars, loc, scale = dist.fit(data, scale=data.std())
         ax[i].hist(data, color=c[i], alpha=0.2, density=True,
                    cumulative=cumulative, label='Density')
         if cumulative:
             cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-            ax[i].plot(data, cdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.2f}\n{scale=:0.2f}')
+            ax[i].plot(data, cdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
         else:
             x = linspace(min(data), max(data))
             pdf = dist.pdf(x, pars, loc=loc, scale=scale)
-            ax[i].plot(x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.2f}\n{scale=:0.2f}')
+            ax[i].plot(x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
         ax[i].set_title(month_name[month])
         if legend:
             ax[i].legend()
