@@ -15,4 +15,4 @@ Note that this package does not calculate potential evaporation, we refer to [py
 
 - [ ] Setup package in nice way
 
-- [ ] Add docstring
+- [x] Add docstring

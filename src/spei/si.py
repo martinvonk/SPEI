@@ -56,7 +56,7 @@ def spi(series, dist=None):
     series: pandas.Series
         Pandas time series of the precipitation. Time series index
         should be a pandas DatetimeIndex.
-    dist: scipy.stats continuous distribution
+    dist: scipy.stats._continuous_distns
         Can be any continuous distribution from the scipy.stats library.
         However, for the SPI generally the Gamma probability density
         function is recommended. Other appropriate choices could be the
@@ -87,7 +87,7 @@ def spei(series, dist=None):
     series: pandas.Series
         Pandas time series of the precipitation. Time series index
         should be a pandas DatetimeIndex.
-    dist: scipy.stats continuous distribution
+    dist: scipy.stats._continuous_distns
         Can be any continuous distribution from the scipy.stats library.
         However, for the SPEI generally the log-logistic (fisk) probability
         density function is recommended. Other appropriate choices could be
