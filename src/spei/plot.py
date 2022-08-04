@@ -28,27 +28,30 @@ def si(si, figsize=(8, 4), ax=None):
     return ax
 
 
-def dist(series, dist, cumulative=False, cmap='Set3', figsize=(8, 10), legend=True):
+def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True):
 
     check_series(series)
 
     _, axs = plt.subplots(4, 3, figsize=figsize, sharey=True, sharex=True)
     ax = axs.ravel()
-    cm = plt.get_cmap(cmap)
+    if cmap is not None:
+        cm = plt.get_cmap(cmap, 12)
+        c = [cm(i) for i in range(12)]
+    else:
+        c = ['k' for _ in range(12)]
 
     for i, month in enumerate(range(1, 13)):
         data = series[series.index.month == month].sort_values()
         *pars, loc, scale = dist.fit(data)
-        cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-        ax[i].hist(data, color=cm(i), alpha=0.2, density=True,
-                   cumulative=cumulative, label=f'Density')
+        ax[i].hist(data, color=c[i], alpha=0.2, density=True,
+                   cumulative=cumulative, label='Density')
         if cumulative:
-            ax[i].plot(data, cdf, color=cm(
-                i), label=f'{loc=:0.2f}\n{scale=:0.2f}')
+            cdf = dist.cdf(data, pars, loc=loc, scale=scale)
+            ax[i].plot(data, cdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.2f}\n{scale=:0.2f}')
         else:
             x = linspace(min(data), max(data))
-            ax[i].plot(x, dist.pdf(x, pars, loc=loc, scale=scale), color=cm(
-                i), label=f'{dist.name.capitalize()} fit:\n{loc=:0.2f}\n{scale=:0.2f}')
+            pdf = dist.pdf(x, pars, loc=loc, scale=scale)
+            ax[i].plot(x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.2f}\n{scale=:0.2f}')
         ax[i].set_title(month_name[month])
         if legend:
             ax[i].legend()
