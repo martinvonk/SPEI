@@ -5,14 +5,15 @@ Note that this package does not calculate potential evaporation, we refer to [py
 
 
 ## To Do
-- [ ] Check distribution correction for x = 0
-
-- [ ] Check SGI for other distributions
-
-- [x] Add Visualisation with Matplotlib
-
-- [ ] Add way to fit best distribution on dataset with Scipy, Fitter or distfit
 
 - [ ] Setup package in nice way
 
+- [ ] Check SGI for other distributions
+
+- [ ] Check distribution correction for x = 0
+
+- [ ] Add way to identify best distribution on time series (with Scipy, Fitter or distfit)
+
 - [x] Add docstring
+
+- [x] Add Visualisation with Matplotlib
