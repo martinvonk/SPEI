@@ -3,6 +3,8 @@ A simple Python package to calculate drought indices for time series such as the
 
 Note that this package does not calculate potential evaporation, we refer to [pyet](https://github.com/phydrus/pyet) for that. All time series have to be calculated in advance and be provided as a pandas Series.
 
+## Installation
+Download the GitHub code to your computer and install using pip install -e .
 
 ## To Do
 
@@ -13,6 +15,8 @@ Note that this package does not calculate potential evaporation, we refer to [py
 - [ ] Check distribution correction for x = 0
 
 - [ ] Add way to identify best distribution on time series (with Scipy, Fitter or distfit)
+
+- [x] Add examples
 
 - [x] Add docstring
 

@@ -93,11 +93,15 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
             cdf = dist.cdf(data, pars, loc=loc, scale=scale)
             ax[i].plot(data, cdf, color=c[i],
                        label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
+            if i in range(0, 12, 3):
+                ax[i].set_ylabel('Cumulative Probability')
         else:
             x = linspace(min(data), max(data))
             pdf = dist.pdf(x, pars, loc=loc, scale=scale)
             ax[i].plot(
                 x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
+            if i in range(0, 12, 3):
+                ax[i].set_ylabel('Probability Density')
         ax[i].set_title(month_name[month])
         if legend:
             ax[i].legend()
