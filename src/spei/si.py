@@ -1,6 +1,6 @@
 from pandas import Series
 from numpy import linspace
-from scipy.stats import norm, gamma, fisk
+from scipy.stats import norm, gamma, fisk, genextreme
 from .utils import check_series
 
 
@@ -107,5 +107,38 @@ def spei(series, dist=None):
 
     if dist == None:
         dist = fisk  # log-logistic
+
+    return get_si_ppf(series, dist)
+
+
+def ssfi(series, dist=None):
+    """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
+
+    Parameters
+    ----------
+    series: pandas.Series
+        Pandas time series of the precipitation. Time series index
+        should be a pandas DatetimeIndex.
+    dist: scipy.stats._continuous_distns
+        Can be any continuous distribution from the scipy.stats library.
+        However, for the SSFI generally the gamma probability density
+        function is recommended. Other appropriate choices could be the
+        normal, lognormal, pearsonIII, GEV, Gen-Logistic or Tweedie
+        distribution.
+
+    Returns
+    -------
+    pandas.Series
+
+    References
+    ----------
+    .. [ssfi_2020] Tijdeman, E., Stahl, K., & Tallaksen, L. M.:
+       Drought characteristics derived based on the Standardized
+       Streamflow Index: A large sample comparison for parametric
+       and nonparametric methods. Water Resources Research, 56, 2020.
+    """
+
+    if dist == None:
+        dist = genextreme
 
     return get_si_ppf(series, dist)
