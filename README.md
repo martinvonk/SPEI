@@ -16,13 +16,13 @@ To get the development version download the GitHub code to your computer. Use cd
 
 ## To Do
 
-- [ ] Setup package in nice way
-
 - [ ] Check SGI for other distributions
 
 - [ ] Check distribution correction for x = 0
 
 - [ ] Add way to identify best distribution on time series (with Scipy, Fitter or distfit)
+
+- [x] Setup package in nice way
 
 - [x] Add examples
 
