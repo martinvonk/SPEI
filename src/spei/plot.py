@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
+from calendar import month_name, month_abbr
 from numpy import meshgrid, linspace
-from calendar import month_name
+from scipy.stats import gaussian_kde
 from .utils import check_series
 
 
@@ -98,8 +99,7 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
         else:
             x = linspace(min(data), max(data))
             pdf = dist.pdf(x, pars, loc=loc, scale=scale)
-            ax[i].plot(
-                x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
+            ax[i].plot(x, pdf, color=c[i], label=f'{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}')
             if i in range(0, 12, 3):
                 ax[i].set_ylabel('Probability Density')
         ax[i].set_title(month_name[month])
@@ -107,3 +107,42 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
             ax[i].legend()
 
     return axs
+
+def monthly_density(si, year, months=[], cmap='tab10', ax=None):
+    """Plot the monthly kernel-density estimate for a specific year.
+
+    Parameters
+    ----------
+    si : pandas.Series
+        Series of the standardized index
+    year : int
+        Year of interest
+    months : list, optional
+        List of ints
+    cmap : str, optional
+        matlotlib colormap, by default 'tab10'
+    ax : matplotlib.Axes, optional
+        Axes handle, by default None which create a new axes
+
+    Returns
+    -------
+    matplotlib.Axes
+        Axes handle
+    """
+    if ax is None:
+        _, ax = plt.subplots(figsize=(6,4))
+    cm = plt.get_cmap(cmap, 12)
+
+    ind = linspace(-3.3, 3.3, 1000)
+    for month in months:
+        gkde_all = gaussian_kde(si[(si.index.month == month)])
+        gkde_spec = gaussian_kde(si[(si.index.month == month) & (si.index.year == year)])
+        ax.plot(ind, gkde_all.evaluate(ind), c=cm(month), label=f'{month_abbr[month]} All' )
+        ax.plot(ind, gkde_spec.evaluate(ind), c=cm(month), label=f'{month_abbr[month]} {year}', linestyle='--',)
+    ax.set_ylabel('Kernel-Density Estimate')
+    ax.set_xlim(ind[0], ind[-1])
+    ax.set_ylim(bottom=0)
+    ax.legend()
+    ax.grid()
+
+    return ax
