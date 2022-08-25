@@ -1,5 +1,6 @@
 
 *.pyc
+*.png
 
 /src/spei.egg-info
 /dist
