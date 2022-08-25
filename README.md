@@ -14,18 +14,10 @@ To get the development version download the GitHub code to your computer. Use cd
 
 `pip install -e .`
 
-## To Do
-
-- [ ] Check SGI for other distributions
-
-- [ ] Check distribution correction for x = 0
+## Nice to haves in the future:
 
 - [ ] Add way to identify best distribution on time series (with Scipy, Fitter or distfit)
 
-- [x] Setup package in nice way
+- [ ] Check SGI for other distributions
 
-- [x] Add examples
-
-- [x] Add docstring
-
-- [x] Add Visualisation with Matplotlib
+Feel free to contribute!

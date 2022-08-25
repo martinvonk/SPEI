@@ -4,7 +4,7 @@ from scipy.stats import norm, gamma, fisk, genextreme
 from .utils import check_series
 
 
-def get_si_ppf(series, dist, sgi=False):
+def get_si_ppf(series, dist, sgi=False, prob_zero=False):
 
     check_series(series)
 
@@ -16,8 +16,15 @@ def get_si_ppf(series, dist, sgi=False):
             pmax = 1 - pmin
             cdf = linspace(pmin, pmax, data.size)
         else:
-            *pars, loc, scale = dist.fit(data, scale=data.std())
-            cdf = dist.cdf(data, pars, loc=loc, scale=scale)
+            if prob_zero:
+                p0 = (data == 0.).sum() / len(data)
+                pars, loc, scale = dist.fit(data[data != 0.], scale=data.std())
+                cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
+                cdf = p0 + (1 - p0) * cdf_sub
+                cdf[data == 0.] = p0
+            else:
+                *pars, loc, scale = dist.fit(data, scale=data.std())
+                cdf = dist.cdf(data, pars, loc=loc, scale=scale)
         ppf = norm.ppf(cdf)
         si.loc[data.index] = ppf
 
@@ -48,7 +55,7 @@ def sgi(series):
     return get_si_ppf(series, None, sgi=True)
 
 
-def spi(series, dist=None):
+def spi(series, dist=None, prob_zero=False):
     """Method to compute the Standardized Precipitation Index [spi_2002]_.
 
     Parameters
@@ -61,6 +68,9 @@ def spi(series, dist=None):
         However, for the SPI generally the Gamma probability density
         function is recommended. Other appropriate choices could be the
         lognormal, log-logistic or PearsonIII distribution.
+    prob_zero: bool
+        Option to correct the distribution if x=0 is not in probability
+        density function. E.g. the case with the Gamma distriubtion.
 
     Returns
     -------
@@ -76,7 +86,7 @@ def spi(series, dist=None):
     if dist == None:
         dist = gamma
 
-    return get_si_ppf(series, dist)
+    return get_si_ppf(series, dist, prob_zero)
 
 
 def spei(series, dist=None):
