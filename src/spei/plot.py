@@ -143,6 +143,6 @@ def monthly_density(si, year, months=[], cmap='tab10', ax=None):
     ax.set_xlim(ind[0], ind[-1])
     ax.set_ylim(bottom=0)
     ax.legend()
-    ax.grid()
+    ax.grid(True)
 
     return ax
