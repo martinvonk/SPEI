@@ -155,4 +155,4 @@ def monthly_density(si, years=[], months=[], cmap="tab20c", ax=None):
     ax.legend()
     ax.grid(True)
 
-    return ax, cm
+    return ax
