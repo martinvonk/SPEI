@@ -2,7 +2,7 @@ from calendar import month_name, month_abbr
 from itertools import cycle
 from numpy import meshgrid, linspace, array, reshape
 from scipy.stats import gaussian_kde
-from .utils import check_series
+from .utils import check_series, dist_test
 import matplotlib.pyplot as plt
 
 
@@ -47,7 +47,15 @@ def si(si, bound=3, figsize=(8, 4), ax=None):
     return ax
 
 
-def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True):
+def dist(
+    series,
+    dist,
+    cumulative=False,
+    test_dist=True,
+    cmap=None,
+    figsize=(8, 10),
+    legend=True,
+):
     """Plot the (cumulative) histogram and scipy fitted distribution
     for the time series on a monthly basis.
 
@@ -61,6 +69,9 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
     cumulative : bool, optional
         If True plots cumulative histogram instead of probability
         density histogram, by default False
+    test_dist : bool, optional
+        If True, fit the distribution with the two-sided
+        Kolmogorov-Smirnov test for goodness of fit.
     cmap : str, optional
         Matplotlib colormap name to use in subplots, by default None
         which uses black for all subplots.
@@ -87,7 +98,6 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
 
     for i, month in enumerate(range(1, 13)):
         data = series[series.index.month == month].sort_values()
-        *pars, loc, scale = dist.fit(data, scale=data.std())
         ax[i].hist(
             data,
             color=c[i],
@@ -96,13 +106,19 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
             cumulative=cumulative,
             label="Density",
         )
+        if test_dist:
+            _, p_value, _, *pars, loc, scale = dist_test(data, dist)
+            label = f"{dist.name.capitalize()} KS:\n{p_value=:0.2f}"
+        else:
+            *pars, loc, scale = dist.fit(data, scale=data.std())
+            label = f"{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}"
         if cumulative:
             cdf = dist.cdf(data, pars, loc=loc, scale=scale)
             ax[i].plot(
                 data,
                 cdf,
                 color=c[i],
-                label=f"{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}",
+                label=label,
             )
             if i in range(0, 12, 3):
                 ax[i].set_ylabel("Cumulative Probability")
@@ -113,7 +129,7 @@ def dist(series, dist, cumulative=False, cmap=None, figsize=(8, 10), legend=True
                 x,
                 pdf,
                 color=c[i],
-                label=f"{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}",
+                label=label,
             )
             if i in range(0, 12, 3):
                 ax[i].set_ylabel("Probability Density")
