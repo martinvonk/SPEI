@@ -8,7 +8,7 @@ def get_si_ppf(series, dist, sgi=False, prob_zero=False):
 
     check_series(series)
 
-    si = Series(index=series.index, dtype='float')
+    si = Series(index=series.index, dtype="float")
     for month in range(1, 13):
         data = series[series.index.month == month].sort_values()
         if sgi:
@@ -17,11 +17,11 @@ def get_si_ppf(series, dist, sgi=False, prob_zero=False):
             cdf = linspace(pmin, pmax, data.size)
         else:
             if prob_zero:
-                p0 = (data == 0.).sum() / len(data)
-                pars, loc, scale = dist.fit(data[data != 0.], scale=data.std())
+                p0 = (data == 0.0).sum() / len(data)
+                pars, loc, scale = dist.fit(data[data != 0.0], scale=data.std())
                 cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
                 cdf = p0 + (1 - p0) * cdf_sub
-                cdf[data == 0.] = p0
+                cdf[data == 0.0] = p0
             else:
                 *pars, loc, scale = dist.fit(data, scale=data.std())
                 cdf = dist.cdf(data, pars, loc=loc, scale=scale)
@@ -67,7 +67,7 @@ def spi(series, dist=None, prob_zero=False):
         Can be any continuous distribution from the scipy.stats library.
         However, for the SPI generally the Gamma probability density
         function is recommended. Other appropriate choices could be the
-        lognormal, log-logistic or PearsonIII distribution.
+        lognormal, log-logistic (fisk) or PearsonIII distribution.
     prob_zero: bool
         Option to correct the distribution if x=0 is not in probability
         density function. E.g. the case with the Gamma distriubtion.
@@ -133,8 +133,7 @@ def ssfi(series, dist=None):
         Can be any continuous distribution from the scipy.stats library.
         However, for the SSFI generally the gamma probability density
         function is recommended. Other appropriate choices could be the
-        normal, lognormal, pearsonIII, GEV, Gen-Logistic or Tweedie
-        distribution.
+        normal, lognormal, pearsonIII, GEV or  Gen-Logistic distribution.
 
     Returns
     -------
