@@ -26,7 +26,7 @@ To get the development version download the GitHub code to your computer. Use cd
 
 ## Nice to haves in the future:
 
-- [ ] Add way to identify best distribution on time series (with Scipy, Fitter or distfit)
+- [ ] Improve notebook documentation
 
 - [ ] Check SGI for other distributions
 
