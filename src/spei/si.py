@@ -1,10 +1,16 @@
+from typing import Any
 from pandas import Series
 from numpy import linspace
 from scipy.stats import norm, gamma, fisk, genextreme
 from .utils import check_series
 
 
-def get_si_ppf(series, dist, sgi=False, prob_zero=False):
+def get_si_ppf(
+    series: Series,
+    dist: Any,
+    sgi: bool = False,
+    prob_zero: bool = False,
+) -> Series:
 
     check_series(series)
 
@@ -31,7 +37,7 @@ def get_si_ppf(series, dist, sgi=False, prob_zero=False):
     return si
 
 
-def sgi(series):
+def sgi(series: Series) -> Series:
     """Method to compute the Standardized Groundwater Index [sgi_2013]_.
     Same method as in Pastas.
 
@@ -55,7 +61,7 @@ def sgi(series):
     return get_si_ppf(series, None, sgi=True)
 
 
-def spi(series, dist=None, prob_zero=False):
+def spi(series: Series, dist: Any = None, prob_zero: bool = False) -> Series:
     """Method to compute the Standardized Precipitation Index [spi_2002]_.
 
     Parameters
@@ -89,7 +95,7 @@ def spi(series, dist=None, prob_zero=False):
     return get_si_ppf(series, dist, prob_zero)
 
 
-def spei(series, dist=None):
+def spei(series: Series, dist: Any = None) -> Series:
     """Method to compute the Standardized Precipitation Evaporation Index [spei_2010]_.
 
     Parameters
@@ -121,7 +127,7 @@ def spei(series, dist=None):
     return get_si_ppf(series, dist)
 
 
-def ssfi(series, dist=None):
+def ssfi(series: Series, dist: Any = None) -> Series:
     """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
 
     Parameters
