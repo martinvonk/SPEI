@@ -1,12 +1,15 @@
-from calendar import month_name, month_abbr
+import matplotlib.pyplot as plt
+
+from typing import Any
 from itertools import cycle
+from calendar import month_name, month_abbr
+from pandas import Series
 from numpy import meshgrid, linspace, array, reshape
 from scipy.stats import gaussian_kde
 from .utils import check_series, dist_test
-import matplotlib.pyplot as plt
 
 
-def si(si, bound=3, figsize=(8, 4), ax=None):
+def si(si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Any = None) -> Any:
     """Plot the standardized index values as a time series.
 
     Parameters
@@ -48,14 +51,14 @@ def si(si, bound=3, figsize=(8, 4), ax=None):
 
 
 def dist(
-    series,
-    dist,
-    cumulative=False,
-    test_dist=True,
-    cmap=None,
-    figsize=(8, 10),
-    legend=True,
-):
+    series: Series,
+    dist: Any,
+    cumulative: bool = False,
+    test_dist: bool = True,
+    cmap: str = None,
+    figsize: tuple = (8, 10),
+    legend: bool = True,
+) -> Any:
     """Plot the (cumulative) histogram and scipy fitted distribution
     for the time series on a monthly basis.
 
@@ -140,7 +143,13 @@ def dist(
     return axs
 
 
-def monthly_density(si, years=[], months=[], cmap="tab20c", ax=None):
+def monthly_density(
+    si: Series,
+    years: list[int] = [],
+    months: list[int] = [],
+    cmap: str = "tab20c",
+    ax: Any = None,
+) -> Any:
     """Plot the monthly kernel-density estimate for a specific year.
 
     Parameters

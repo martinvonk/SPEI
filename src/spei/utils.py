@@ -1,3 +1,4 @@
+from typing import Any
 from pandas import Series, DataFrame
 from scipy.stats import (
     norm,
@@ -12,7 +13,7 @@ from scipy.stats import (
 )
 
 
-def check_series(series):
+def check_series(series: Series) -> None:
     """Check if provided time series is of type pandas.Series
 
     Parameters
@@ -35,7 +36,7 @@ def check_series(series):
             raise TypeError(f"Please provide a Pandas Series instead of {type(series)}")
 
 
-def dist_test(data, dist, N=100, alpha=0.05):
+def dist_test(data: Series, dist: Any, N: int = 100, alpha: float = 0.05) -> Any:
     """Fit a distribution and perform the two-sided
     Kolmogorov-Smirnov test for goodness of fit. The
     null hypothesis is that the data and distributions
@@ -75,7 +76,9 @@ def dist_test(data, dist, N=100, alpha=0.05):
     return dist.name, ks, rej_h0, *fitted
 
 
-def dists_test(data, distributions=None, N=100, alpha=0.05):
+def dists_test(
+    data: Series, distributions: list[Any] = None, N: int = 100, alpha: float = 0.05
+) -> DataFrame:
     """Fit a list of distribution and perform the
     two-sided Kolmogorov-Smirnov test for goodness
     of fit. The null hypothesis is that the data and
