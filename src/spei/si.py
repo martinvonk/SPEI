@@ -47,7 +47,7 @@ def get_si_ppf(
         else:
             if prob_zero:
                 p0 = (data == 0.0).sum() / len(data)
-                pars, loc, scale = dist.fit(data[data != 0.0], scale=data.std())
+                *pars, loc, scale = dist.fit(data[data != 0.0], scale=data.std())
                 cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
                 cdf = p0 + (1 - p0) * cdf_sub
                 cdf[data == 0.0] = p0
@@ -117,7 +117,7 @@ def spi(
     if dist is None:
         dist = gamma
 
-    return get_si_ppf(series, dist, prob_zero)
+    return get_si_ppf(series, dist, prob_zero=prob_zero)
 
 
 def spei(series: Series, dist: Optional[ContinuousDist] = None) -> Series:
