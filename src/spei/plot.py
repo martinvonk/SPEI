@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-from typing import Any
 from itertools import cycle
 from calendar import month_name, month_abbr
 from pandas import Series
@@ -8,8 +7,14 @@ from numpy import meshgrid, linspace, array, reshape
 from scipy.stats import gaussian_kde
 from .utils import check_series, dist_test
 
+# Type Hinting
+from typing import List, Optional
+from .typing import Axes, ContinuousDist
 
-def si(si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Any = None) -> Any:
+
+def si(
+    si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Axes = None
+) -> Axes:
     """Plot the standardized index values as a time series.
 
     Parameters
@@ -52,13 +57,13 @@ def si(si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Any = None) 
 
 def dist(
     series: Series,
-    dist: Any,
+    dist: ContinuousDist,
     cumulative: bool = False,
     test_dist: bool = True,
-    cmap: str = None,
+    cmap: Optional[str] = None,
     figsize: tuple = (8, 10),
     legend: bool = True,
-) -> Any:
+) -> Axes:
     """Plot the (cumulative) histogram and scipy fitted distribution
     for the time series on a monthly basis.
 
@@ -145,21 +150,21 @@ def dist(
 
 def monthly_density(
     si: Series,
-    years: list[int] = [],
-    months: list[int] = [],
+    years: Optional[List[int]] = None,
+    months: Optional[List[int]] = None,
     cmap: str = "tab20c",
-    ax: Any = None,
-) -> Any:
+    ax: Optional[Axes] = None,
+) -> Axes:
     """Plot the monthly kernel-density estimate for a specific year.
 
     Parameters
     ----------
     si : pandas.Series
         Series of the standardized index
-    year : list
+    year : list, optional
         List of years as int
-    months : list
-        List of months as int
+    months : list, optional
+        List of months as int, by default all months
     cmap : str, optional
         matlotlib colormap, by default 'tab10'
     ax : matplotlib.Axes, optional
@@ -172,6 +177,13 @@ def monthly_density(
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(6, 4))
+
+    if years is None:
+        years = []
+
+    if months is None:
+        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
     cm = plt.get_cmap(cmap, 20)
     colors = reshape(array([cm(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
     lsts = cycle(["--", "-.", ":"])

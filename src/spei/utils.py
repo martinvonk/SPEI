@@ -1,4 +1,3 @@
-from typing import Any
 from pandas import Series, DataFrame
 from scipy.stats import (
     norm,
@@ -11,6 +10,10 @@ from scipy.stats import (
     genlogistic,
     kstest,
 )
+
+# Type Hinting
+from typing import List, Optional, Tuple
+from .typing import ArrayLike, ContinuousDist
 
 
 def check_series(series: Series) -> None:
@@ -30,13 +33,16 @@ def check_series(series: Series) -> None:
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
             raise TypeError(
-                f"Please convert pandas.DataFrame to a pandas.Series using .squeeze()"
+                "Please convert pandas.DataFrame to a"
+                "pandas.Series using DataFrame.squeeze()"
             )
         else:
             raise TypeError(f"Please provide a Pandas Series instead of {type(series)}")
 
 
-def dist_test(data: Series, dist: Any, N: int = 100, alpha: float = 0.05) -> Any:
+def dist_test(
+    data: Series, dist: List[ContinuousDist], N: int = 100, alpha: float = 0.05
+) -> Tuple[str, float, bool, ArrayLike]:
     """Fit a distribution and perform the two-sided
     Kolmogorov-Smirnov test for goodness of fit. The
     null hypothesis is that the data and distributions
@@ -47,7 +53,7 @@ def dist_test(data: Series, dist: Any, N: int = 100, alpha: float = 0.05) -> Any
     ----------
     data : array_like
         1-D array of observations of random variables
-    dist: scipy.stats._continuous_distns
+    dist: scipy.stats.rv_continuous
         Can be any continuous distribution from the
         scipy.stats library.
     N : int, optional
@@ -61,7 +67,7 @@ def dist_test(data: Series, dist: Any, N: int = 100, alpha: float = 0.05) -> Any
 
     Returns
     -------
-    string, float, bool, floats
+    string, float, bool, array_like
         distribution name, p-value and fitted parameters
 
     References
@@ -77,7 +83,10 @@ def dist_test(data: Series, dist: Any, N: int = 100, alpha: float = 0.05) -> Any
 
 
 def dists_test(
-    data: Series, distributions: list[Any] = None, N: int = 100, alpha: float = 0.05
+    data: Series,
+    distributions: Optional[List[ContinuousDist]] = None,
+    N: int = 100,
+    alpha: float = 0.05,
 ) -> DataFrame:
     """Fit a list of distribution and perform the
     two-sided Kolmogorov-Smirnov test for goodness
@@ -89,8 +98,9 @@ def dists_test(
     ----------
     data : array_like
         1-D array of observations of random variables
-    distributions : list of scipy.stats._continuous_distns, optional
-        A list of (can be) any continuous distribution from the scipy.stats library, by default None
+    distributions : list of scipy.stats.rv_continuous, optional
+        A list of (can be) any continuous distribution from the scipy.stats
+        library, by default None which makes a custom selection
     N : int, optional
         Sample size, by default 100
     alpha : float, optional
@@ -125,7 +135,7 @@ def dists_test(
         ]
 
     df = DataFrame([dist_test(data, D, N, alpha) for D in distributions])
-    cols = ["Distribution", "KS p-value", f"Reject H0"]
+    cols = ["Distribution", "KS p-value", "Reject H0"]
     cols += [f"Param {i+1}" for i in range(df.columns.stop - len(cols))]
     df.columns = cols
     df = df.set_index(cols[0])

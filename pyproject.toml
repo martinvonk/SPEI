@@ -1,13 +1,13 @@
 [project]
 name = "spei"
-version = "0.2.2"
+version = "0.2.3"
 authors = [
   { name="Martin Vonk" },
 ]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
   "numpy", "scipy", "matplotlib", "pandas"
 ]
