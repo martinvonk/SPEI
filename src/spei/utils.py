@@ -1,4 +1,4 @@
-from pandas import Series, DataFrame
+from pandas import Series, DataFrame, DatetimeIndex, to_datetime
 from scipy.stats import (
     norm,
     gamma,
@@ -13,36 +13,48 @@ from scipy.stats import (
 
 # Type Hinting
 from typing import List, Optional, Tuple
-from .typing import ArrayLike, ContinuousDist
+from .typing import ContinuousDist, NDArray, float64
 
 
-def check_series(series: Series) -> None:
-    """Check if provided time series is of type pandas.Series
+def validate_series(series: Series) -> Series:
 
-    Parameters
-    ----------
-    series : any
-        Time series of any kind
+    series = series.copy()
 
-    Raises
-    ------
-    TypeError
-        If series is not a pandas.Series
-
-    """
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
-            raise TypeError(
-                "Please convert pandas.DataFrame to a"
-                "pandas.Series using DataFrame.squeeze()"
-            )
+            if len(series.columns == 1):
+                print(
+                    "Please convert series of type pandas.DataFrame to a"
+                    "pandas.Series using DataFrame.squeeze(). Now done automatically."
+                )
+                series = series.squeeze()
+            else:
+                raise TypeError(
+                    "Please provide a pandas.Series instead of a pandas.DataFrame"
+                )
         else:
             raise TypeError(f"Please provide a Pandas Series instead of {type(series)}")
 
+    return series
+
+
+def validate_index(series: Series) -> DatetimeIndex:
+
+    index = series.index.copy()
+
+    if not isinstance(index, DatetimeIndex):
+        print(
+            f"Expected the index to be a DatetimeIndex. Automatically converted"
+            f"{type(index)} using pd.to_datetime(Index)"
+        )
+        index = DatetimeIndex(to_datetime(index))
+
+    return index
+
 
 def dist_test(
-    data: Series, dist: List[ContinuousDist], N: int = 100, alpha: float = 0.05
-) -> Tuple[str, float, bool, ArrayLike]:
+    data: Series, dist: ContinuousDist, N: int = 100, alpha: float = 0.05
+) -> Tuple[str, float, bool, NDArray[float64]]:
     """Fit a distribution and perform the two-sided
     Kolmogorov-Smirnov test for goodness of fit. The
     null hypothesis is that the data and distributions
@@ -77,9 +89,10 @@ def dist_test(
     SciPy, 2021.
     """
     fitted = dist.fit(data, scale=data.std())
-    ks = kstest(data, dist.name, fitted, N=N)[1]
+    dist_name = getattr(dist, "name")
+    ks = kstest(data, dist_name, fitted, N=N)[1]
     rej_h0 = ks < alpha
-    return dist.name, ks, rej_h0, *fitted
+    return dist_name, ks, rej_h0, fitted
 
 
 def dists_test(
@@ -136,9 +149,8 @@ def dists_test(
 
     df = DataFrame([dist_test(data, D, N, alpha) for D in distributions])
     cols = ["Distribution", "KS p-value", "Reject H0"]
-    cols += [f"Param {i+1}" for i in range(df.columns.stop - len(cols))]
-    df.columns = cols
-    df = df.set_index(cols[0])
+    cols += [f"Param {i+1}" for i in range(len(df.columns) - len(cols))]
+    df = df.rename(columns=dict(zip(df.columns, cols))).set_index(cols[0])
     df["Dist"] = distributions
 
     return df

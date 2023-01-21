@@ -1,9 +1,10 @@
-from typing import TypeVar
-
 from scipy.stats._continuous_distns import rv_continuous
-from matplotlib.axes._base import _AxesBase
-from numpy.typing import ArrayLike
+from matplotlib.axes import Axes
+from typing import Any, Union
 
-ContinuousDist = TypeVar("ContinuousDist", bound=rv_continuous)
-Axes = TypeVar("Axes", bound=_AxesBase)
-ArrayLike = TypeVar("ArrayLike", bound=ArrayLike)
+# types in code
+from numpy.typing import NDArray
+from numpy import float64
+
+ContinuousDist = Union[Any, rv_continuous]
+Axes = Union[Any, Axes]

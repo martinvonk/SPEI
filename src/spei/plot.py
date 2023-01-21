@@ -5,15 +5,15 @@ from calendar import month_name, month_abbr
 from pandas import Series
 from numpy import meshgrid, linspace, array, reshape
 from scipy.stats import gaussian_kde
-from .utils import check_series, dist_test
+from .utils import validate_series, validate_index, dist_test
 
 # Type Hinting
 from typing import List, Optional
-from .typing import Axes, ContinuousDist
+from .typing import Axes, ContinuousDist, NDArray, float64
 
 
 def si(
-    si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Axes = None
+    si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Optional[Axes] = None
 ) -> Axes:
     """Plot the standardized index values as a time series.
 
@@ -41,13 +41,15 @@ def si(
 
     nmin = -bound
     nmax = bound
-    droughts = si.to_numpy(copy=True)
+    droughts = si.to_numpy(dtype=float64, copy=True)
     droughts[droughts > 0] = 0
-    nodroughts = si.to_numpy(copy=True)
+    nodroughts = si.to_numpy(dtype=float64, copy=True)
     nodroughts[nodroughts < 0] = 0
 
     x, y = meshgrid(si.index, linspace(nmin, nmax, 100))
-    ax.contourf(x, y, y, cmap=plt.cm.seismic_r, levels=linspace(nmin, nmax, 100))
+    ax.contourf(
+        x, y, y, cmap=plt.get_cmap("seismic_r"), levels=linspace(nmin, nmax, 100)
+    )
     ax.fill_between(x=si.index, y1=droughts, y2=nmin, color="w")
     ax.fill_between(x=si.index, y1=nodroughts, y2=nmax, color="w")
     ax.set_ylim(nmin, nmax)
@@ -63,7 +65,7 @@ def dist(
     cmap: Optional[str] = None,
     figsize: tuple = (8, 10),
     legend: bool = True,
-) -> Axes:
+) -> NDArray[Axes]:
     """Plot the (cumulative) histogram and scipy fitted distribution
     for the time series on a monthly basis.
 
@@ -94,56 +96,58 @@ def dist(
         Axes handle
     """
 
-    check_series(series)
+    series = validate_series(series)
+    index = validate_index(series)
 
     _, axs = plt.subplots(4, 3, figsize=figsize, sharey=True, sharex=True)
-    ax = axs.ravel()
     if cmap is not None:
         cm = plt.get_cmap(cmap, 12)
         c = [cm(i) for i in range(12)]
     else:
         c = ["k" for _ in range(12)]
 
-    for i, month in enumerate(range(1, 13)):
-        data = series[series.index.month == month].sort_values()
-        ax[i].hist(
+    for i, ax in enumerate(axs.flat, start=1):
+        data = series[index.month == i].sort_values()
+        ax.hist(
             data,
-            color=c[i],
+            color=c[i - 1],
             alpha=0.2,
             density=True,
             cumulative=cumulative,
             label="Density",
         )
+        dist_name = getattr(dist, "name")
         if test_dist:
-            _, p_value, _, *pars, loc, scale = dist_test(data, dist)
-            label = f"{dist.name.capitalize()} KS:\n{p_value=:0.2f}"
+            _, p_value, _, fitted = dist_test(data, dist)
+            *pars, loc, scale = fitted
+            label = f"{dist_name.capitalize()} KS:\n{p_value=:0.2f}"
         else:
             *pars, loc, scale = dist.fit(data, scale=data.std())
-            label = f"{dist.name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}"
+            label = f"{dist_name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}"
         if cumulative:
             cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-            ax[i].plot(
+            ax.plot(
                 data,
                 cdf,
-                color=c[i],
+                color=c[i - 1],
                 label=label,
             )
-            if i in range(0, 12, 3):
-                ax[i].set_ylabel("Cumulative Probability")
+            if i in range(1, 13, 3):
+                ax.set_ylabel("Cumulative Probability")
         else:
             x = linspace(min(data), max(data))
             pdf = dist.pdf(x, pars, loc=loc, scale=scale)
-            ax[i].plot(
+            ax.plot(
                 x,
                 pdf,
-                color=c[i],
+                color=c[i - 1],
                 label=label,
             )
-            if i in range(0, 12, 3):
-                ax[i].set_ylabel("Probability Density")
-        ax[i].set_title(month_name[month])
+            if i in range(1, 13, 3):
+                ax.set_ylabel("Probability Density")
+        ax.set_title(month_name[i])
         if legend:
-            ax[i].legend()
+            ax.legend()
 
     return axs
 
@@ -175,6 +179,10 @@ def monthly_density(
     matplotlib.Axes
         Axes handle
     """
+
+    si = validate_series(si)
+    index = validate_index(si)
+
     if ax is None:
         _, ax = plt.subplots(figsize=(6, 4))
 
@@ -190,7 +198,7 @@ def monthly_density(
 
     ind = linspace(-3.3, 3.3, 1000)
     for i, month in enumerate(months):
-        gkde_all = gaussian_kde(si[(si.index.month == month)])
+        gkde_all = gaussian_kde(si[(index.month == month)])
         ax.plot(
             ind,
             gkde_all.evaluate(ind),
@@ -198,9 +206,7 @@ def monthly_density(
             label=f"{month_abbr[month]} all",
         )
         for j, year in enumerate(years, start=1):
-            gkde_spec = gaussian_kde(
-                si[(si.index.month == month) & (si.index.year == year)]
-            )
+            gkde_spec = gaussian_kde(si[(index.month == month) & (index.year == year)])
             ax.plot(
                 ind,
                 gkde_spec.evaluate(ind),
