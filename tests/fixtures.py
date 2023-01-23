@@ -36,6 +36,3 @@ def si() -> Series:
     prec = read_data("Prec [m/d] 081_JOURE").dropna()
     si = spi(prec.rolling("30D", min_periods=30).sum().dropna(), prob_zero=True)
     return si
-
-def series_without_datetimeindex() -> Series:
-    return Series([1,2,3], index=["a", "b", "c"])
