@@ -1,15 +1,14 @@
-import matplotlib.pyplot as plt
-
+from calendar import month_abbr, month_name
 from itertools import cycle
-from calendar import month_name, month_abbr
-from pandas import Series
-from numpy import meshgrid, linspace, array, reshape
-from scipy.stats import gaussian_kde
-from .utils import validate_series, validate_index, dist_test
-
-# Type Hinting
 from typing import List, Optional
+
+import matplotlib.pyplot as plt
+from numpy import array, linspace, meshgrid, reshape
+from pandas import Series
+from scipy.stats import gaussian_kde
+
 from .typing import Axes, ContinuousDist, NDArray, float64
+from .utils import dist_test, validate_index, validate_series
 
 
 def si(
