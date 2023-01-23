@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "spei"
@@ -24,13 +24,14 @@ classifiers = [
 ]
 
 [project.urls]
-Home = "https://github.com/martinvonk/spei"
+homepage = "https://github.com/martinvonk/spei"
+repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
 linting = ["black[jupyter]", "isort"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
-testing = ["spei[linting,typing,pytesting]"]
+dev = ["spei[linting,typing,pytesting]"]
 
 [tool.black]
 line-length = 88
