@@ -43,10 +43,10 @@ legacy_tox_ini = """
 
     [gh-actions]
     python =
-    3.8: py38
-    3.9: py39
-    3.10: py310, lint, type
-    3.11: py311
+        3.8: py38
+        3.9: py39, lint, type
+        3.10: py310
+        3.11: py311
 
     [testenv]
     description = run unit tests
@@ -56,7 +56,7 @@ legacy_tox_ini = """
 
     [testenv:lint]
     description = run linters
-    basepython = python3.10
+    basepython = python3.9
     extras = linting
     commands =
             black {posargs:src}
@@ -64,7 +64,7 @@ legacy_tox_ini = """
 
     [testenv:type]
     description = run type checks
-    basepython = python3.10
+    basepython = python3.9
     extras = typing
     commands =
             mypy {posargs:src}

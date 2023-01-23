@@ -8,19 +8,47 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        include:
+        - name: Test suite with py38-ubuntu
+          python: '3.8'
+          os: ubuntu-latest
+          toxenv: py38
+        - name: Test suite with py39-ubuntu
+          python: '3.9'
+          os: ubuntu-latest
+          toxenv: py39
+        - name: Test suite with py310-ubuntu
+          python: '3.10'
+          os: ubuntu-latest
+          toxenv: py310
+        - name: Test suite with py311-ubuntu
+          python: '3.11'
+          os: ubuntu-latest
+          toxenv: py311
+        - name: Type check with mypy
+          python: '3.9'
+          os: ubuntu-latest
+          toxenv: type
+        - name: Formatting with black + isort
+          python: '3.9'
+          os: ubuntu-latest
+          toxenv: lint
 
+    name: ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python }}
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python }}
+        check-latest: true
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
     - name: Test with tox
       run: tox
+      env:
+        PLATFORM: ${{ matrix.platform }}
