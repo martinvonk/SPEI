@@ -1,9 +1,13 @@
 
 *.pyc
 *.png
+*.coverage
 
 /src/spei.egg-info
 /dist
 /doc/references
+
 /.vscode
 /.mypy_cache
+/.pytest_cache
+/htmlcov
