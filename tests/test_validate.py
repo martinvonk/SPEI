@@ -1,6 +1,7 @@
 import pytest
-from pandas import Series, DataFrame, to_datetime
-from spei.utils import validate_series, validate_index
+from pandas import DataFrame, Series, to_datetime
+
+from spei.utils import validate_index, validate_series
 
 
 def test_validate_index(capfd) -> None:

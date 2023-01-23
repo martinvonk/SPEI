@@ -1,6 +1,7 @@
 import pytest
+from pandas import Series, read_csv
+
 from spei.si import spi
-from pandas import read_csv, Series
 
 
 def read_data(column: str) -> Series:

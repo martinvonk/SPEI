@@ -1,7 +1,8 @@
 from pandas import Series
-from spei import spi, spei, sgi, ssfi
 
-from .fixtures import prec, evap, head
+from spei import sgi, spei, spi, ssfi
+
+from .fixtures import evap, head, prec
 
 
 def test_spi(prec: Series) -> None:
