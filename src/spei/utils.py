@@ -1,19 +1,20 @@
-from pandas import Series, DataFrame, DatetimeIndex, to_datetime
-from scipy.stats import (
-    norm,
-    gamma,
-    genextreme,
-    pearson3,
-    fisk,
-    lognorm,
-    logistic,
-    genlogistic,
-    kstest,
-)
-
 # Type Hinting
 from typing import List, Optional, Tuple
-from .typing import ContinuousDist, NDArray, float64
+
+from pandas import DataFrame, DatetimeIndex, Series, to_datetime
+from scipy.stats import (
+    fisk,
+    gamma,
+    genextreme,
+    genlogistic,
+    kstest,
+    logistic,
+    lognorm,
+    norm,
+    pearson3,
+)
+
+from .typing import ContinuousDist
 
 
 def validate_series(series: Series) -> Series:
@@ -22,7 +23,7 @@ def validate_series(series: Series) -> Series:
 
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
-            if len(series.columns == 1):
+            if len(series.columns) == 1:
                 print(
                     "Please convert series of type pandas.DataFrame to a"
                     "pandas.Series using DataFrame.squeeze(). Now done automatically."
@@ -53,8 +54,8 @@ def validate_index(series: Series) -> DatetimeIndex:
 
 
 def dist_test(
-    data: Series, dist: ContinuousDist, N: int = 100, alpha: float = 0.05
-) -> Tuple[str, float, bool, NDArray[float64]]:
+    series: Series, dist: ContinuousDist, N: int = 100, alpha: float = 0.05
+) -> Tuple[str, float, bool, tuple]:
     """Fit a distribution and perform the two-sided
     Kolmogorov-Smirnov test for goodness of fit. The
     null hypothesis is that the data and distributions
@@ -63,8 +64,8 @@ def dist_test(
 
     Parameters
     ----------
-    data : array_like
-        1-D array of observations of random variables
+    data : Series
+        pandas Series of observations of random variables
     dist: scipy.stats.rv_continuous
         Can be any continuous distribution from the
         scipy.stats library.
@@ -79,7 +80,7 @@ def dist_test(
 
     Returns
     -------
-    string, float, bool, array_like
+    string, float, bool, tuple
         distribution name, p-value and fitted parameters
 
     References
@@ -88,15 +89,15 @@ def dist_test(
      Distributions and Distribution Fitting with Pythons
     SciPy, 2021.
     """
-    fitted = dist.fit(data, scale=data.std())
+    fitted = dist.fit(series.values, scale=series.std())
     dist_name = getattr(dist, "name")
-    ks = kstest(data, dist_name, fitted, N=N)[1]
+    ks = kstest(series.values, dist_name, fitted, N=N)[1]
     rej_h0 = ks < alpha
     return dist_name, ks, rej_h0, fitted
 
 
 def dists_test(
-    data: Series,
+    series: Series,
     distributions: Optional[List[ContinuousDist]] = None,
     N: int = 100,
     alpha: float = 0.05,
@@ -109,8 +110,8 @@ def dists_test(
 
     Parameters
     ----------
-    data : array_like
-        1-D array of observations of random variables
+    series : Series
+        pandas Series with observations of random variables
     distributions : list of scipy.stats.rv_continuous, optional
         A list of (can be) any continuous distribution from the scipy.stats
         library, by default None which makes a custom selection
@@ -147,7 +148,7 @@ def dists_test(
             genlogistic,
         ]
 
-    df = DataFrame([dist_test(data, D, N, alpha) for D in distributions])
+    df = DataFrame([dist_test(series, D, N, alpha) for D in distributions])
     cols = ["Distribution", "KS p-value", "Reject H0"]
     cols += [f"Param {i+1}" for i in range(len(df.columns) - len(cols))]
     df = df.rename(columns=dict(zip(df.columns, cols))).set_index(cols[0])

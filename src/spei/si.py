@@ -1,14 +1,14 @@
-from pandas import Series
-from numpy import linspace
-from scipy.stats import norm, gamma, fisk, genextreme
-from .utils import validate_series, validate_index
-
-# Type Hinting
 from typing import Optional
-from .typing import ContinuousDist
+
+from numpy import linspace
+from pandas import Series
+from scipy.stats import fisk, gamma, genextreme, norm
+
+from .typing import ContinuousDist, NDArray, float64
+from .utils import validate_index, validate_series
 
 
-def get_si_ppf(
+def compute_si_ppf(
     series: Series,
     dist: ContinuousDist,
     sgi: bool = False,
@@ -26,13 +26,13 @@ def get_si_ppf(
         Whether to caclulate the standardized groundwater index or not, by
         default False
     prob_zero : bool, optional
-        Apply logic to observations of zero and calculate the probability
-        seperately, by default False
+        Apply logic to observations that have value zero and calculate their
+        probability seperately, by default False
 
     Returns
     -------
     Series
-        Series with probability point function ppf
+        Series with probability point function, ppf
     """
 
     series = validate_series(series)
@@ -41,24 +41,38 @@ def get_si_ppf(
     si = Series(index=index, dtype="float")
     for month in range(1, 13):
         data = series[index.month == month].sort_values()
-        if sgi:
-            pmin = 1 / (2 * data.size)
-            pmax = 1 - pmin
-            cdf = linspace(pmin, pmax, data.size)
-        else:
+        if not sgi:
             if prob_zero:
-                p0 = (data == 0.0).sum() / len(data)
-                *pars, loc, scale = dist.fit(data[data != 0.0], scale=data.std())
-                cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
-                cdf = p0 + (1 - p0) * cdf_sub
-                cdf[data == 0.0] = p0
+                cdf = compute_cdf_probzero(data=data, dist=dist)
             else:
-                *pars, loc, scale = dist.fit(data, scale=data.std())
-                cdf = dist.cdf(data, pars, loc=loc, scale=scale)
+                cdf = compute_cdf(data=data, dist=dist)
+        else:
+            cdf = compute_cdf_nsf(data=data)
         ppf = norm.ppf(cdf)
         si.loc[data.index] = ppf
-
     return si
+
+
+def compute_cdf(data: Series, dist: ContinuousDist) -> NDArray[float64]:
+    *pars, loc, scale = dist.fit(data.values, scale=data.std())
+    cdf = dist.cdf(data.values, pars, loc=loc, scale=scale)
+    return cdf
+
+
+def compute_cdf_probzero(data: Series, dist: ContinuousDist) -> NDArray[float64]:
+    p0 = (data == 0.0).sum() / len(data)
+    *pars, loc, scale = dist.fit(data[data != 0.0].values, scale=data.std())
+    cdf_sub = dist.cdf(data.values, pars, loc=loc, scale=scale)
+    cdf = p0 + (1 - p0) * cdf_sub
+    cdf[data == 0.0] = p0
+    return cdf
+
+
+def compute_cdf_nsf(data: Series) -> NDArray[float64]:
+    """Normal Scores Transform"""
+    n = data.size
+    cdf = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
+    return cdf
 
 
 def sgi(series: Series) -> Series:
@@ -82,10 +96,12 @@ def sgi(series: Series) -> Series:
        approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
     """
     mock_dist = norm  # not used
-    return get_si_ppf(series, mock_dist, sgi=True)
+    return compute_si_ppf(series=series, dist=mock_dist, sgi=True)
 
 
-def spi(series: Series, dist: ContinuousDist = gamma, prob_zero: bool = False) -> Series:
+def spi(
+    series: Series, dist: ContinuousDist = gamma, prob_zero: bool = False
+) -> Series:
     """Method to compute the Standardized Precipitation Index [spi_2002]_.
 
     Parameters
@@ -113,7 +129,7 @@ def spi(series: Series, dist: ContinuousDist = gamma, prob_zero: bool = False) -
        22, 1571-1592, 2002.
     """
 
-    return get_si_ppf(series, dist, prob_zero=prob_zero)
+    return compute_si_ppf(series=series, dist=dist, prob_zero=prob_zero)
 
 
 def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
@@ -144,7 +160,7 @@ def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
        Journal of Climate, 23, 1696-1718, 2010.
     """
 
-    return get_si_ppf(series, dist)
+    return compute_si_ppf(series=series, dist=dist)
 
 
 def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
@@ -173,4 +189,4 @@ def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
        and nonparametric methods. Water Resources Research, 56, 2020.
     """
 
-    return get_si_ppf(series, dist)
+    return compute_si_ppf(series=series, dist=dist)

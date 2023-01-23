@@ -153,8 +153,8 @@ def dist(
 
 def monthly_density(
     si: Series,
-    years: Optional[List[int]] = None,
-    months: Optional[List[int]] = None,
+    years: List[int],
+    months: List[int],
     cmap: str = "tab20c",
     ax: Optional[Axes] = None,
 ) -> Axes:
@@ -184,12 +184,6 @@ def monthly_density(
 
     if ax is None:
         _, ax = plt.subplots(figsize=(6, 4))
-
-    if years is None:
-        years = []
-
-    if months is None:
-        months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
     cm = plt.get_cmap(cmap, 20)
     colors = reshape(array([cm(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
