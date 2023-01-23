@@ -14,8 +14,10 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-testing = ["mypy", "pandas-stubs", "tox", "pytest", "pytest-cov"]
-full = ["spei[testing]", "black[jupyter]"]
+linting = ["black[jupyter]", "isort"]
+typing = ["mypy", "pandas-stubs"]
+pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
+testing = ["spei[linting,typing,pytesting]"]
 
 [tool.black]
 line-length = 88
@@ -32,3 +34,31 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    requires = tox>=4
+    env_list = lint, type, py{38,39,310,311}
+
+    [testenv]
+    description = run unit tests
+    extras = pytesting
+    commands =
+            pytest {posargs:tests}
+
+    [testenv:lint]
+    description = run linters
+    basepython = python3.10
+    extras = linting
+    commands =
+            black {posargs:src}
+            isort {posargs:src}
+
+    [testenv:type]
+    description = run type checks
+    basepython = python3.10
+    extras = typing
+    commands =
+            mypy {posargs:src}
+"""
