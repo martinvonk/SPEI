@@ -1,6 +1,6 @@
 [project]
 name = "spei"
-version = "0.2.3"
+version = "0.2.4"
 authors = [{ name = "Martin Vonk" }]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
