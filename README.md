@@ -1,6 +1,9 @@
-![PyPI](https://img.shields.io/pypi/v/SPEI)
-
 # SPEI
+
+![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square)
+![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square)
+![Tests](https://img.shields.io/github/actions/workflow/status/actions/spei/tests.yml?style=flat-square)
+
 SPEI is a simple Python package to calculate drought indices for time series such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index) and SGI (Standardized Groundwater Index). There are other great packages available to calculate these indices. However, they are either written in R such as [SPEI](https://github.com/sbegueria/SPEI) or don't have the Standardized Groundwater Index such as [climate_indices](https://github.com/monocongo/climate_indices). Additionaly, these packages provide ways to analyse spatial data and calculate potential evaporation. This makes these packages complex, because it is easier to only deal with one time series.
 
 This package uses the popular Python packages such as Pandas and Scipy to make it easy and versitile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average and other manipulation options. SciPy gives the option to use all [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html) available in the library to fit the data.
