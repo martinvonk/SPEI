@@ -14,11 +14,21 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-type = ["mypy", "pandas-stubs"]
-full = ["spei[type]", "black[jupyter]"]
+testing = ["mypy", "pandas-stubs", "tox", "pytest", "pytest-cov"]
+full = ["spei[testing]", "black[jupyter]"]
 
 [tool.black]
 line-length = 88
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ['matplotlib.*', 'scipy.stats.*']
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
