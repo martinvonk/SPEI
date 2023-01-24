@@ -1,18 +1,85 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "spei"
-version = "0.2.3"
-authors = [
-  { name="Martin Vonk" },
-]
+version = "0.3.0"
+authors = [{ name = "Martin Vonk", email = "vonk.mart@gmail.com" }]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
-license = { file="LICENSE" }
+license = { file = "LICENSE" }
 requires-python = ">=3.8"
-dependencies = [
-  "numpy", "scipy", "matplotlib", "pandas"
-]
+dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+        'Programming Language :: Python :: 3 :: Only',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Topic :: Scientific/Engineering :: Hydrology',
+        'Intended Audience :: Science/Research',
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
 ]
+
+[project.urls]
+homepage = "https://github.com/martinvonk/spei"
+repository = "https://github.com/martinvonk/spei"
+
+[project.optional-dependencies]
+linting = ["black[jupyter]", "isort"]
+typing = ["mypy", "pandas-stubs"]
+pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
+dev = ["spei[linting,typing,pytesting]"]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ['matplotlib.*', 'scipy.stats.*']
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.tox]
+legacy_tox_ini = """
+    [tox]
+    requires = tox>=4
+    env_list = lint, type, py{38,39,310,311}
+
+    [gh-actions]
+    python =
+        3.8: py38
+        3.9: py39, lint, type
+        3.10: py310
+        3.11: py311
+
+    [testenv]
+    description = run unit tests
+    extras = pytesting
+    commands =
+            pytest {posargs:tests}
+
+    [testenv:lint]
+    description = run linters
+    basepython = python3.9
+    extras = linting
+    commands =
+            black {posargs:src}
+            isort {posargs:src}
+
+    [testenv:type]
+    description = run type checks
+    basepython = python3.9
+    extras = typing
+    commands =
+            mypy {posargs:src}
+"""

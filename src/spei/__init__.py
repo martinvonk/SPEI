@@ -1,2 +1,2 @@
-from . import si, plot, utils
-from .si import spi, spei, sgi, ssfi
+from . import plot, si, utils
+from .si import sgi, spei, spi, ssfi
