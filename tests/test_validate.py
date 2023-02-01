@@ -16,7 +16,7 @@ def test_validate_index(capfd) -> None:
     assert out == msg
 
 
-def test_validate_series(capfd) -> None:
+def test_validate_series() -> None:
     with pytest.raises(TypeError):
         validate_series([1, 2, 3])
 
@@ -32,7 +32,7 @@ def test_validate_series_df_1d(capfd) -> None:
     assert out == msg
 
 
-def test_validate_series_df_2d(capfd) -> None:
+def test_validate_series_df_2d() -> None:
     with pytest.raises(TypeError):
         df = DataFrame({"s1": [1, 2, 3], "s2": [1, 2, 3]}, index=to_datetime([1, 2, 3]))
         validate_series(df)
