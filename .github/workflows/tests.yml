@@ -34,6 +34,10 @@ jobs:
         - name: Formatting with black + isort
           python: '3.9'
           os: ubuntu-latest
+          toxenv: format
+        - name: Linting with flake8
+          python: '3.9'
+          os: ubuntu-latest
           toxenv: lint
 
     name: ${{ matrix.name }}
