@@ -1,7 +1,8 @@
 # Type Hinting
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
-from pandas import DataFrame, DatetimeIndex, Series, to_datetime
+from numpy import std
+from pandas import DataFrame, DatetimeIndex, Index, Series, to_datetime
 from scipy.stats import (
     fisk,
     gamma,
@@ -14,11 +15,10 @@ from scipy.stats import (
     pearson3,
 )
 
-from .typing import ContinuousDist
+from .typing import ContinuousDist, NDArray, float64
 
 
 def validate_series(series: Series) -> Series:
-
     series = series.copy()
 
     if not isinstance(series, Series):
@@ -39,9 +39,8 @@ def validate_series(series: Series) -> Series:
     return series
 
 
-def validate_index(series: Series) -> DatetimeIndex:
-
-    index = series.index.copy()
+def validate_index(index: Index) -> DatetimeIndex:
+    index = index.copy()
 
     if not isinstance(index, DatetimeIndex):
         print(
@@ -54,7 +53,10 @@ def validate_index(series: Series) -> DatetimeIndex:
 
 
 def dist_test(
-    series: Series, dist: ContinuousDist, N: int = 100, alpha: float = 0.05
+    series: Union[Series, NDArray[float64]],
+    dist: ContinuousDist,
+    N: int = 100,
+    alpha: float = 0.05,
 ) -> Tuple[str, float, bool, tuple]:
     """Fit a distribution and perform the two-sided
     Kolmogorov-Smirnov test for goodness of fit. The
@@ -64,8 +66,9 @@ def dist_test(
 
     Parameters
     ----------
-    data : Series
-        pandas Series of observations of random variables
+    data : Union[Series, NDArray[float64]]
+        pandas Series or numpy array of floats of observations of random
+        variables
     dist: scipy.stats.rv_continuous
         Can be any continuous distribution from the
         scipy.stats library.
@@ -89,15 +92,15 @@ def dist_test(
      Distributions and Distribution Fitting with Pythons
     SciPy, 2021.
     """
-    fitted = dist.fit(series.values, scale=series.std())
+    fitted = dist.fit(series, scale=std(series))
     dist_name = getattr(dist, "name")
-    ks = kstest(series.values, dist_name, fitted, N=N)[1]
+    ks = kstest(series, dist_name, fitted, N=N)[1]
     rej_h0 = ks < alpha
     return dist_name, ks, rej_h0, fitted
 
 
 def dists_test(
-    series: Series,
+    series: Union[Series, NDArray[float64]],
     distributions: Optional[List[ContinuousDist]] = None,
     N: int = 100,
     alpha: float = 0.05,
@@ -110,7 +113,7 @@ def dists_test(
 
     Parameters
     ----------
-    series : Series
+    series : Union[Series, NDArray[float64]]
         pandas Series with observations of random variables
     distributions : list of scipy.stats.rv_continuous, optional
         A list of (can be) any continuous distribution from the scipy.stats
