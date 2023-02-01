@@ -56,38 +56,31 @@ legacy_tox_ini = """
     requires = tox>=4
     env_list = format, type, lint, py{38,39,310,311}
 
-    [gh-actions]
-    python =
-        3.8: py38
-        3.9: py39, format, type, lint
-        3.10: py310
-        3.11: py311
-
     [testenv]
     description = run unit tests
     extras = pytesting
     commands =
-            pytest {posargs:tests}
+            pytest tests
 
     [testenv:format]
     description = run formatters
     basepython = python3.9
     extras = formatting
     commands =
-            black {posargs:src}
-            isort {posargs:src}
+            black src
+            isort src
 
     [testenv:type]
     description = run type checks
     basepython = python3.9
     extras = typing
     commands =
-            mypy {posargs:src}
+            mypy src
 
     [testenv:lint]
     description = run linters
     basepython = python3.9
     extras = linting
     commands =
-            flake8 {posargs:src --max-line-length=88}
+            flake8 src --max-line-length=88
 """
