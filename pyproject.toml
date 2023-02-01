@@ -73,6 +73,7 @@ legacy_tox_ini = """
     description = run formatters
     basepython = python3.9
     extras = formatting
+    commands =
             black {posargs:src}
             isort {posargs:src}
 

@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 from numpy import linspace, std
-from pandas import Series, DatetimeIndex
+from pandas import DatetimeIndex, Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
 from .typing import ContinuousDist, NDArray, float64

@@ -6,7 +6,7 @@ from spei.utils import validate_index, validate_series
 
 def test_validate_index(capfd) -> None:
     series = Series([1, 2, 3], index=[1, 2, 3])
-    validate_index(series)
+    validate_index(series.index)
     index = series.index
     msg = (
         f"Expected the index to be a DatetimeIndex. Automatically converted"
