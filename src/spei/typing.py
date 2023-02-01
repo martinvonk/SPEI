@@ -1,4 +1,3 @@
-# flake8: noqa
 from typing import Any, Union
 
 from matplotlib.axes import Axes

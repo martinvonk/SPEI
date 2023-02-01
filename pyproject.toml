@@ -28,11 +28,10 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-linting = ["flake8"]
-formatting = ["black[jupyter]", "isort"]
+linting = ["black[jupyter]", "isort"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
-dev = ["spei[formatting,typing,pytesting]"]
+dev = ["spei[linting,typing,pytesting]"]
 
 [tool.black]
 line-length = 88
@@ -54,12 +53,12 @@ pythonpath = ["src"]
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py{38,39,310,311}
+    env_list = lint, type, py{38,39,310,311}
 
     [gh-actions]
     python =
         3.8: py38
-        3.9: py39, format, type, lint
+        3.9: py39, lint, type
         3.10: py310
         3.11: py311
 
@@ -69,10 +68,10 @@ legacy_tox_ini = """
     commands =
             pytest {posargs:tests}
 
-    [testenv:format]
-    description = run formatters
+    [testenv:lint]
+    description = run linters
     basepython = python3.9
-    extras = formatting
+    extras = linting
     commands =
             black {posargs:src}
             isort {posargs:src}
@@ -83,11 +82,4 @@ legacy_tox_ini = """
     extras = typing
     commands =
             mypy {posargs:src}
-
-    [testenv:lint]
-    description = run linters
-    basepython = python3.9
-    extras = linting
-    commands =
-            flake8 {posargs:src --max-line-length=88}
 """
