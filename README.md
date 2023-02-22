@@ -1,15 +1,12 @@
 # SPEI
 
-![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square)
-![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square)
-![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square)
-![License](https://img.shields.io/pypi/l/spei?style=flat-square)
-![Code Size](https://img.shields.io/github/languages/code-size/martinvonk/spei?style=flat-square)
+![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square) ![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square) ![Code Size](https://img.shields.io/github/languages/code-size/martinvonk/spei?style=flat-square) ![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square) ![License](https://img.shields.io/pypi/l/spei?style=flat-square)
+
 ![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square)
+![MyPy](https://img.shields.io/badge/%20type_checker-mypy-%231674b1?style=flat-square)
+![Black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 
-SPEI is a simple Python package to calculate drought indices for time series such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index) and SGI (Standardized Groundwater Index). There are other great packages available to calculate these indices. However, they are either written in R such as [SPEI](https://github.com/sbegueria/SPEI) or don't have the Standardized Groundwater Index such as [climate_indices](https://github.com/monocongo/climate_indices). Additionaly, these packages provide ways to analyse spatial data and calculate potential evaporation. This makes these packages complex, because it is easier to only deal with one time series.
-
-This package uses the popular Python packages such as Pandas and Scipy to make it easy and versitile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average and other manipulation options. SciPy gives the option to use all [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html) available in the library to fit the data.
+SPEI is a simple Python package to calculate drought indices for time series such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index) and SGI (Standardized Groundwater Index). This package uses popular Python packages such as Pandas and Scipy to make it easy and versitile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data.
 
 For the calculation of potential evaporation, take a look at [pyet](https://github.com/phydrus/pyet). This is another great package that uses pandas Series to calculate different kinds of potential evaporation time series.
 
@@ -42,3 +39,7 @@ To get the development version download the GitHub code to your computer. Use cd
   5.  E. Tijdeman, K. Stahl and L.M. Tallaksen (2020) - Drought characteristics derived based on the Standardized Streamflow Index: A large sample comparison for parametric and nonparametric methods. DOI: 10.1029/2019WR026315
 
 Note that the method for calculating the drought indices does not come from these articles and SciPy is used for deriving the distribution. However the literature is helpful as a reference to understand the context and application of drought indices.
+
+## Alternatives
+
+There are other great packages available to calculate these indices. However, they are either written in R such as [SPEI](https://github.com/sbegueria/SPEI) or don't have the Standardized Groundwater Index such as [climate_indices](https://github.com/monocongo/climate_indices). Additionaly, these packages provide ways to analyse spatial data and calculate potential evaporation. This makes these packages complex, because it is easier to only deal with time series.

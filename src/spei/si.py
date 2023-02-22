@@ -1,16 +1,17 @@
-from typing import Optional
+from typing import Optional, Union
 
-from numpy import linspace
-from pandas import Series
+from numpy import linspace, std
+from pandas import DatetimeIndex, Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
-from .typing import ContinuousDist, NDArray, float64
+from ._typing import ContinuousDist, NDArray, float64
 from .utils import validate_index, validate_series
 
 
 def compute_si_ppf(
     series: Series,
     dist: ContinuousDist,
+    index: Optional[DatetimeIndex] = None,
     sgi: bool = False,
     prob_zero: bool = False,
 ) -> Series:
@@ -22,6 +23,8 @@ def compute_si_ppf(
         Series with observations
     dist : ContinuousDist
         Continuous distribution from the SciPy library
+    index : DatetimeIndex, optional
+        DatetimeIndex with the date of the observations
     sgi : bool, optional
         Whether to caclulate the standardized groundwater index or not, by
         default False
@@ -35,10 +38,11 @@ def compute_si_ppf(
         Series with probability point function, ppf
     """
 
-    series = validate_series(series)
-    index = validate_index(series)
+    if index is None:
+        series = validate_series(series)
+        index = validate_index(series.index)
 
-    si = Series(index=index, dtype="float")
+    si = Series(index=index, dtype=float64)
     for month in range(1, 13):
         data = series[index.month == month].sort_values()
         if not sgi:
@@ -53,22 +57,26 @@ def compute_si_ppf(
     return si
 
 
-def compute_cdf(data: Series, dist: ContinuousDist) -> NDArray[float64]:
-    *pars, loc, scale = dist.fit(data.values, scale=data.std())
-    cdf = dist.cdf(data.values, pars, loc=loc, scale=scale)
+def compute_cdf(
+    data: Union[Series, NDArray[float64]], dist: ContinuousDist
+) -> NDArray[float64]:
+    *pars, loc, scale = dist.fit(data, scale=std(data))
+    cdf = dist.cdf(data, pars, loc=loc, scale=scale)
     return cdf
 
 
-def compute_cdf_probzero(data: Series, dist: ContinuousDist) -> NDArray[float64]:
+def compute_cdf_probzero(
+    data: Union[Series, NDArray[float64]], dist: ContinuousDist
+) -> NDArray[float64]:
     p0 = (data == 0.0).sum() / len(data)
-    *pars, loc, scale = dist.fit(data[data != 0.0].values, scale=data.std())
-    cdf_sub = dist.cdf(data.values, pars, loc=loc, scale=scale)
+    *pars, loc, scale = dist.fit(data[data != 0.0], scale=std(data))
+    cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
     cdf = p0 + (1 - p0) * cdf_sub
     cdf[data == 0.0] = p0
     return cdf
 
 
-def compute_cdf_nsf(data: Series) -> NDArray[float64]:
+def compute_cdf_nsf(data: Union[Series, NDArray[float64]]) -> NDArray[float64]:
     """Normal Scores Transform"""
     n = data.size
     cdf = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
@@ -133,7 +141,6 @@ def spi(
 
 
 def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
-
     """Method to compute the Standardized Precipitation Evaporation Index
     [spei_2010]_.
 

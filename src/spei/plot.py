@@ -7,7 +7,7 @@ from numpy import array, linspace, meshgrid, reshape
 from pandas import Series
 from scipy.stats import gaussian_kde
 
-from .typing import Axes, ContinuousDist, NDArray, float64
+from ._typing import Axes, ContinuousDist, NDArray, float64
 from .utils import dist_test, validate_index, validate_series
 
 
@@ -96,7 +96,7 @@ def dist(
     """
 
     series = validate_series(series)
-    index = validate_index(series)
+    index = validate_index(series.index)
 
     _, axs = plt.subplots(4, 3, figsize=figsize, sharey=True, sharex=True)
     if cmap is not None:
@@ -180,7 +180,7 @@ def monthly_density(
     """
 
     si = validate_series(si)
-    index = validate_index(si)
+    index = validate_index(si.index)
 
     if ax is None:
         _, ax = plt.subplots(figsize=(6, 4))

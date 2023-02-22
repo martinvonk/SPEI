@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "spei"
-version = "0.3.0"
+dynamic = ["version"]
 authors = [{ name = "Martin Vonk", email = "vonk.mart@gmail.com" }]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
@@ -28,10 +28,14 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-linting = ["black[jupyter]", "isort"]
+linting = ["flake8"]
+formatting = ["black[jupyter]", "isort"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
-dev = ["spei[linting,typing,pytesting]"]
+dev = ["spei[linting,formatting,typing,pytesting]"]
+
+[tool.setuptools.dynamic]
+version = { attr = "spei._version.__version__" }
 
 [tool.black]
 line-length = 88
@@ -53,33 +57,33 @@ pythonpath = ["src"]
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = lint, type, py{38,39,310,311}
-
-    [gh-actions]
-    python =
-        3.8: py38
-        3.9: py39, lint, type
-        3.10: py310
-        3.11: py311
+    env_list = format, type, lint, py{38,39,310,311}
 
     [testenv]
     description = run unit tests
     extras = pytesting
     commands =
-            pytest {posargs:tests}
+            pytest tests
 
-    [testenv:lint]
-    description = run linters
+    [testenv:format]
+    description = run formatters
     basepython = python3.9
-    extras = linting
+    extras = formatting
     commands =
-            black {posargs:src}
-            isort {posargs:src}
+            black src
+            isort src
 
     [testenv:type]
     description = run type checks
     basepython = python3.9
     extras = typing
     commands =
-            mypy {posargs:src}
+            mypy src
+
+    [testenv:lint]
+    description = run linters
+    basepython = python3.9
+    extras = linting
+    commands =
+            flake8 src --max-line-length=88
 """
