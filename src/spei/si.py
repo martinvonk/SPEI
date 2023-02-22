@@ -4,7 +4,7 @@ from numpy import linspace, std
 from pandas import DatetimeIndex, Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
-from .typing import ContinuousDist, NDArray, float64
+from ._typing import ContinuousDist, NDArray, float64
 from .utils import validate_index, validate_series
 
 

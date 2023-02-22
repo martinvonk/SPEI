@@ -7,7 +7,7 @@ from numpy import array, linspace, meshgrid, reshape
 from pandas import Series
 from scipy.stats import gaussian_kde
 
-from .typing import Axes, ContinuousDist, NDArray, float64
+from ._typing import Axes, ContinuousDist, NDArray, float64
 from .utils import dist_test, validate_index, validate_series
 
 

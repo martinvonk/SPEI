@@ -15,7 +15,7 @@ from scipy.stats import (
     pearson3,
 )
 
-from .typing import ContinuousDist, NDArray, float64
+from ._typing import ContinuousDist, NDArray, float64
 
 
 def validate_series(series: Series) -> Series:
