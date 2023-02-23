@@ -3,6 +3,7 @@
 ![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square) ![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square) ![Code Size](https://img.shields.io/github/languages/code-size/martinvonk/spei?style=flat-square) ![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square) ![License](https://img.shields.io/pypi/l/spei?style=flat-square)
 
 ![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square)
+![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square)
 ![MyPy](https://img.shields.io/badge/%20type_checker-mypy-%231674b1?style=flat-square)
 ![Black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 
