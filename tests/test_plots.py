@@ -1,5 +1,4 @@
 import matplotlib as mpl
-import pytest
 from pandas import Series
 from scipy.stats import pearson3
 
