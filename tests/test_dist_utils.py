@@ -1,5 +1,3 @@
-from numpy import random
-
 from spei.utils import dists_test
 
 from .fixtures import head

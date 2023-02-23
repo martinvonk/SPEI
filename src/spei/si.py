@@ -4,7 +4,7 @@ from numpy import linspace, std
 from pandas import DatetimeIndex, Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
-from ._typing import ContinuousDist, NDArray, float64
+from ._typing import ContinuousDist, NDArrayFloat
 from .utils import validate_index, validate_series
 
 
@@ -42,7 +42,7 @@ def compute_si_ppf(
         series = validate_series(series)
         index = validate_index(series.index)
 
-    si = Series(index=index, dtype=float64)
+    si = Series(index=index, dtype=float)
     for month in range(1, 13):
         data = series[index.month == month].sort_values()
         if not sgi:
@@ -58,16 +58,16 @@ def compute_si_ppf(
 
 
 def compute_cdf(
-    data: Union[Series, NDArray[float64]], dist: ContinuousDist
-) -> NDArray[float64]:
+    data: Union[Series, NDArrayFloat], dist: ContinuousDist
+) -> NDArrayFloat:
     *pars, loc, scale = dist.fit(data, scale=std(data))
     cdf = dist.cdf(data, pars, loc=loc, scale=scale)
     return cdf
 
 
 def compute_cdf_probzero(
-    data: Union[Series, NDArray[float64]], dist: ContinuousDist
-) -> NDArray[float64]:
+    data: Union[Series, NDArrayFloat], dist: ContinuousDist
+) -> NDArrayFloat:
     p0 = (data == 0.0).sum() / len(data)
     *pars, loc, scale = dist.fit(data[data != 0.0], scale=std(data))
     cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
@@ -76,7 +76,7 @@ def compute_cdf_probzero(
     return cdf
 
 
-def compute_cdf_nsf(data: Union[Series, NDArray[float64]]) -> NDArray[float64]:
+def compute_cdf_nsf(data: Union[Series, NDArrayFloat]) -> NDArrayFloat:
     """Normal Scores Transform"""
     n = data.size
     cdf = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)

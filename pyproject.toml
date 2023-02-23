@@ -32,7 +32,8 @@ linting = ["flake8"]
 formatting = ["black[jupyter]", "isort"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
-dev = ["spei[linting,formatting,typing,pytesting]"]
+coveraging = ["coverage"]
+dev = ["spei[linting,formatting,typing,pytesting,coveraging]"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -86,4 +87,12 @@ legacy_tox_ini = """
     extras = linting
     commands =
             flake8 src --max-line-length=88
+
+    [testenv:coverage]
+    description = get coverage report xml
+    basepython = 3.9
+    extras = coveraging,pytesting
+    commands =
+            coverage run -m pytest tests
+            coverage xml
 """
