@@ -7,7 +7,7 @@ from numpy import array, linspace, meshgrid, reshape
 from pandas import Series
 from scipy.stats import gaussian_kde
 
-from ._typing import Axes, ContinuousDist, NDArray, float64
+from ._typing import Axes, ContinuousDist, NDArrayAxes
 from .utils import dist_test, validate_index, validate_series
 
 
@@ -40,9 +40,9 @@ def si(
 
     nmin = -bound
     nmax = bound
-    droughts = si.to_numpy(dtype=float64, copy=True)
+    droughts = si.to_numpy(dtype=float, copy=True)
     droughts[droughts > 0] = 0
-    nodroughts = si.to_numpy(dtype=float64, copy=True)
+    nodroughts = si.to_numpy(dtype=float, copy=True)
     nodroughts[nodroughts < 0] = 0
 
     x, y = meshgrid(si.index, linspace(nmin, nmax, 100))
@@ -64,7 +64,7 @@ def dist(
     cmap: Optional[str] = None,
     figsize: tuple = (8, 10),
     legend: bool = True,
-) -> NDArray[Axes]:
+) -> NDArrayAxes:
     """Plot the (cumulative) histogram and scipy fitted distribution
     for the time series on a monthly basis.
 

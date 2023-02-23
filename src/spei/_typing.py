@@ -1,12 +1,12 @@
 # flake8: noqa
 from typing import Any, Union
 
-from matplotlib.axes import Axes
-from numpy import float64 as npfloat64
-from numpy.typing import NDArray as npNDArray
+from matplotlib.axes import Axes as mplAxes
+from numpy import float64
+from numpy.typing import NDArray
 from scipy.stats._continuous_distns import rv_continuous
 
 ContinuousDist = Union[Any, rv_continuous]
-Axes = Union[Any, Axes]
-NDArray = npNDArray
-float64 = npfloat64
+Axes = Union[Any, mplAxes]
+NDArrayAxes = NDArray[Axes]
+NDArrayFloat = NDArray[float64]

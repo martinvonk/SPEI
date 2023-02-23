@@ -15,7 +15,7 @@ from scipy.stats import (
     pearson3,
 )
 
-from ._typing import ContinuousDist, NDArray, float64
+from ._typing import ContinuousDist, NDArrayFloat
 
 
 def validate_series(series: Series) -> Series:
@@ -53,7 +53,7 @@ def validate_index(index: Index) -> DatetimeIndex:
 
 
 def dist_test(
-    series: Union[Series, NDArray[float64]],
+    series: Union[Series, NDArrayFloat],
     dist: ContinuousDist,
     N: int = 100,
     alpha: float = 0.05,
@@ -66,7 +66,7 @@ def dist_test(
 
     Parameters
     ----------
-    data : Union[Series, NDArray[float64]]
+    data : Union[Series, NDArray[float]]
         pandas Series or numpy array of floats of observations of random
         variables
     dist: scipy.stats.rv_continuous
@@ -100,7 +100,7 @@ def dist_test(
 
 
 def dists_test(
-    series: Union[Series, NDArray[float64]],
+    series: Union[Series, NDArrayFloat],
     distributions: Optional[List[ContinuousDist]] = None,
     N: int = 100,
     alpha: float = 0.05,
@@ -113,7 +113,7 @@ def dists_test(
 
     Parameters
     ----------
-    series : Union[Series, NDArray[float64]]
+    series : Union[Series, NDArray[float]]
         pandas Series with observations of random variables
     distributions : list of scipy.stats.rv_continuous, optional
         A list of (can be) any continuous distribution from the scipy.stats
