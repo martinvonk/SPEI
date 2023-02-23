@@ -4,6 +4,7 @@
 
 ![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square)
 ![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square)
+![CodacyCoverage](https://img.shields.io/codacy/coverage/908b566912314666b84e1add22ea7d66?style=flat-square)
 ![MyPy](https://img.shields.io/badge/%20type_checker-mypy-%231674b1?style=flat-square)
 ![Black](https://img.shields.io/badge/code%20style-black-black?style=flat-square)
 
