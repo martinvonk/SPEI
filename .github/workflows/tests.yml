@@ -35,7 +35,7 @@ jobs:
             python: "3.9"
             os: ubuntu-latest
             toxenv: format
-          - name: Linting with flake8
+          - name: Linting with flake8 + ruff
             python: "3.9"
             os: ubuntu-latest
             toxenv: lint
