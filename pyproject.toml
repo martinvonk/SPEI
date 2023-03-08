@@ -28,7 +28,7 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-linting = ["flake8"]
+linting = ["flake8", "ruff"]
 formatting = ["black[jupyter]", "isort"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
@@ -53,6 +53,9 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 88
 
 [tool.tox]
 legacy_tox_ini = """
@@ -86,7 +89,8 @@ legacy_tox_ini = """
     basepython = python3.9
     extras = linting
     commands =
-            flake8 src --max-line-length=88
+            flake8 src --max-line-length=88 --ignore=E203,W503,W504
+            ruff check src
 
     [testenv:coverage]
     description = get coverage report xml

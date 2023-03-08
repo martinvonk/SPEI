@@ -1,4 +1,4 @@
-# Type Hinting
+import logging
 from typing import List, Optional, Tuple, Union
 
 from numpy import std
@@ -24,7 +24,7 @@ def validate_series(series: Series) -> Series:
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
             if len(series.columns) == 1:
-                print(
+                logging.warning(
                     "Please convert series of type pandas.DataFrame to a"
                     "pandas.Series using DataFrame.squeeze(). Now done automatically."
                 )
@@ -43,8 +43,8 @@ def validate_index(index: Index) -> DatetimeIndex:
     index = index.copy()
 
     if not isinstance(index, DatetimeIndex):
-        print(
-            f"Expected the index to be a DatetimeIndex. Automatically converted"
+        logging.info(
+            f"Expected the index to be a DatetimeIndex. Automatically converted "
             f"{type(index)} using pd.to_datetime(Index)"
         )
         index = DatetimeIndex(to_datetime(index))
