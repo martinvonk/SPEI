@@ -21,6 +21,7 @@ classifiers = [
         'Intended Audience :: Science/Research',
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Typing :: Typed",
 ]
 
 [project.urls]
