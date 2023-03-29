@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from numpy import meshgrid, linspace
+from numpy import linspace, meshgrid
 
 fig, ax = plt.subplots(figsize=(27, 9))
 x, y = meshgrid((0, 100), linspace(0, 0.1, 1000))

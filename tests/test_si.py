@@ -2,8 +2,6 @@ from pandas import Series
 
 from spei import sgi, spei, spi, ssfi
 
-from .fixtures import evap, head, prec
-
 
 def test_spi(prec: Series) -> None:
     spi(prec.rolling("30D", min_periods=30).sum().dropna(), prob_zero=True)

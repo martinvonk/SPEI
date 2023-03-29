@@ -1,7 +1,7 @@
+from pandas import Series
+
 from spei.utils import dists_test
 
-from .fixtures import head
 
-
-def test_dists_test(head) -> None:
+def test_dists_test(head: Series) -> None:
     _ = dists_test(head)

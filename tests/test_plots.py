@@ -5,8 +5,6 @@ from scipy.stats import pearson3
 from spei.plot import dist, monthly_density
 from spei.plot import si as plot_si
 
-from .fixtures import prec, si
-
 mpl.use("Agg")  # prevent _tkinter.TclError: Can't find a usable tk.tcl error
 
 
