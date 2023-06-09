@@ -61,7 +61,7 @@ def cdd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
 
     w = series < threshold
 
-    return w.diff().rolling(period).sum().astype(int)
+    return w.diff().rolling(period).sum().dropna().astype(int)
 
 
 def cwd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
@@ -72,7 +72,7 @@ def cwd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
 
     w = series >= threshold
 
-    return w.diff().rolling(period).sum().astype(int)
+    return w.diff().rolling(period).sum().dropna().astype(int)
 
 
 def prcptot(series: Series, period: str = "1Y") -> Series:
