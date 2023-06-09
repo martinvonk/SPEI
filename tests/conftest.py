@@ -21,6 +21,11 @@ def prec() -> Series:
 
 
 @pytest.fixture
+def precmm(prec) -> Series:
+    return prec.multiply(1e3).rename("Prec [mm/d]  081_JOURE")
+
+
+@pytest.fixture
 def evap() -> Series:
     evap = read_data("Evap [m/d] 235_DE-KOOY").dropna()
     return evap
