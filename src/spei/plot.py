@@ -12,7 +12,7 @@ from .utils import dist_test, validate_index, validate_series
 
 
 def si(
-    si: Series, bound: float = 3.0, figsize: tuple = (8, 4), ax: Optional[Axes] = None
+    si: Series, bound: float = 3.0, figsize: tuple = (6.5, 4), ax: Optional[Axes] = None
 ) -> Axes:
     """Plot the standardized index values as a time series.
 
@@ -35,8 +35,8 @@ def si(
     if ax is None:
         _, ax = plt.subplots(figsize=figsize)
 
-    ax.plot(si, color="k", label="SGI")
-    ax.axhline(0, linestyle="--", color="k")
+    ax.plot(si.index, si.values, linewidth=1.0, color="k")
+    ax.axhline(0, linestyle="--", linewidth=1.0, color="k")
 
     nmin = -bound
     nmax = bound
@@ -62,7 +62,7 @@ def dist(
     cumulative: bool = False,
     test_dist: bool = True,
     cmap: Optional[str] = None,
-    figsize: tuple = (8, 10),
+    figsize: tuple = (6.5, 10),
     legend: bool = True,
 ) -> NDArrayAxes:
     """Plot the (cumulative) histogram and scipy fitted distribution
@@ -146,7 +146,7 @@ def dist(
                 ax.set_ylabel("Probability Density")
         ax.set_title(month_name[i])
         if legend:
-            ax.legend()
+            ax.legend(fontsize=7)
 
     return axs
 
@@ -183,7 +183,7 @@ def monthly_density(
     index = validate_index(si.index)
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(6, 4))
+        _, ax = plt.subplots(figsize=(6.5, 4))
 
     cm = plt.get_cmap(cmap, 20)
     colors = reshape(array([cm(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
