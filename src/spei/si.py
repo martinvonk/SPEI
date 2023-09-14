@@ -43,8 +43,8 @@ def compute_si_ppf(
         index = validate_index(series.index)
 
     si = Series(index=index, dtype=float)  # type: Series
-    for month in range(1, 13):
-        data = series[index.month == month].sort_values()
+    for dy in range(1, 366):
+        data = series[index.dayofyear == dy].sort_values()
         if not sgi:
             if prob_zero:
                 cdf = compute_cdf_probzero(data=data, dist=dist)
