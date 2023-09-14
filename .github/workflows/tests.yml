@@ -30,6 +30,7 @@ jobs:
           - name: Test suite with py311-ubuntu
             python: "3.11"
             os: ubuntu-latest
+            toxenv: py311
             experimental: false
           - name: Test suite with py312-ubuntu
             python: "3.12-dev"
