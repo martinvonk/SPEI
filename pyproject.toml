@@ -76,8 +76,8 @@ legacy_tox_ini = """
     basepython = python3.9
     extras = formatting
     commands =
-            black src
-            isort src
+            black src --check --verbose
+            isort src --check
 
     [testenv:type]
     description = run type checks
