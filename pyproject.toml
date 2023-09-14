@@ -63,7 +63,7 @@ line-length = 88
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py{38,39,310,311,312}
+    env_list = format, type, lint, py38, py39, py310, py311, py312
 
     [testenv]
     description = run unit tests
