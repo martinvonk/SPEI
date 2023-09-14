@@ -27,9 +27,9 @@ jobs:
             python: "3.11"
             os: ubuntu-latest
           - name: Test suite with py312-ubuntu
-            python: "3.12"
+            python: "3.12-dev"
             os: ubuntu-latest
-            toxenv: py311
+            toxenv: py312
           - name: Type check with mypy
             python: "3.9"
             os: ubuntu-latest
