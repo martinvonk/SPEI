@@ -37,9 +37,9 @@ To get the latest stable version install using:
 
 `pip install spei`
 
-To get the development version download the GitHub code to your computer. Use cd to get to the download directory and install using:
+To get the development version download or clone the GitHub repository to your local device. Install using:
 
-`pip install -e .`
+`pip install -e <download_directory>`
 
 ## Literature
 
