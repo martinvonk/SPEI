@@ -1,5 +1,5 @@
 # flake8: noqa
-from typing import Any, Union, TypeVar
+from typing import Any, TypeVar, Union
 
 from matplotlib.axes import Axes as mplAxes
 from numpy import float64
