@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
@@ -15,34 +16,47 @@ jobs:
             python: "3.8"
             os: ubuntu-latest
             toxenv: py38
+            experimental: false
           - name: Test suite with py39-ubuntu
             python: "3.9"
             os: ubuntu-latest
             toxenv: py39
+            experimental: false
           - name: Test suite with py310-ubuntu
             python: "3.10"
             os: ubuntu-latest
             toxenv: py310
+            experimental: false
           - name: Test suite with py311-ubuntu
             python: "3.11"
             os: ubuntu-latest
             toxenv: py311
+            experimental: false
+          - name: Test suite with py312-ubuntu
+            python: "3.12-dev"
+            os: ubuntu-latest
+            toxenv: py312
+            experimental: true
           - name: Type check with mypy
             python: "3.9"
             os: ubuntu-latest
             toxenv: type
+            experimental: false
           - name: Formatting with black + isort
             python: "3.9"
             os: ubuntu-latest
             toxenv: format
+            experimental: false
           - name: Linting with flake8 + ruff
             python: "3.9"
             os: ubuntu-latest
             toxenv: lint
+            experimental: false
           - name: Codacy Coverage Report
             python: "3.9"
             os: ubuntu-latest
             toxenv: coverage
+            experimental: false
 
     name: ${{ matrix.name }}
     env:

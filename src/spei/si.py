@@ -42,7 +42,7 @@ def compute_si_ppf(
         series = validate_series(series)
         index = validate_index(series.index)
 
-    si = Series(index=index, dtype=float)
+    si = Series(index=index, dtype=float)  # type: Series
     for month in range(1, 13):
         data = series[index.month == month].sort_values()
         if not sgi:
