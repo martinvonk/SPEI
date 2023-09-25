@@ -17,6 +17,7 @@ classifiers = [
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Scientific/Engineering :: Hydrology',
         'Intended Audience :: Science/Research',
         "License :: OSI Approved :: MIT License",
@@ -62,7 +63,7 @@ line-length = 88
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py{38,39,310,311}
+    env_list = format, type, lint, py38, py39, py310, py311, py312
 
     [testenv]
     description = run unit tests
@@ -75,8 +76,8 @@ legacy_tox_ini = """
     basepython = python3.9
     extras = formatting
     commands =
-            black src
-            isort src
+            black src --check --verbose
+            isort src --check
 
     [testenv:type]
     description = run type checks

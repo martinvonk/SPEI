@@ -103,7 +103,7 @@ def dist(
         cm = plt.get_cmap(cmap, 12)
         c = [cm(i) for i in range(12)]
     else:
-        c = ["k" for _ in range(12)]
+        c = [(1, 1, 1, 1) for _ in range(12)]
 
     for i, ax in enumerate(axs.flat, start=1):
         data = series[index.month == i].sort_values()
