@@ -43,7 +43,7 @@ def compute_si_ppf(
     series = validate_series(series)
     if index is None:
         index = validate_index(series.index)
-        series = series.set_index(index, inplace=False)
+        series = series.reindex(index, copy=True)
 
     inf_freq = infer_frequency(index)
     dfval = group_yearly_df(series=series)
