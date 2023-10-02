@@ -1,8 +1,18 @@
 import logging
+from calendar import isleap
 from typing import List, Optional, Tuple, Union
 
-from numpy import std
-from pandas import DataFrame, DatetimeIndex, Index, Series, to_datetime
+from numpy import array, std
+from pandas import (
+    DataFrame,
+    DatetimeIndex,
+    Grouper,
+    Index,
+    Series,
+    concat,
+    infer_freq,
+    to_datetime,
+)
 from scipy.stats import (
     fisk,
     gamma,
@@ -50,6 +60,49 @@ def validate_index(index: Index) -> DatetimeIndex:
         index = DatetimeIndex(to_datetime(index))
 
     return index
+
+
+def infer_frequency(index: DatetimeIndex) -> str:
+    """Infer frequency"""
+    inf_freq = infer_freq(index)
+    if inf_freq is None:
+        logging.info("Could not infer frequency from index, using monthly frequency")
+        inf_freq = "M"
+    return inf_freq
+
+
+def group_yearly_df(series: Series) -> DataFrame:
+    strfstr: str = "%m-%d %H:%M:%S"
+    grs = {}
+    for year, gry in series.groupby(Grouper(freq="Y")):
+        gry.index = to_datetime(
+            "2000-" + gry.index.strftime(strfstr), format="%Y-" + strfstr
+        )
+        grs[year.year] = gry
+    return concat(grs, axis=1)
+
+
+def get_data_series(group_df: DataFrame) -> Series:
+    strfstr: str = "%m-%d %H:%M:%S"
+
+    idx = array(
+        [
+            (f"{col}-" + group_df.index.strftime(strfstr)).tolist()
+            for col in group_df.columns
+        ]
+    ).flatten()
+    # remove illegal 29 febraury for non leap years created by group_yearly_df
+    boolidx = ~array(
+        [
+            (x.split(" ")[0].split("-", 1)[1] == "02-29")
+            and not isleap(int(x.split(" ")[0].split("-")[0]))
+            for x in idx
+        ]
+    )
+
+    dt_idx = to_datetime(idx[boolidx], format="%Y-" + strfstr)
+    values = group_df.transpose().values.flatten()[boolidx]
+    return Series(values, index=dt_idx).dropna()
 
 
 def dist_test(

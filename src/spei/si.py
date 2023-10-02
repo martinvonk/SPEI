@@ -1,11 +1,17 @@
 from typing import Optional, Union
 
 from numpy import linspace, std
-from pandas import DatetimeIndex, Series
+from pandas import DatetimeIndex, Grouper, Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
 from ._typing import ContinuousDist, NDArrayFloat
-from .utils import validate_index, validate_series
+from .utils import (
+    get_data_series,
+    group_yearly_df,
+    infer_frequency,
+    validate_index,
+    validate_series,
+)
 
 
 def compute_si_ppf(
@@ -41,10 +47,13 @@ def compute_si_ppf(
     if index is None:
         series = validate_series(series)
         index = validate_index(series.index)
+        series.index = index
 
+    inf_freq = infer_frequency(index)
+    dfval = group_yearly_df(series=series)
     si = Series(index=index, dtype=float)  # type: Series
-    for dy in range(1, 366):
-        data = series[index.dayofyear == dy].sort_values()
+    for _, grval in dfval.groupby(Grouper(freq=inf_freq)):
+        data = get_data_series(grval).values
         if not sgi:
             if prob_zero:
                 cdf = compute_cdf_probzero(data=data, dist=dist)
