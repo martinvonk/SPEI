@@ -18,7 +18,6 @@ def compute_si_ppf(
     series: Series,
     dist: ContinuousDist,
     index: Optional[DatetimeIndex] = None,
-    sgi: bool = False,
     prob_zero: bool = False,
 ) -> Series:
     """Internal helper function to calculate drought index
@@ -31,9 +30,6 @@ def compute_si_ppf(
         Continuous distribution from the SciPy library
     index : DatetimeIndex, optional
         DatetimeIndex with the date of the observations
-    sgi : bool, optional
-        Whether to caclulate the standardized groundwater index or not, by
-        default False
     prob_zero : bool, optional
         Apply logic to observations that have value zero and calculate their
         probability seperately, by default False
@@ -44,23 +40,20 @@ def compute_si_ppf(
         Series with probability point function, ppf
     """
 
+    series = validate_series(series)
     if index is None:
-        series = validate_series(series)
         index = validate_index(series.index)
-        series.index = index
+        series = series.set_index(index, inplace=False)
 
     inf_freq = infer_frequency(index)
     dfval = group_yearly_df(series=series)
     si = Series(index=index, dtype=float)  # type: Series
     for _, grval in dfval.groupby(Grouper(freq=inf_freq)):
         data = get_data_series(grval)
-        if not sgi:
-            if prob_zero:
-                cdf = compute_cdf_probzero(data=data.values, dist=dist)
-            else:
-                cdf = compute_cdf(data=data.values, dist=dist)
+        if prob_zero:
+            cdf = compute_cdf_probzero(data=data.values, dist=dist)
         else:
-            cdf = compute_cdf_nsf(data=data.values)
+            cdf = compute_cdf(data=data.values, dist=dist)
         ppf = norm.ppf(cdf)
         si.loc[data.index] = ppf
     return si
@@ -112,8 +105,16 @@ def sgi(series: Series) -> Series:
        groundwater drought building on the standardised precipitation index
        approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
     """
-    mock_dist = norm  # not used
-    return compute_si_ppf(series=series, dist=mock_dist, sgi=True)
+
+    series = validate_series(series)
+    index = validate_index(series.index)
+    si = Series(index=index, dtype=float)  # type: Series
+    for month in range(1, 13):
+        data = series[index.month == month].sort_values()
+        cdf = compute_cdf_nsf(data=data.values)
+        si.loc[data.index] = norm.ppf(cdf)
+
+    return si
 
 
 def spi(
