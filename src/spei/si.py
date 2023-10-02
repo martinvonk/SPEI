@@ -53,14 +53,14 @@ def compute_si_ppf(
     dfval = group_yearly_df(series=series)
     si = Series(index=index, dtype=float)  # type: Series
     for _, grval in dfval.groupby(Grouper(freq=inf_freq)):
-        data = get_data_series(grval).values
+        data = get_data_series(grval)
         if not sgi:
             if prob_zero:
-                cdf = compute_cdf_probzero(data=data, dist=dist)
+                cdf = compute_cdf_probzero(data=data.values, dist=dist)
             else:
-                cdf = compute_cdf(data=data, dist=dist)
+                cdf = compute_cdf(data=data.values, dist=dist)
         else:
-            cdf = compute_cdf_nsf(data=data)
+            cdf = compute_cdf_nsf(data=data.values)
         ppf = norm.ppf(cdf)
         si.loc[data.index] = ppf
     return si
