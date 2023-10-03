@@ -74,22 +74,21 @@ def infer_frequency(index: DatetimeIndex) -> str:
 def group_yearly_df(series: Series) -> DataFrame:
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
-    for year, gry in series.groupby(Grouper(freq="Y")):
+    for year_timestamp, gry in series.groupby(Grouper(freq="Y")):
+        index = validate_index(gry.index)
         gry.index = to_datetime(
-            "2000-" + gry.index.strftime(strfstr), format="%Y-" + strfstr
+            "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
         )
-        grs[year.year] = gry
+        year = getattr(year_timestamp, "year")  # type: str
+        grs[year] = gry
     return concat(grs, axis=1)
 
 
 def get_data_series(group_df: DataFrame) -> Series:
     strfstr: str = "%m-%d %H:%M:%S"
-
+    index = validate_index(group_df.index)
     idx = array(
-        [
-            (f"{col}-" + group_df.index.strftime(strfstr)).tolist()
-            for col in group_df.columns
-        ]
+        [(f"{col}-" + index.strftime(strfstr)).tolist() for col in group_df.columns]
     ).flatten()
     # remove illegal 29 febraury for non leap years created by group_yearly_df
     boolidx = ~array(
@@ -102,7 +101,7 @@ def get_data_series(group_df: DataFrame) -> Series:
 
     dt_idx = to_datetime(idx[boolidx], format="%Y-" + strfstr)
     values = group_df.transpose().values.flatten()[boolidx]
-    return Series(values, index=dt_idx).dropna()
+    return Series(values, index=dt_idx, dtype=float).dropna()
 
 
 def dist_test(
