@@ -33,10 +33,10 @@ jobs:
             toxenv: py311
             experimental: false
           - name: Test suite with py312-ubuntu
-            python: "3.12-dev"
+            python: "3.12"
             os: ubuntu-latest
             toxenv: py312
-            experimental: true
+            experimental: false
           - name: Type check with mypy
             python: "3.9"
             os: ubuntu-latest
