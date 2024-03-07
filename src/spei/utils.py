@@ -59,6 +59,15 @@ def validate_index(index: Index) -> DatetimeIndex:
         )
         index = DatetimeIndex(to_datetime(index))
 
+    if index.has_duplicates:
+        msg = (
+            "Duplicated indices found. Please remove them. For instance by"
+            " using `series = "
+            "series.loc[~series.index.duplicated(keep='first/last')]`"
+        )
+        logging.error(msg)
+        raise ValueError(msg)
+
     return index
 
 

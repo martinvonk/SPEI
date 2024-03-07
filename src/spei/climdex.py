@@ -33,7 +33,7 @@ def sdii(series: Series, threshold: float = 1.0, period: str = "30D") -> Series:
     return series.loc[w].resample(period).sum() / w.sum()
 
 
-def rnmm(series: Series, threshold: float, period: str = "1Y") -> Series:
+def rnmm(series: Series, threshold: float, period: str = "1YE") -> Series:
     """Annual count of days when precipitation ≥ n mm. n is a user-defined threshold"""
     series = validate_series(series)
     _ = validate_index(series.index)
@@ -43,12 +43,12 @@ def rnmm(series: Series, threshold: float, period: str = "1Y") -> Series:
     return w.resample(period).sum()
 
 
-def r10mm(series: Series, threshold: float = 10.0, period: str = "1Y") -> Series:
+def r10mm(series: Series, threshold: float = 10.0, period: str = "1YE") -> Series:
     """Annual count of days when precipitation ≥ 10 mm"""
     return rnmm(series=series, threshold=threshold, period=period)
 
 
-def r20mm(series: Series, threshold: float = 20.0, period: str = "1Y") -> Series:
+def r20mm(series: Series, threshold: float = 20.0, period: str = "1YE") -> Series:
     """Annual count of days when precipitation ≥ 20 mm"""
     return rnmm(series=series, threshold=threshold, period=period)
 
@@ -75,7 +75,7 @@ def cwd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
     return w.diff().rolling(period).sum().dropna().astype(int)
 
 
-def prcptot(series: Series, period: str = "1Y") -> Series:
+def prcptot(series: Series, period: str = "1YE") -> Series:
     """Total precipitation on wet days over a certain period"""
     series = validate_series(series)
     _ = validate_index(series.index)
@@ -84,7 +84,7 @@ def prcptot(series: Series, period: str = "1Y") -> Series:
 
 
 def rnnp(
-    series: Series, quantile: float, threshold: float = 1.0, period: str = "1Y"
+    series: Series, quantile: float, threshold: float = 1.0, period: str = "1YE"
 ) -> Series:
     """Total amount of precipitation on wet days above certain quantile"""
     series = validate_series(series)
@@ -97,21 +97,21 @@ def rnnp(
 
 
 def r95p(
-    series: Series, quantile: float = 0.95, threshold: float = 1.0, period: str = "1Y"
+    series: Series, quantile: float = 0.95, threshold: float = 1.0, period: str = "1YE"
 ) -> Series:
     """Total amount of precipitation on very wet days"""
     return rnnp(series=series, quantile=quantile, threshold=threshold, period=period)
 
 
 def r99p(
-    series: Series, quantile: float = 0.99, threshold: float = 1.0, period: str = "1Y"
+    series: Series, quantile: float = 0.99, threshold: float = 1.0, period: str = "1YE"
 ) -> Series:
     """Total amount of precipitation on extremely wet days"""
     return rnnp(series=series, quantile=quantile, threshold=threshold, period=period)
 
 
 def r95ptot(
-    series: Series, quantile: float = 0.95, threshold: float = 1.0, period: str = "1Y"
+    series: Series, quantile: float = 0.95, threshold: float = 1.0, period: str = "1YE"
 ) -> Series:
     """Contribution to total precipitation from very wet days"""
     r95 = r95p(series=series, quantile=quantile, threshold=threshold, period=period)
@@ -120,7 +120,7 @@ def r95ptot(
 
 
 def r99ptot(
-    series: Series, quantile: float = 0.99, threshold: float = 1.0, period: str = "1Y"
+    series: Series, quantile: float = 0.99, threshold: float = 1.0, period: str = "1YE"
 ) -> Series:
     """Contribution to total precipitation from extremely wet days"""
     r99 = r99p(series=series, quantile=quantile, threshold=threshold, period=period)
