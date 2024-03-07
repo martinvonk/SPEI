@@ -1,21 +1,35 @@
 import logging
 
 import pytest
-from pandas import DataFrame, Series, to_datetime
+from pandas import DataFrame, DatetimeIndex, Series, Timestamp, to_datetime
 
 from spei.utils import validate_index, validate_series
 
 
 def test_validate_index(caplog) -> None:
     caplog.set_level(logging.INFO)
-    series = Series([1, 2, 3], index=["2018", "2019", "2020"])
+    series = Series([1.0, 2.0, 3.0], index=["2018", "2019", "2020"])
     validate_index(series.index)
     msg = (
         f"Expected the index to be a DatetimeIndex. Automatically converted "
         f"{type(series.index)} using pd.to_datetime(Index)\n"
     )
-    print(f"{caplog.text=}")
     assert msg in caplog.text
+
+
+def test_validate_index_duplicated(caplog) -> None:
+    caplog.set_level(logging.ERROR)
+    series = Series(
+        [1.0, 1.0],
+        index=DatetimeIndex([Timestamp("2000-01-01"), Timestamp("2000-01-01")]),
+    )
+    with pytest.raises(ValueError):
+        validate_index(series.index)
+        msg = (
+            "Duplicated indices found. Please remove them. For instance by using"
+            "`series = series.loc[~series.index.duplicated(keep='first/last')]`"
+        )
+        assert msg in caplog.text
 
 
 def test_validate_series() -> None:
