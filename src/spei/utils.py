@@ -2,30 +2,18 @@ import logging
 from calendar import isleap
 from typing import List, Optional, Tuple, Union
 
-from numpy import array, std
+from numpy import array, nan
 from pandas import (
     DataFrame,
     DatetimeIndex,
     Grouper,
     Index,
     Series,
+    Timedelta,
     concat,
     infer_freq,
     to_datetime,
 )
-from scipy.stats import (
-    fisk,
-    gamma,
-    genextreme,
-    genlogistic,
-    kstest,
-    logistic,
-    lognorm,
-    norm,
-    pearson3,
-)
-
-from ._typing import ContinuousDist, NDArrayFloat
 
 
 def validate_series(series: Series) -> Series:
@@ -75,15 +63,23 @@ def infer_frequency(index: DatetimeIndex) -> str:
     """Infer frequency"""
     inf_freq = infer_freq(index)
     if inf_freq is None:
-        logging.info("Could not infer frequency from index, using monthly frequency")
+        logging.info(
+            "Could not infer frequency from index, using monthly frequency instead"
+        )
         inf_freq = "M"
+    else:
+        logging.info(f"Inferred frequency '{inf_freq}' from index")
+    if "W-" in inf_freq:
+        logging.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
+        inf_freq = "W"
     return inf_freq
 
 
 def group_yearly_df(series: Series) -> DataFrame:
+    """Group series in a DataFrame with date (in the year 2000) as index and year as columns."""
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
-    for year_timestamp, gry in series.groupby(Grouper(freq="Y")):
+    for year_timestamp, gry in series.groupby(Grouper(freq="YE")):
         index = validate_index(gry.index)
         gry.index = to_datetime(
             "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
@@ -94,6 +90,7 @@ def group_yearly_df(series: Series) -> DataFrame:
 
 
 def get_data_series(group_df: DataFrame) -> Series:
+    """Transform grouped dataframe by yearly values back to time series."""
     strfstr: str = "%m-%d %H:%M:%S"
     index = validate_index(group_df.index)
     idx = array(
@@ -113,109 +110,23 @@ def get_data_series(group_df: DataFrame) -> Series:
     return Series(values, index=dt_idx, dtype=float).dropna()
 
 
-def dist_test(
-    series: Union[Series, NDArrayFloat],
-    dist: ContinuousDist,
-    N: int = 100,
-    alpha: float = 0.05,
-) -> Tuple[str, float, bool, tuple]:
-    """Fit a distribution and perform the two-sided
-    Kolmogorov-Smirnov test for goodness of fit. The
-    null hypothesis is that the data and distributions
-    are identical, the alternative is that they are
-    not identical. [scipy_2021]_
+def daily_window_groupby_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
+    """Fill a period of daily values in grouped by yearly DataFrame to get cyclic rolling window."""
+    dfval_window_index_start = [
+        dfval.index[0] + Timedelta(value=-i, unit="D")
+        for i in reversed(range(1, period))
+    ]
+    dfval_window_index_end = [
+        dfval.index[-1] + Timedelta(value=i, unit="D") for i in range(1, period)
+    ]
+    dfval_window_index = DatetimeIndex(
+        dfval_window_index_start + dfval.index.to_list() + dfval_window_index_end
+    )
 
-    Parameters
-    ----------
-    data : Union[Series, NDArray[float]]
-        pandas Series or numpy array of floats of observations of random
-        variables
-    dist: scipy.stats.rv_continuous
-        Can be any continuous distribution from the
-        scipy.stats library.
-    N : int, optional
-        Sample size, by default 100
-    alpha : float, optional
-        Significance level for testing, default is 0.05
-        which is equal to a a confidence level of 95%;
-        that is, the null hypothesis will be rejected in
-        favor of the alternative if the p-value is
-        less than 0.05.
-
-    Returns
-    -------
-    string, float, bool, tuple
-        distribution name, p-value and fitted parameters
-
-    References
-    -------
-    .. [scipy_2021] Onnen, H.: Intro to Probability
-     Distributions and Distribution Fitting with Pythons
-    SciPy, 2021.
-    """
-    fitted = dist.fit(series, scale=std(series))
-    dist_name = getattr(dist, "name")
-    ks = kstest(series, dist_name, fitted, N=N)[1]
-    rej_h0 = ks < alpha
-    return dist_name, ks, rej_h0, fitted
-
-
-def dists_test(
-    series: Union[Series, NDArrayFloat],
-    distributions: Optional[List[ContinuousDist]] = None,
-    N: int = 100,
-    alpha: float = 0.05,
-) -> DataFrame:
-    """Fit a list of distribution and perform the
-    two-sided Kolmogorov-Smirnov test for goodness
-    of fit. The null hypothesis is that the data and
-    distributions are identical, the alternative is
-    that they are not identical. [scipy_2021]_
-
-    Parameters
-    ----------
-    series : Union[Series, NDArray[float]]
-        pandas Series with observations of random variables
-    distributions : list of scipy.stats.rv_continuous, optional
-        A list of (can be) any continuous distribution from the scipy.stats
-        library, by default None which makes a custom selection
-    N : int, optional
-        Sample size, by default 100
-    alpha : float, optional
-        Significance level for testing, default is 0.05
-        which is equal to a a confidence level of 95%;
-        that is, the null hypothesis will be rejected in
-        favor of the alternative if the p-value is
-        less than 0.05.
-
-    Returns
-    -------
-    pandas.DataFrame
-        DataFrame with the distribution names,
-        pvalues and parameters
-
-    References
-    -------
-    .. [scipy_2021] Onnen, H.: Intro to Probability
-     Distributions and Distribution Fitting with Pythons
-    SciPy, 2021.
-    """
-    if distributions is None:
-        distributions = [
-            norm,
-            gamma,
-            genextreme,
-            pearson3,
-            fisk,
-            lognorm,
-            logistic,
-            genlogistic,
-        ]
-
-    df = DataFrame([dist_test(series, D, N, alpha) for D in distributions])
-    cols = ["Distribution", "KS p-value", "Reject H0"]
-    cols += [f"Param {i+1}" for i in range(len(df.columns) - len(cols))]
-    df = df.rename(columns=dict(zip(df.columns, cols))).set_index(cols[0])
-    df["Dist"] = distributions
-
-    return df
+    dfval_window = DataFrame(
+        nan, index=dfval_window_index, columns=dfval.columns, dtype=float
+    )
+    dfval_window.loc[dfval.index, dfval.columns] = dfval.values
+    dfval_window.iloc[: period - 1] = dfval.iloc[-period + 1 :].values
+    dfval_window.iloc[-period + 1 :] = dfval.iloc[: period - 1].values
+    return dfval_window

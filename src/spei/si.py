@@ -1,100 +1,11 @@
-from typing import Optional, Tuple, Union
+from typing import Optional
 
-from numpy import linspace, std
-from pandas import DatetimeIndex, Grouper, Series
+from pandas import Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
-from ._typing import ContinuousDist, NDArrayFloat
-from .utils import (
-    get_data_series,
-    group_yearly_df,
-    infer_frequency,
-    validate_index,
-    validate_series,
-)
-
-
-def compute_si_ppf(
-    series: Series,
-    dist: ContinuousDist,
-    index: Optional[DatetimeIndex] = None,
-    prob_zero: bool = False,
-) -> Series:
-    """Internal helper function to calculate drought index
-
-    Parameters
-    ----------
-    series : Series
-        Series with observations
-    dist : ContinuousDist
-        Continuous distribution from the SciPy library
-    index : DatetimeIndex, optional
-        DatetimeIndex with the date of the observations
-    prob_zero : bool, optional
-        Apply logic to observations that have value zero and calculate their
-        probability seperately, by default False
-
-    Returns
-    -------
-    Series
-        Series with probability point function, ppf
-    """
-
-    series = validate_series(series)
-    if index is None:
-        index = validate_index(series.index)
-        series = series.reindex(index, copy=True)
-
-    inf_freq = infer_frequency(index)
-    dfval = group_yearly_df(series=series)
-    si = Series(index=index, dtype=float)  # type: Series
-    for _, grval in dfval.groupby(Grouper(freq=inf_freq)):
-        data = get_data_series(grval)
-        if prob_zero:
-            p0 = (data == 0.0).sum() / len(data)
-            pars, loc, scale = fit_dist(data=data[data != 0.0], dist=dist)
-            cdf_sub = compute_cdf(data=data, dist=dist, loc=loc, scale=scale, pars=pars)
-            cdf = p0 + (1 - p0) * cdf_sub
-            cdf[data == 0.0] = p0
-        else:
-            pars, loc, scale = fit_dist(data=data, dist=dist)
-            cdf = compute_cdf(data=data, dist=dist, loc=loc, scale=scale, pars=pars)
-        ppf = norm.ppf(cdf)
-        si.loc[data.index] = ppf
-    return si
-
-
-def fit_dist(data: Union[Series, NDArrayFloat], dist: ContinuousDist) -> Tuple:
-    """Fit a Scipy Continuous Distribution"""
-    fit_tuple = dist.fit(data, scale=std(data))
-    if len(fit_tuple) == 2:
-        loc, scale = fit_tuple
-        pars = None
-    else:
-        *pars, loc, scale = fit_tuple
-    return pars, loc, scale
-
-
-def compute_cdf(
-    data: Union[Series, NDArrayFloat],
-    dist: ContinuousDist,
-    loc: float,
-    scale: float,
-    pars: Optional[Tuple[float]] = None,
-) -> NDArrayFloat:
-    """Compute cumulative density function of a Scipy Continuous Distribution"""
-    if pars is not None:
-        cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-    else:
-        cdf = dist.cdf(data, loc=loc, scale=scale)
-    return cdf
-
-
-def compute_cdf_nsf(data: Union[Series, NDArrayFloat]) -> NDArrayFloat:
-    """Compute cumulative density function using the Normal Scores Transform"""
-    n = data.size
-    cdf = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
-    return cdf
+from ._typing import ContinuousDist
+from .dist import compute_cdf_nsf, compute_si_ppf
+from .utils import validate_index, validate_series
 
 
 def sgi(series: Series) -> Series:
@@ -123,14 +34,18 @@ def sgi(series: Series) -> Series:
     si = Series(index=index, dtype=float)  # type: Series
     for month in range(1, 13):
         data = series[index.month == month].sort_values()
-        cdf = compute_cdf_nsf(data=data.values)
+        cdf = compute_cdf_nsf(data=data.values.astype(float))
         si.loc[data.index] = norm.ppf(cdf)
 
     return si
 
 
 def spi(
-    series: Series, dist: ContinuousDist = gamma, prob_zero: bool = False
+    series: Series,
+    dist: ContinuousDist = gamma,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
 ) -> Series:
     """Method to compute the Standardized Precipitation Index [spi_2002]_.
 
@@ -159,10 +74,18 @@ def spi(
        22, 1571-1592, 2002.
     """
 
-    return compute_si_ppf(series=series, dist=dist, prob_zero=prob_zero)
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
 
 
-def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
+def spei(
+    series: Series,
+    dist: ContinuousDist = fisk,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
+) -> Series:
     """Method to compute the Standardized Precipitation Evaporation Index
     [spei_2010]_.
 
@@ -189,10 +112,18 @@ def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
        Journal of Climate, 23, 1696-1718, 2010.
     """
 
-    return compute_si_ppf(series=series, dist=dist)
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
 
 
-def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
+def ssfi(
+    series: Series,
+    dist: Optional[ContinuousDist] = genextreme,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
+) -> Series:
     """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
 
     Parameters
@@ -218,4 +149,6 @@ def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
        and nonparametric methods. Water Resources Research, 56, 2020.
     """
 
-    return compute_si_ppf(series=series, dist=dist)
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
