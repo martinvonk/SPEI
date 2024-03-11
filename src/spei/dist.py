@@ -1,19 +1,9 @@
 import logging
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Tuple, Union
 
 from numpy import ceil, isnan, linspace, nan, std
 from pandas import DataFrame, DatetimeIndex, Grouper, Series, Timedelta
-from scipy.stats import (
-    fisk,
-    gamma,
-    genextreme,
-    genlogistic,
-    kstest,
-    logistic,
-    lognorm,
-    norm,
-    pearson3,
-)
+from scipy.stats import kstest, norm
 
 from ._typing import ContinuousDist, NDArrayFloat
 from .utils import (
@@ -242,61 +232,3 @@ def fit_test(
     ks = kstest(rvs=series, cdf=dist_name, args=fitted)[1]
     rej_h0 = ks < alpha
     return dist_name, ks, rej_h0, fitted
-
-
-def dists_test(
-    series: Union[Series, NDArrayFloat],
-    distributions: Optional[List[ContinuousDist]] = None,
-    alpha: float = 0.05,
-) -> DataFrame:
-    """Fit a list of distribution and perform the
-    two-sided Kolmogorov-Smirnov test for goodness
-    of fit. The null hypothesis is that the data and
-    distributions are identical, the alternative is
-    that they are not identical. [scipy_2021]_
-
-    Parameters
-    ----------
-    series : Union[Series, NDArray[float]]
-        pandas Series with observations of random variables
-    distributions : list of scipy.stats.rv_continuous, optional
-        A list of (can be) any continuous distribution from the scipy.stats
-        library, by default None which makes a custom selection
-    alpha : float, optional
-        Significance level for testing, default is 0.05
-        which is equal to a a confidence level of 95%;
-        that is, the null hypothesis will be rejected in
-        favor of the alternative if the p-value is
-        less than 0.05.
-
-    Returns
-    -------
-    pandas.DataFrame
-        DataFrame with the distribution names,
-        pvalues and parameters
-
-    References
-    -------
-    .. [scipy_2021] Onnen, H.: Intro to Probability
-     Distributions and Distribution Fitting with Pythons
-    SciPy, 2021.
-    """
-    if distributions is None:
-        distributions = [
-            norm,
-            gamma,
-            genextreme,
-            pearson3,
-            fisk,
-            lognorm,
-            logistic,
-            genlogistic,
-        ]
-
-    df = DataFrame([fit_test(series, D, alpha) for D in distributions])
-    cols = ["Distribution", "KS p-value", "Reject H0"]
-    cols += [f"Param {i+1}" for i in range(len(df.columns) - len(cols))]
-    df = df.rename(columns=dict(zip(df.columns, cols))).set_index(cols[0])
-    df["Dist"] = distributions
-
-    return df

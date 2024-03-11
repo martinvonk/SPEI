@@ -1,6 +1,5 @@
 import logging
 from calendar import isleap
-from typing import List, Optional, Tuple, Union
 
 from numpy import array, nan
 from pandas import (
