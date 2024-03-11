@@ -4,13 +4,13 @@ from pandas import Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
 from ._typing import ContinuousDist
-from .dist import compute_cdf_nsf, compute_si_ppf
-from .utils import validate_index, validate_series
+from .dist import compute_si_ppf
 
 
-def sgi(series: Series) -> Series:
-    """Method to compute the Standardized Groundwater Index [sgi_2013]_.
-    Same method as in Pastas.
+def sgi(series: Series, freq: Optional[str] = None) -> Series:
+    """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
+    method as in Pastas. Uses the normal scores transform to calculate the
+    cumulative density function.
 
     Parameters
     ----------
@@ -28,16 +28,10 @@ def sgi(series: Series) -> Series:
        groundwater drought building on the standardised precipitation index
        approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
     """
-
-    series = validate_series(series)
-    index = validate_index(series.index)
-    si = Series(index=index, dtype=float)  # type: Series
-    for month in range(1, 13):
-        data = series[index.month == month].sort_values()
-        cdf = compute_cdf_nsf(data=data.values.astype(float))
-        si.loc[data.index] = norm.ppf(cdf)
-
-    return si
+    mock_dist = norm
+    return compute_si_ppf(
+        series=series, dist=mock_dist, prob_zero=False, freq=freq, window=0, nsf=True
+    )
 
 
 def spi(

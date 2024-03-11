@@ -2,17 +2,9 @@ import logging
 from calendar import isleap
 
 from numpy import array, nan
-from pandas import (
-    DataFrame,
-    DatetimeIndex,
-    Grouper,
-    Index,
-    Series,
-    Timedelta,
-    concat,
-    infer_freq,
-    to_datetime,
-)
+from pandas import DataFrame, DatetimeIndex, Grouper, Index, Series, Timedelta
+from pandas import __version__ as pandas_version
+from pandas import concat, infer_freq, to_datetime
 
 
 def validate_series(series: Series) -> Series:
@@ -61,16 +53,19 @@ def validate_index(index: Index) -> DatetimeIndex:
 def infer_frequency(index: DatetimeIndex) -> str:
     """Infer frequency"""
     inf_freq = infer_freq(index)
+
     if inf_freq is None:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "M"
+        inf_freq = "M" if pandas_version < "2.1.0" else "ME"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
+
     if "W-" in inf_freq:
         logging.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
         inf_freq = "W"
+
     return inf_freq
 
 

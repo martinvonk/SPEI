@@ -8,7 +8,7 @@ from pandas import Series
 from scipy.stats import gaussian_kde
 
 from ._typing import Axes, ContinuousDist, NDArrayAxes
-from .utils import dist_test, validate_index, validate_series
+from .utils import validate_index, validate_series
 
 
 def si(
