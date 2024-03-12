@@ -5,6 +5,7 @@ from scipy.stats import fisk, gamma, genextreme, norm
 
 from ._typing import ContinuousDist
 from .dist import compute_si_ppf
+from .utils import infer_frequency, validate_series
 
 
 def sgi(series: Series, freq: Optional[str] = None) -> Series:
@@ -28,6 +29,11 @@ def sgi(series: Series, freq: Optional[str] = None) -> Series:
        groundwater drought building on the standardised precipitation index
        approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
     """
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
+
     mock_dist = norm
     return compute_si_ppf(
         series=series, dist=mock_dist, prob_zero=False, freq=freq, window=0, nsf=True
@@ -68,6 +74,11 @@ def spi(
        22, 1571-1592, 2002.
     """
 
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
+
     return compute_si_ppf(
         series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
     )
@@ -105,6 +116,10 @@ def spei(
        Standardized Precipitation Evapotranspiration Index.
        Journal of Climate, 23, 1696-1718, 2010.
     """
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
 
     return compute_si_ppf(
         series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
@@ -142,6 +157,10 @@ def ssfi(
        Streamflow Index: A large sample comparison for parametric
        and nonparametric methods. Water Resources Research, 56, 2020.
     """
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
 
     return compute_si_ppf(
         series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window

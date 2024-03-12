@@ -7,18 +7,14 @@ from pandas import Grouper, Series, Timedelta
 from scipy.stats import kstest, norm
 
 from ._typing import ContinuousDist
-from .utils import (
-    daily_window_groupby_yearly_df,
-    get_data_series,
-    group_yearly_df,
-)
+from .utils import daily_window_groupby_yearly_df, get_data_series, group_yearly_df
 
 
 def compute_si_ppf(
     series: Series,
     dist: ContinuousDist,
+    freq: str,
     prob_zero: bool = False,
-    freq: Optional[str] = None,
     window: int = 0,
     nsf: bool = False,
 ) -> Series:
