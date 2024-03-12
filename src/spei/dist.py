@@ -1,19 +1,16 @@
 import logging
 from dataclasses import dataclass, field
-from typing import Any, List, Literal, Optional, Tuple
+from typing import List, Literal, Optional, Tuple
 
-from numpy import ceil, isnan, linspace, nan, std
-from pandas import DataFrame, DatetimeIndex, Grouper, Series, Timedelta
+from numpy import ceil, linspace, nan, std
+from pandas import Grouper, Series, Timedelta
 from scipy.stats import kstest, norm
 
-from ._typing import ContinuousDist, NDArrayFloat
+from ._typing import ContinuousDist
 from .utils import (
     daily_window_groupby_yearly_df,
     get_data_series,
     group_yearly_df,
-    infer_frequency,
-    validate_index,
-    validate_series,
 )
 
 
@@ -54,13 +51,6 @@ def compute_si_ppf(
         Series with probability point function, ppf
     """
 
-    series = validate_series(series)
-    index = validate_index(series.index)
-    series = series.reindex(index, copy=True)
-
-    if freq is None:
-        freq = infer_frequency(index)
-
     if window > 0:
         cdf = compute_cdf_rolling_window(
             series=series,
@@ -78,7 +68,8 @@ def compute_si_ppf(
             prob_zero=prob_zero,
             freq=freq,
         )
-    return Series(norm.ppf(cdf.values, loc=0, scale=1), index=index, dtype=float)
+
+    return Series(norm.ppf(cdf.values, loc=0, scale=1), index=series.index, dtype=float)
 
 
 def compute_cdf_groupby_freq(
@@ -204,9 +195,19 @@ class FittedDist:
 
         return Series(cdf, index=self.data.index, dtype=float)
 
+    def pdf(self) -> Series:
+        if self.pars is not None:
+            pdf = self.dist.pdf(
+                self.data.values, self.pars, loc=self.loc, scale=self.scale
+            )
+        else:
+            pdf = self.dist.pdf(self.data.values, loc=self.loc, scale=self.scale)
+
+        return Series(pdf, index=self.data.index, dtype=float)
+
     def ks_test(
         self,
-        alternative: Literal["two-sided", "less", "greater"] = "two-sided",
+        method: Literal["auto", "exact", "approx", "asymp"] = "auto",
     ) -> float:
         """Fit a distribution and perform the two-sided
         Kolmogorov-Smirnov test for goodness of fit. The
@@ -216,14 +217,13 @@ class FittedDist:
 
         Parameters
         ----------
-        data : Union[Series, NDArray[float]]
-            pandas Series or numpy array of floats of observations of random
-            variables
-        dist: scipy.stats.rv_continuous
-            Can be any continuous distribution from the
-            scipy.stats library.
-        alternative: Literal["two-sided", "less", "greater"], optional
-            Defines the null and alternative hypotheses. Default is 'two-sided'.
+        method : Literal['auto', 'exact', 'approx', 'asymp'], optional
+            Defines the distribution used for calculating the p-value. The
+            following options are available (default is 'auto'): 'auto' selects
+            one of the other options, 'exact' uses the exact distribution of
+            test statistic, 'approx' approximates the two-sided probability
+            with twice the one-sided probability, 'asymp' uses asymptotic
+            distribution of test statistic
 
         Returns
         -------
@@ -240,9 +240,9 @@ class FittedDist:
             (self.pars, self.loc, self.scale)
             if self.pars is not None
             else (self.loc, self.scale)
-        )  # type: Any
+        )
         kstest_result = kstest(
-            rvs=self.data, cdf=self.dist.name, args=args, alternative=alternative
+            rvs=self.data, cdf=self.dist.name, args=args, method=method
         )
         # rej_h0 = kstest_result.pvalue < alpha
         return kstest_result.pvalue
