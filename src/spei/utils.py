@@ -3,17 +3,9 @@ from calendar import isleap
 from typing import Union
 
 from numpy import array, nan
-from pandas import (
-    DataFrame,
-    DatetimeIndex,
-    Grouper,
-    Index,
-    Series,
-    Timedelta,
-    concat,
-    infer_freq,
-    to_datetime,
-)
+from pandas import DataFrame, DatetimeIndex, Grouper, Index, Series, Timedelta
+from pandas import __version__ as pd_version
+from pandas import concat, infer_freq, to_datetime
 
 
 def validate_series(series: Series) -> Series:
@@ -72,7 +64,7 @@ def infer_frequency(index: Union[Index, DatetimeIndex]) -> str:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "ME"
+        inf_freq = "ME" if pd_version >= "2.1.0" else "M"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
 
@@ -87,7 +79,8 @@ def group_yearly_df(series: Series) -> DataFrame:
     """Group series in a DataFrame with date (in the year 2000) as index and year as columns."""
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
-    for year_timestamp, gry in series.groupby(Grouper(freq="YE")):
+    freq = "YE" if pd_version >= "2.1.0" else "Y"
+    for year_timestamp, gry in series.groupby(Grouper(freq=freq)):
         index = validate_index(gry.index)
         gry.index = to_datetime(
             "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
