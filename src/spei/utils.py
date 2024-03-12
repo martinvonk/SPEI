@@ -76,7 +76,9 @@ def infer_frequency(index: Union[Index, DatetimeIndex]) -> str:
 
 
 def group_yearly_df(series: Series) -> DataFrame:
-    """Group series in a DataFrame with date (in the year 2000) as index and year as columns."""
+    """Group series in a DataFrame with date (in the year 2000) as index and
+    year as columns.
+    """
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
     freq = "YE" if pd_version >= "2.1.0" else "Y"
@@ -112,7 +114,9 @@ def get_data_series(group_df: DataFrame) -> Series:
 
 
 def daily_window_groupby_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
-    """Fill a period of daily values in grouped by yearly DataFrame to get cyclic rolling window."""
+    """Fill a period of daily values in grouped by yearly DataFrame to get
+    cyclic rolling window.
+    """
     dfval_window_index_start = [
         dfval.index[0] + Timedelta(value=-i, unit="D")
         for i in reversed(range(1, period))

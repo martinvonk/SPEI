@@ -101,7 +101,7 @@ def compute_cdf_rolling_window(
 
     if window < 3:
         logging.error("Window should be larger than 2. Setting the window value to 3.")
-        window = 3  # make sure window is at least three (value itself plus one to the left and right)
+        window = 3  # make sure window is at least three
     elif window % 2 == 0:
         logging.error(f"Window should be odd. Setting the window value to {window + 1}")
         window += 1  # make sure window is odd
