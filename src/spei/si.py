@@ -1,91 +1,17 @@
-from typing import Optional, Union
+from typing import Optional
 
-from numpy import linspace, std
-from pandas import DatetimeIndex, Series
+from pandas import Series
 from scipy.stats import fisk, gamma, genextreme, norm
 
-from ._typing import ContinuousDist, NDArrayFloat
-from .utils import validate_index, validate_series
+from ._typing import ContinuousDist
+from .dist import compute_si_ppf
+from .utils import infer_frequency, validate_series
 
 
-def compute_si_ppf(
-    series: Series,
-    dist: ContinuousDist,
-    index: Optional[DatetimeIndex] = None,
-    sgi: bool = False,
-    prob_zero: bool = False,
-) -> Series:
-    """Internal helper function to calculate drought index
-
-    Parameters
-    ----------
-    series : Series
-        Series with observations
-    dist : ContinuousDist
-        Continuous distribution from the SciPy library
-    index : DatetimeIndex, optional
-        DatetimeIndex with the date of the observations
-    sgi : bool, optional
-        Whether to caclulate the standardized groundwater index or not, by
-        default False
-    prob_zero : bool, optional
-        Apply logic to observations that have value zero and calculate their
-        probability seperately, by default False
-
-    Returns
-    -------
-    Series
-        Series with probability point function, ppf
-    """
-
-    if index is None:
-        series = validate_series(series)
-        index = validate_index(series.index)
-
-    si = Series(index=index, dtype=float)  # type: Series
-    for month in range(1, 13):
-        data = series[index.month == month].sort_values()
-        if not sgi:
-            if prob_zero:
-                cdf = compute_cdf_probzero(data=data, dist=dist)
-            else:
-                cdf = compute_cdf(data=data, dist=dist)
-        else:
-            cdf = compute_cdf_nsf(data=data)
-        ppf = norm.ppf(cdf)
-        si.loc[data.index] = ppf
-    return si
-
-
-def compute_cdf(
-    data: Union[Series, NDArrayFloat], dist: ContinuousDist
-) -> NDArrayFloat:
-    *pars, loc, scale = dist.fit(data, scale=std(data))
-    cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-    return cdf
-
-
-def compute_cdf_probzero(
-    data: Union[Series, NDArrayFloat], dist: ContinuousDist
-) -> NDArrayFloat:
-    p0 = (data == 0.0).sum() / len(data)
-    *pars, loc, scale = dist.fit(data[data != 0.0], scale=std(data))
-    cdf_sub = dist.cdf(data, pars, loc=loc, scale=scale)
-    cdf = p0 + (1 - p0) * cdf_sub
-    cdf[data == 0.0] = p0
-    return cdf
-
-
-def compute_cdf_nsf(data: Union[Series, NDArrayFloat]) -> NDArrayFloat:
-    """Normal Scores Transform"""
-    n = data.size
-    cdf = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
-    return cdf
-
-
-def sgi(series: Series) -> Series:
-    """Method to compute the Standardized Groundwater Index [sgi_2013]_.
-    Same method as in Pastas.
+def sgi(series: Series, freq: Optional[str] = None) -> Series:
+    """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
+    method as in Pastas. Uses the normal scores transform to calculate the
+    cumulative density function.
 
     Parameters
     ----------
@@ -103,12 +29,23 @@ def sgi(series: Series) -> Series:
        groundwater drought building on the standardised precipitation index
        approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
     """
-    mock_dist = norm  # not used
-    return compute_si_ppf(series=series, dist=mock_dist, sgi=True)
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
+
+    mock_dist = norm
+    return compute_si_ppf(
+        series=series, dist=mock_dist, prob_zero=False, freq=freq, window=0, nsf=True
+    )
 
 
 def spi(
-    series: Series, dist: ContinuousDist = gamma, prob_zero: bool = False
+    series: Series,
+    dist: ContinuousDist = gamma,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
 ) -> Series:
     """Method to compute the Standardized Precipitation Index [spi_2002]_.
 
@@ -137,10 +74,23 @@ def spi(
        22, 1571-1592, 2002.
     """
 
-    return compute_si_ppf(series=series, dist=dist, prob_zero=prob_zero)
+    series = validate_series(series)
+
+    if freq is None:
+        freq = infer_frequency(series.index)
+
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
 
 
-def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
+def spei(
+    series: Series,
+    dist: ContinuousDist = fisk,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
+) -> Series:
     """Method to compute the Standardized Precipitation Evaporation Index
     [spei_2010]_.
 
@@ -166,11 +116,23 @@ def spei(series: Series, dist: ContinuousDist = fisk) -> Series:
        Standardized Precipitation Evapotranspiration Index.
        Journal of Climate, 23, 1696-1718, 2010.
     """
+    series = validate_series(series)
 
-    return compute_si_ppf(series=series, dist=dist)
+    if freq is None:
+        freq = infer_frequency(series.index)
+
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
 
 
-def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
+def ssfi(
+    series: Series,
+    dist: Optional[ContinuousDist] = genextreme,
+    prob_zero: bool = True,
+    freq: Optional[str] = None,
+    window: int = 0,
+) -> Series:
     """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
 
     Parameters
@@ -195,5 +157,11 @@ def ssfi(series: Series, dist: Optional[ContinuousDist] = genextreme) -> Series:
        Streamflow Index: A large sample comparison for parametric
        and nonparametric methods. Water Resources Research, 56, 2020.
     """
+    series = validate_series(series)
 
-    return compute_si_ppf(series=series, dist=dist)
+    if freq is None:
+        freq = infer_frequency(series.index)
+
+    return compute_si_ppf(
+        series=series, dist=dist, prob_zero=prob_zero, freq=freq, window=window
+    )
