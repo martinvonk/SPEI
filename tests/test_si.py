@@ -5,16 +5,16 @@ from spei import sgi, spei, spi, ssfi
 
 def test_spi(prec: Series) -> None:
     precr = prec.rolling("30D", min_periods=30).sum().dropna()
-    spi(precr, freq="ME", prob_zero=True)
+    spi(precr, fit_freq="ME", prob_zero=True)
 
 
 def test_spei(prec: Series, evap: Series) -> None:
     n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
-    spei(n, freq="ME")
+    spei(n, fit_freq="ME")
 
 
 def test_sgi(head: Series) -> None:
-    sgi(head, freq="ME")
+    sgi(head, fit_freq="ME")
 
 
 def test_sffi(prec: Series) -> None:
@@ -24,4 +24,4 @@ def test_sffi(prec: Series) -> None:
 
 def test_window(prec: Series, evap: Series) -> None:
     n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
-    spei(n, freq="W", window=3)
+    spei(n, fit_freq="W", fit_window=3)

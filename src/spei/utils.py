@@ -113,7 +113,7 @@ def get_data_series(group_df: DataFrame) -> Series:
     return Series(values, index=dt_idx, dtype=float).dropna()
 
 
-def daily_window_groupby_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
+def daily_window_group_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
     """Fill a period of daily values in grouped by yearly DataFrame to get
     cyclic rolling window.
     """
