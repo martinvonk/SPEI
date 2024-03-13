@@ -17,9 +17,8 @@ def test_sgi(head: Series) -> None:
     sgi(head, fit_freq="ME")
 
 
-def test_sffi(prec: Series) -> None:
-    sf = prec.rolling("30D", min_periods=30).sum().dropna()
-    ssfi(sf)
+def test_sffi_timescale(prec: Series) -> None:
+    ssfi(prec, timescale=30)
 
 
 def test_window(prec: Series, evap: Series) -> None:
