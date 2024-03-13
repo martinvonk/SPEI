@@ -13,4 +13,4 @@ def show_versions() -> None:
         for dep in deps:
             msg += f"{dep}: {metadata.version(dep)}\n"
 
-    print(msg)
+    return msg

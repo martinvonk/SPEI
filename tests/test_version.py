@@ -7,4 +7,5 @@ def test_version() -> None:
 
 
 def test_show_versions():
-    si.show_versions()
+    msg = si.show_versions()
+    assert isinstance(msg, str)
