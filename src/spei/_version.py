@@ -4,7 +4,7 @@ from platform import python_version
 __version__ = "0.4.0"
 
 
-def show_versions() -> None:
+def show_versions() -> str:
     msg = f"Versions\npython: {python_version()}\nspei: {__version__}\n"
 
     requirements = metadata.requires("spei")
