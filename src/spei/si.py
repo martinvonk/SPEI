@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Optional
 
 from numpy import ceil, linspace, nan
-from pandas import DataFrame, Grouper, Series, Timedelta
+from pandas import DataFrame, Grouper, Series, Timedelta, Timestamp
 from scipy.stats import fisk, gamma, genextreme, norm
 
 from ._typing import ContinuousDist
@@ -19,7 +19,6 @@ from .utils import (
 
 def sgi(
     series: Series,
-    timescale: int = 0,
     fit_freq: Optional[str] = None,
 ) -> Series:
     """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
@@ -47,7 +46,7 @@ def sgi(
     sgi = SI(
         series=series,
         dist=mock_dist,
-        timescale=timescale,
+        timescale=0,
         fit_freq=fit_freq,
         fit_window=0,
         prob_zero=False,
@@ -243,8 +242,8 @@ class SI:
     timescale: int = 0
     fit_freq: Optional[str] = field(default=None)
     fit_window: int = field(default=0)
-    prob_zero: bool = field(default=True)
-    normal_scores_transform: bool = field(default=True)
+    prob_zero: bool = field(default=False)
+    normal_scores_transform: bool = field(default=False)
     _grouped_year: DataFrame = field(init=False, repr=False, compare=False)
     _dist_dict: Dict[int, Dist] = field(
         default_factory=dict, init=False, repr=False, compare=False
@@ -252,7 +251,8 @@ class SI:
 
     def __post_init__(self) -> None:
         """
-        Post initializes the SI class and performs necessary data preprocessing and validation.
+        Post initializes the SI class and performs necessary data
+        preprocessing and validation.
         """
         self.series = validate_series(self.series)
 
@@ -277,12 +277,16 @@ class SI:
                 self.fit_window = 3  # make sure window is at least three
             elif self.fit_window % 2 == 0:
                 logging.error(
-                    f"Window should be odd. Setting the window value to {self.fit_window + 1}"
+                    "Window should be odd. Setting the window value to"
+                    f"{self.fit_window + 1}"
                 )
                 self.fit_window += 1  # make sure window is odd
 
     def fit_distribution(self):
-        """Fit distribution on the time series per fit_frequency and/or fit_window"""
+        """
+        Fit distribution on the time series per fit_frequency and/or fit_window
+        """
+
         if self.normal_scores_transform:
             logging.info("Using normal-scores-transform. No distribution is fitted.")
 
@@ -294,7 +298,8 @@ class SI:
                 "W",
             ):  # TODO: ideally 14D should also work.
                 raise ValueError(
-                    f"Frequency fit_freq must be 'D' or 'W', not '{self.fit_freq}', if a fit_window is provided."
+                    "Frequency fit_freq must be 'D' or 'W', not "
+                    f"'{self.fit_freq}', if a fit_window is provided."
                 )
 
             logging.info("Using rolling window method")
@@ -307,12 +312,11 @@ class SI:
             dfval_window = daily_window_group_yearly_df(
                 dfval=self._grouped_year, period=period
             )
-            for i, dfval_rwindow in enumerate(
-                dfval_window.rolling(window=window, min_periods=window, closed="right")
-            ):
+            for dfval_rwindow in dfval_window.rolling(window=window, min_periods=window, closed="right"):
                 if len(dfval_rwindow) < window:
                     continue  # min_periods ignored by Rolling.__iter__
-                data = get_data_series(dfval_rwindow.iloc[[period]])
+                date = dfval_rwindow.index[period]
+                data = get_data_series(dfval_rwindow.loc[[date]])
                 data_window = get_data_series(dfval_rwindow)
                 fd = Dist(
                     data=data,
@@ -320,12 +324,10 @@ class SI:
                     prob_zero=self.prob_zero,
                     data_window=data_window,
                 )
-                self._dist_dict[i] = fd
+                self._dist_dict[date] = fd
         else:
             logging.info("Using groupby fit by frequency method")
-            for i, (_, grval) in enumerate(
-                self._grouped_year.groupby(Grouper(freq=self.fit_freq))
-            ):
+            for date, grval in self._grouped_year.groupby(Grouper(freq=self.fit_freq)):
                 data = get_data_series(grval)
                 fd = Dist(
                     data=data,
@@ -333,7 +335,7 @@ class SI:
                     prob_zero=self.prob_zero,
                     data_window=None,
                 )
-                self._dist_dict[i] = fd
+                self._dist_dict[date] = fd
 
     def cdf(self):
         """Compute the cumulative density function"""
@@ -358,7 +360,8 @@ class SI:
         return pdf
 
     def cdf_nsf(self) -> Series:
-        """Compute the cumulative density function using the Normal Scores
+        """
+        Compute the cumulative density function using the Normal Scores
         Transform
 
         Returns
@@ -374,9 +377,9 @@ class SI:
         return cdf
 
     def norm_ppf(self) -> Series:
-        """Method to calculate propability point function of normal
-        distribution based on a cumulative density function of a fitted
-        distribution
+        """
+        Method to calculate propability point function of normal distribution
+        based on a cumulative density function of a fitted distribution
 
         Returns
         -------
@@ -388,3 +391,11 @@ class SI:
             norm.ppf(cdf.values, loc=0, scale=1), index=self.series.index, dtype=float
         )
         return ppf
+
+    def get_dist(self, date: Timestamp) -> Dist:
+        for k in self._dist_dict:
+            dist = self._dist_dict[k]
+            if date in dist.data.index:
+                return dist
+            else:
+                raise KeyError("Date not found in distributions")

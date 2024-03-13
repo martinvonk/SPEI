@@ -72,7 +72,7 @@ class Dist:
             self.p0 = (data_fit == 0.0).sum() / len(data_fit)
 
     @staticmethod
-    def fit_dist(data: Series, dist: ContinuousDist) -> Tuple:
+    def fit_dist(data: Series, dist: ContinuousDist) -> Tuple[Optional[List[float]], float, float]:
         """
         Fits a Scipy continuous distribution to the data.
 
@@ -112,16 +112,17 @@ class Dist:
         return Series(cdf, index=self.data.index, dtype=float)
 
     def pdf(self) -> Series:
+        data_pdf = self.data.sort_values()
         if self.pars is not None:
             pdf = self.dist.pdf(
-                self.data.values, self.pars, loc=self.loc, scale=self.scale
+                data_pdf.values, self.pars, loc=self.loc, scale=self.scale
             )
         else:
-            pdf = self.dist.pdf(self.data.values, loc=self.loc, scale=self.scale)
+            pdf = self.dist.pdf(data_pdf.values, loc=self.loc, scale=self.scale)
 
         # TODO: check what to do if prob_zero
 
-        return Series(pdf, index=self.data.index, dtype=float)
+        return Series(pdf, index=data_pdf.index, dtype=float)
 
     def ks_test(
         self,

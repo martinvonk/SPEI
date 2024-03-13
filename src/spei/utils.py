@@ -119,10 +119,10 @@ def daily_window_group_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
     """
     dfval_window_index_start = [
         dfval.index[0] + Timedelta(value=-i, unit="D")
-        for i in reversed(range(1, period))
+        for i in reversed(range(1, period+1))
     ]
     dfval_window_index_end = [
-        dfval.index[-1] + Timedelta(value=i, unit="D") for i in range(1, period)
+        dfval.index[-1] + Timedelta(value=i, unit="D") for i in range(1, period+1)
     ]
     dfval_window_index = DatetimeIndex(
         dfval_window_index_start + dfval.index.to_list() + dfval_window_index_end
@@ -132,6 +132,6 @@ def daily_window_group_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
         nan, index=dfval_window_index, columns=dfval.columns, dtype=float
     )
     dfval_window.loc[dfval.index, dfval.columns] = dfval.values
-    dfval_window.iloc[: period - 1] = dfval.iloc[-period + 1 :].values
-    dfval_window.iloc[-period + 1 :] = dfval.iloc[: period - 1].values
+    dfval_window.iloc[: period] = dfval.iloc[-period :].values
+    dfval_window.iloc[-period :] = dfval.iloc[: period].values
     return dfval_window
