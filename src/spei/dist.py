@@ -72,7 +72,9 @@ class Dist:
             self.p0 = (data_fit == 0.0).sum() / len(data_fit)
 
     @staticmethod
-    def fit_dist(data: Series, dist: ContinuousDist) -> Tuple[Optional[List[float]], float, float]:
+    def fit_dist(
+        data: Series, dist: ContinuousDist
+    ) -> Tuple[Optional[List[float]], float, float]:
         """
         Fits a Scipy continuous distribution to the data.
 

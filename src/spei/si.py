@@ -312,7 +312,9 @@ class SI:
             dfval_window = daily_window_group_yearly_df(
                 dfval=self._grouped_year, period=period
             )
-            for dfval_rwindow in dfval_window.rolling(window=window, min_periods=window, closed="right"):
+            for dfval_rwindow in dfval_window.rolling(
+                window=window, min_periods=window, closed="right"
+            ):
                 if len(dfval_rwindow) < window:
                     continue  # min_periods ignored by Rolling.__iter__
                 date = dfval_rwindow.index[period]
@@ -327,7 +329,9 @@ class SI:
                 self._dist_dict[date] = fd
         else:
             logging.info("Using groupby fit by frequency method")
-            for date, grval in self._grouped_year.groupby(Grouper(freq=self.fit_freq)):
+            for date, grval in self._grouped_year.groupby(
+                Grouper(freq=str(self.fit_freq))
+            ):
                 data = get_data_series(grval)
                 fd = Dist(
                     data=data,
@@ -370,7 +374,7 @@ class SI:
         """
         logging.info("Using the normal scores transform")
         cdf = Series(nan, index=self.series.index, dtype=float)
-        for _, grval in self._grouped_year.groupby(Grouper(freq=self.fit_freq)):
+        for _, grval in self._grouped_year.groupby(Grouper(freq=str(self.fit_freq))):
             data = get_data_series(grval).sort_values()
             n = len(data)
             cdf.loc[data.index] = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
@@ -397,5 +401,5 @@ class SI:
             dist = self._dist_dict[k]
             if date in dist.data.index:
                 return dist
-            else:
-                raise KeyError("Date not found in distributions")
+
+        raise KeyError("Date not found in distributions")
