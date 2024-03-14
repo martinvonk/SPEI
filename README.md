@@ -20,7 +20,9 @@ SPEI is a simple Python package to calculate drought indices for time series suc
 
 For the calculation of potential evaporation, take a look at [pyet](https://github.com/phydrus/pyet). This is another great package that uses pandas Series to calculate different kinds of potential evaporation time series.
 
-Please feel free to contribute or ask questions! If you happen to use this package, please refer to [pypi.org/project/spei](https://pypi.org/project/spei/) or the [github repository](https://github.com/martinvonk/spei).
+Please feel free to contribute or ask questions! 
+
+If you happen to use this package, please cite: Vonk, M. A. (2024). SPEI: A simple Python package to calculate and visualize drought indices (vX.X.X). Zenodo. https://doi.org/10.5281/zenodo.10816741.
 
 ## Available Drought Indices
 
