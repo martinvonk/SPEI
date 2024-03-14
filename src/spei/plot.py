@@ -1,4 +1,4 @@
-from calendar import month_abbr, month_name
+from calendar import month_abbr
 from itertools import cycle
 from typing import List, Optional
 
@@ -7,12 +7,15 @@ from numpy import array, linspace, meshgrid, reshape
 from pandas import Series
 from scipy.stats import gaussian_kde
 
-from ._typing import Axes, ContinuousDist, NDArrayAxes
-from .utils import dist_test, validate_index, validate_series
+from ._typing import Axes
+from .utils import validate_index, validate_series
 
 
 def si(
-    si: Series, bound: float = 3.0, figsize: tuple = (6.5, 4), ax: Optional[Axes] = None
+    si: Series,
+    ybound: float = 3.0,
+    figsize: tuple = (6.5, 4),
+    ax: Optional[Axes] = None,
 ) -> Axes:
     """Plot the standardized index values as a time series.
 
@@ -20,7 +23,7 @@ def si(
     ----------
     si : pandas.Series
         Series of the standardized index
-    bound : int, optional
+    ybound : int, optional
         Maximum and minimum ylim of plot
     figsize : tuple, optional
         Figure size, by default (8, 4)
@@ -38,8 +41,8 @@ def si(
     ax.plot(si.index, si.values, linewidth=1.0, color="k")
     ax.axhline(0, linestyle="--", linewidth=1.0, color="k")
 
-    nmin = -bound
-    nmax = bound
+    nmin = -ybound
+    nmax = ybound
     droughts = si.to_numpy(dtype=float, copy=True)
     droughts[droughts > 0] = 0
     nodroughts = si.to_numpy(dtype=float, copy=True)
@@ -54,101 +57,6 @@ def si(
     ax.set_ylim(nmin, nmax)
 
     return ax
-
-
-def dist(
-    series: Series,
-    dist: ContinuousDist,
-    cumulative: bool = False,
-    test_dist: bool = True,
-    cmap: Optional[str] = None,
-    figsize: tuple = (6.5, 10),
-    legend: bool = True,
-) -> NDArrayAxes:
-    """Plot the (cumulative) histogram and scipy fitted distribution
-    for the time series on a monthly basis.
-
-    Parameters
-    ----------
-    series : pandas.Series
-        Time series of the precipitation (excess) or head
-    dist : scipy.stats._continuous_distns
-        Continuous distribution of the scipy stats library
-        to fit on series using maximum likelihood estimation
-    cumulative : bool, optional
-        If True plots cumulative histogram instead of probability
-        density histogram, by default False
-    test_dist : bool, optional
-        If True, fit the distribution with the two-sided
-        Kolmogorov-Smirnov test for goodness of fit.
-    cmap : str, optional
-        Matplotlib colormap name to use in subplots, by default None
-        which uses black for all subplots.
-    figsize : tuple, optional
-        Figure size, by default (8, 10)
-    legend : bool, optional
-        Add legend, by default True
-
-    Returns
-    -------
-    matplotlib.Axes
-        Axes handle
-    """
-
-    series = validate_series(series)
-    index = validate_index(series.index)
-
-    _, axs = plt.subplots(4, 3, figsize=figsize, sharey=True, sharex=True)
-    if cmap is not None:
-        cm = plt.get_cmap(cmap, 12)
-        c = [cm(i) for i in range(12)]
-    else:
-        c = [(1, 1, 1, 1) for _ in range(12)]
-
-    for i, ax in enumerate(axs.flat, start=1):
-        data = series[index.month == i].sort_values()
-        ax.hist(
-            data,
-            color=c[i - 1],
-            alpha=0.2,
-            density=True,
-            cumulative=cumulative,
-            label="Density",
-        )
-        dist_name = getattr(dist, "name")
-        if test_dist:
-            _, p_value, _, fitted = dist_test(data, dist)
-            *pars, loc, scale = fitted
-            label = f"{dist_name.capitalize()} KS:\n{p_value=:0.2f}"
-        else:
-            *pars, loc, scale = dist.fit(data, scale=data.std())
-            label = f"{dist_name.capitalize()} fit:\n{loc=:0.1f}\n{scale=:0.1f}"
-        if cumulative:
-            cdf = dist.cdf(data, pars, loc=loc, scale=scale)
-            ax.plot(
-                data,
-                cdf,
-                color=c[i - 1],
-                label=label,
-            )
-            if i in range(1, 13, 3):
-                ax.set_ylabel("Cumulative Probability")
-        else:
-            x = linspace(min(data), max(data))
-            pdf = dist.pdf(x, pars, loc=loc, scale=scale)
-            ax.plot(
-                x,
-                pdf,
-                color=c[i - 1],
-                label=label,
-            )
-            if i in range(1, 13, 3):
-                ax.set_ylabel("Probability Density")
-        ax.set_title(month_name[i])
-        if legend:
-            ax.legend(fontsize=7)
-
-    return axs
 
 
 def monthly_density(

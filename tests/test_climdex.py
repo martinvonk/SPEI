@@ -3,15 +3,15 @@ from pandas import Series
 from spei import climdex
 
 
-def text_climdex_rxnday(precmm: Series) -> None:
+def test_climdex_rxnday(precmm: Series) -> None:
     climdex.rxnday(series=precmm, interval="10D", period="90D")
 
 
-def text_climdex_rx1day(precmm: Series) -> None:
+def test_climdex_rx1day(precmm: Series) -> None:
     climdex.rx1day(series=precmm)
 
 
-def text_climdex_rx5day(precmm: Series) -> None:
+def test_climdex_rx5day(precmm: Series) -> None:
     climdex.rx5day(series=precmm)
 
 
