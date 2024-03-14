@@ -3,18 +3,20 @@
 [![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square)](https://pypi.org/project/spei/)
 [![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square)](https://pypi.org/project/spei/)
 [![Code Size](https://img.shields.io/github/languages/code-size/martinvonk/spei?style=flat-square)](https://pypi.org/project/spei/)
-[![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square)](https://app.codacy.com/gh/martinvonk/SPEI/)
-[![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square) ![License](https://img.shields.io/pypi/l/spei?style=flat-square)](https://pypi.org/project/spei/)
+[![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square)
+![License](https://img.shields.io/pypi/l/spei?style=flat-square)](https://pypi.org/project/spei/)
+[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.10816741-blue?style=flat-square)](https://doi.org/10.5281/zenodo.10816741)
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square)](https://github.com/martinvonk/SPEI/actions/workflows/tests.yml)
 [![CodacyCoverage](https://img.shields.io/codacy/coverage/908b566912314666b84e1add22ea7d66?style=flat-square)](https://app.codacy.com/gh/martinvonk/SPEI/)
+[![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square)](https://app.codacy.com/gh/martinvonk/SPEI/)
 [![MyPy](https://img.shields.io/badge/type_checker-mypy-2A6DB2?style=flat-square)](https://mypy-lang.org/)
 [![Format: isort](https://img.shields.io/badge/imports-isort-ef8336?style=flat-square)](https://pycqa.github.io/isort/index.html)
 [![Format: Black](https://img.shields.io/badge/code_style-black-black?style=flat-square)](https://github.com/psf/black)
 [![Linter: flake8](https://img.shields.io/badge/linter-flake8-yellowgreen?style=flat-square)](https://flake8.pycqa.org/)
 [![Linter: ruff](https://img.shields.io/badge/linter-ruff-red?style=flat-square)](https://github.com/charliermarsh/ruff)
 
-SPEI is a simple Python package to calculate drought indices for time series such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index) and SGI (Standardized Groundwater Index). This package uses popular Python packages such as Pandas and Scipy to make it easy and versitile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data.
+SPEI is a simple Python package to calculate drought indices for time series such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index), and SGI (Standardized Groundwater Index). This package uses popular Python packages such as Pandas and Scipy to make it easy and versatile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average, and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data.
 
 For the calculation of potential evaporation, take a look at [pyet](https://github.com/phydrus/pyet). This is another great package that uses pandas Series to calculate different kinds of potential evaporation time series.
 
