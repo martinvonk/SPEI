@@ -1,7 +1,7 @@
-from pandas import Series
+from pandas import Series, Timestamp
 
-from spei import sgi, spei, spi, ssfi
-
+from spei import SI, sgi, spei, spi, ssfi
+from scipy.stats import norm
 
 def test_spi(prec: Series) -> None:
     precr = prec.rolling("30D", min_periods=30).sum().dropna()
@@ -24,3 +24,11 @@ def test_sffi_timescale(prec: Series) -> None:
 def test_window(prec: Series, evap: Series) -> None:
     n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
     spei(n, fit_freq="W", fit_window=3)
+
+
+def test_SI(prec: Series) -> None:
+    si = SI(prec, dist=norm, timescale=30, fit_freq="ME")
+    si.fit_distribution()
+    si.pdf()
+    dist = si.get_dist(Timestamp("2010-01-01"))
+    dist.ks_test()
