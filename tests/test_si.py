@@ -1,7 +1,8 @@
 from pandas import Series, Timestamp
+from scipy.stats import norm
 
 from spei import SI, sgi, spei, spi, ssfi
-from scipy.stats import norm
+
 
 def test_spi(prec: Series) -> None:
     precr = prec.rolling("30D", min_periods=30).sum().dropna()

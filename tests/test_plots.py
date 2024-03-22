@@ -11,5 +11,9 @@ def test_plot_si(si: Series) -> None:
     _ = plot_si(si)
 
 
+def test_plot_si_no_background(si: Series) -> None:
+    _ = plot_si(si, cmap="roma_r", background=False)
+
+
 def test_plot_monthly_density(si: Series) -> None:
     _ = monthly_density(si, years=[2011], months=[1, 2, 3, 4, 5])
