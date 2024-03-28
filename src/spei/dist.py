@@ -102,7 +102,7 @@ class Dist:
         """Compute cumulative density function of a Scipy Continuous Distribution"""
         if self.pars is not None:
             cdf = self.dist.cdf(
-                self.data.values, self.pars, loc=self.loc, scale=self.scale
+                self.data.values, *self.pars, loc=self.loc, scale=self.scale
             )
         else:
             cdf = self.dist.cdf(self.data.values, loc=self.loc, scale=self.scale)
@@ -117,7 +117,7 @@ class Dist:
         data_pdf = self.data.sort_values()
         if self.pars is not None:
             pdf = self.dist.pdf(
-                data_pdf.values, self.pars, loc=self.loc, scale=self.scale
+                data_pdf.values, *self.pars, loc=self.loc, scale=self.scale
             )
         else:
             pdf = self.dist.pdf(data_pdf.values, loc=self.loc, scale=self.scale)
