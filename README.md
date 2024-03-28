@@ -3,8 +3,8 @@
 [![PyPI](https://img.shields.io/pypi/v/spei?style=flat-square)](https://pypi.org/project/spei/)
 [![PyPi Supported Python Versions](https://img.shields.io/pypi/pyversions/spei?style=flat-square)](https://pypi.org/project/spei/)
 [![Code Size](https://img.shields.io/github/languages/code-size/martinvonk/spei?style=flat-square)](https://pypi.org/project/spei/)
-[![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square)
-![License](https://img.shields.io/pypi/l/spei?style=flat-square)](https://pypi.org/project/spei/)
+[![PyPi Downloads](https://img.shields.io/pypi/dm/spei?style=flat-square)](https://pypi.org/project/spei/)
+[![License](https://img.shields.io/pypi/l/spei?style=flat-square)](https://pypi.org/project/spei/)
 [![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.10816741-blue?style=flat-square)](https://doi.org/10.5281/zenodo.10816741)
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square)](https://github.com/martinvonk/SPEI/actions/workflows/tests.yml)
