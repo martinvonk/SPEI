@@ -30,6 +30,10 @@ def sgi(
     series: pandas.Series
         Pandas time series of the groundwater levels. Time series index
         should be a pandas DatetimeIndex.
+    fit_freq : str, optional, default=None
+        Frequency for fitting the distribution. Default is None in which case
+        the frequency of the series is inferred. If this fails a monthly
+        frequency is used.
 
     Returns
     -------
@@ -75,9 +79,26 @@ def spi(
         However, for the SPI generally the Gamma probability density
         function is recommended. Other appropriate choices could be the
         lognormal, log-logistic (fisk) or PearsonIII distribution.
-    prob_zero: bool
-        Option to correct the distribution if x=0 is not in probability
-        density function. E.g. the case with the Gamma distriubtion.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
+    fit_freq : str, optional, default=None
+        Frequency for fitting the distribution. Default is None in which case
+        the frequency of the series is inferred. If this fails a monthly
+        frequency is used.
+    fit_window : int, optional, default=0
+        Window size for fitting data in fit_freq frequency's unit. Default is
+        zero in which case only data within the fit_freq is considered. If
+        larger than zero data data within the window is used to fit the
+        distribution for the series. fit_window must be a odd number larger
+        than 3 when used.
+    prob_zero : bool, default=True
+        Option to correct the distribution if x=0 is not in probability density
+        function. E.g. the case with the Gamma distriubtion. If True, the
+        probability of zero values in the series is calculated by the
+        occurence.
 
     Returns
     -------
@@ -124,6 +145,24 @@ def spei(
         However, for the SPEI generally the log-logistic (fisk) probability
         density function is recommended. Other appropriate choices could be
         the lognormal or PearsonIII distribution.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
+    fit_freq : str, optional, default=None
+        Frequency for fitting the distribution. Default is None in which case
+        the frequency of the series is inferred. If this fails a monthly
+        frequency is used.
+    fit_window : int, optional, default=0
+        Window size for fitting data in fit_freq frequency's unit. Default is
+        zero in which case only data within the fit_freq is considered. If
+        larger than zero data data within the window is used to fit the
+        distribution for the series. fit_window must be a odd number larger
+        than 3 when used.
+    prob_zero : bool, default=False
+        Flag indicating whether the probability of zero values in the series is
+        calculated by the occurence.
 
     Returns
     -------
@@ -170,6 +209,24 @@ def ssfi(
         However, for the SSFI generally the gamma probability density
         function is recommended. Other appropriate choices could be the
         normal, lognormal, pearsonIII, GEV or  Gen-Logistic distribution.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
+    fit_freq : str, optional, default=None
+        Frequency for fitting the distribution. Default is None in which case
+        the frequency of the series is inferred. If this fails a monthly
+        frequency is used.
+    fit_window : int, optional, default=0
+        Window size for fitting data in fit_freq frequency's unit. Default is
+        zero in which case only data within the fit_freq is considered. If
+        larger than zero data data within the window is used to fit the
+        distribution for the series. fit_window must be a odd number larger
+        than 3 when used.
+    prob_zero : bool, default=False
+        Flag indicating whether the probability of zero values in the series is
+        calculated by the occurence.
 
     Returns
     -------
@@ -207,9 +264,10 @@ class SI:
     dist : ContinuousDist
         The SciPy continuous distribution associated with the data.
     timescale : int, optional, default=0
-        Rolling window timescale in days over which the series is summed. For
-        SI1 the user would provide timescale=30, for SI3: timescale=90, SI6:
-        timescale=180 etc.
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
     fit_freq : str, optional, default=None
         Frequency for fitting the distribution. Default is None in which case
         the frequency of the series is inferred. If this fails a monthly
@@ -258,7 +316,7 @@ class SI:
 
         if self.timescale > 0:
             self.series = (
-                self.series.rolling(f"{self.timescale}D", min_periods=self.timescale)
+                self.series.rolling(self.timescale, min_periods=self.timescale)
                 .sum()
                 .dropna()
                 .copy()
