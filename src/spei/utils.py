@@ -64,7 +64,7 @@ def infer_frequency(index: Union[Index, DatetimeIndex]) -> str:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "ME" if pd_version >= "2.1.0" else "M"
+        inf_freq = "ME" if pd_version >= "2.2.0" else "M"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
 
@@ -81,7 +81,7 @@ def group_yearly_df(series: Series) -> DataFrame:
     """
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
-    freq = "YE" if pd_version >= "2.1.0" else "Y"
+    freq = "YE" if pd_version >= "2.2.0" else "Y"
     for year_timestamp, gry in series.groupby(Grouper(freq=freq)):
         index = validate_index(gry.index)
         gry.index = to_datetime(
