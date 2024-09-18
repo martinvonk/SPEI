@@ -12,11 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Test suite with py39-ubuntu
-            python: "3.9"
-            os: ubuntu-latest
-            toxenv: py39
-            experimental: false
           - name: Test suite with py310-ubuntu
             python: "3.10"
             os: ubuntu-latest
@@ -32,23 +27,22 @@ jobs:
             os: ubuntu-latest
             toxenv: py312
             experimental: false
+          - name: Test suite with py313-ubuntu
+            python: "3.13-dev"
+            toxenv: py313
+            experimental: true
           - name: Type check with mypy
-            python: "3.9"
+            python: "3.10"
             os: ubuntu-latest
             toxenv: type
             experimental: false
-          - name: Formatting with black + isort
-            python: "3.9"
-            os: ubuntu-latest
-            toxenv: format
-            experimental: false
-          - name: Linting with flake8 + ruff
-            python: "3.9"
+          - name: Formatting and linting with ruff
+            python: "3.10"
             os: ubuntu-latest
             toxenv: lint
             experimental: false
           - name: Codacy Coverage Report
-            python: "3.9"
+            python: "3.10"
             os: ubuntu-latest
             toxenv: coverage
             experimental: false
