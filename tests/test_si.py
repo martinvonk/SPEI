@@ -1,6 +1,5 @@
 from pandas import Series, Timestamp
 from scipy.stats import norm
-
 from spei import SI, sgi, spei, spi, ssfi
 
 

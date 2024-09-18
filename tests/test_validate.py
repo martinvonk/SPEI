@@ -2,7 +2,6 @@ import logging
 
 import pytest
 from pandas import DataFrame, DatetimeIndex, Series, Timestamp, to_datetime
-
 from spei.utils import validate_index, validate_series
 
 

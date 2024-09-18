@@ -3,9 +3,18 @@ from calendar import isleap
 from typing import Union
 
 from numpy import array, nan
-from pandas import DataFrame, DatetimeIndex, Grouper, Index, Series, Timedelta
+from pandas import (
+    DataFrame,
+    DatetimeIndex,
+    Grouper,
+    Index,
+    Series,
+    Timedelta,
+    concat,
+    infer_freq,
+    to_datetime,
+)
 from pandas import __version__ as pd_version
-from pandas import concat, infer_freq, to_datetime
 
 
 def validate_series(series: Series) -> Series:

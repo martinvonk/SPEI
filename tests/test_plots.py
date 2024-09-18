@@ -1,6 +1,5 @@
 import matplotlib as mpl
 from pandas import Series
-
 from spei.plot import monthly_density
 from spei.plot import si as plot_si
 
