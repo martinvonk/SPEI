@@ -13,10 +13,10 @@ requires-python = ">=3.9"
 dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Topic :: Scientific/Engineering :: Hydrology',
         'Intended Audience :: Science/Research',
         "License :: OSI Approved :: MIT License",
@@ -29,21 +29,14 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-linting = ["flake8", "ruff"]
-formatting = ["black[jupyter]", "isort"]
+ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
-dev = ["spei[linting,formatting,typing,pytesting,coveraging]"]
+dev = ["spei[ruffing,typing,pytesting,coveraging]"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
-
-[tool.black]
-line-length = 88
-
-[tool.isort]
-profile = "black"
 
 [tool.mypy]
 mypy_path = "src"
@@ -56,27 +49,22 @@ ignore_missing_imports = true
 pythonpath = ["src"]
 
 [tool.ruff]
-line-length = 88
+extend-include = ["*.ipynb"]
+lint.extend-select = ["I"]
+show-fixes = true
+fix = true
 
 [tool.tox]
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py39, py310, py311, py312
+    env_list = format, type, lint, py310, py311, py312, py313
 
     [testenv]
     description = run unit tests
     extras = pytesting
     commands =
             pytest tests
-
-    [testenv:format]
-    description = run formatters
-    basepython = python3.9
-    extras = formatting
-    commands =
-            black src --check --verbose
-            isort src --check
 
     [testenv:type]
     description = run type checks
@@ -85,13 +73,20 @@ legacy_tox_ini = """
     commands =
             mypy src
 
-    [testenv:lint]
-    description = run linters
-    basepython = python3.9
-    extras = linting
+    [testenv:ruff]
+    description = run ruff checks
+    basepython = python3.10
+    extras = ruffing
     commands =
-            flake8 src --max-line-length=88 --ignore=E203,W503,W504
-            ruff check src
+            ruff check --extend-select I --preview
+            ruff format --check
+
+    [testenv:ruff_fix]
+    description = run ruff locally and fix issues
+    extras = ruffing
+    commands =
+            ruff check --extend-select I --fix
+            ruff format
 
     [testenv:coverage]
     description = get coverage report xml
