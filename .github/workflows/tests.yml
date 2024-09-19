@@ -40,7 +40,7 @@ jobs:
           - name: Formatting and linting with ruff
             python: "3.10"
             os: ubuntu-latest
-            toxenv: lint
+            toxenv: ruff
             experimental: false
           - name: Codacy Coverage Report
             python: "3.10"
