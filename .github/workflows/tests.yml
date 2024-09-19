@@ -29,6 +29,7 @@ jobs:
             experimental: false
           - name: Test suite with py313-ubuntu
             python: "3.13-dev"
+            os: ubuntu-latest
             toxenv: py313
             experimental: true
           - name: Type check with mypy
@@ -39,7 +40,7 @@ jobs:
           - name: Formatting and linting with ruff
             python: "3.10"
             os: ubuntu-latest
-            toxenv: lint
+            toxenv: ruff
             experimental: false
           - name: Codacy Coverage Report
             python: "3.10"

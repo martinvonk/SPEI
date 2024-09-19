@@ -52,9 +52,14 @@ def test_validate_series_df_2d() -> None:
         validate_series(df)
 
 
-def test_infer_frequency_monthly():
+def test_infer_frequency_monthly_start():
     index = DatetimeIndex(["2020-01-01", "2020-02-01", "2020-03-01"])
-    assert infer_frequency(index) == "M"
+    assert infer_frequency(index) == "MS"  # Assuming pandas version >= 2.2.0
+
+
+def test_infer_frequency_monthly_end():
+    index = DatetimeIndex(["2020-01-31", "2020-02-28", "2020-03-31"])
+    assert infer_frequency(index) == "BME"  # Assuming pandas version >= 2.2.0
 
 
 def test_infer_frequency_weekly():
@@ -74,7 +79,7 @@ def test_infer_frequency_no_infer():
 
 def test_infer_frequency_non_datetime_index():
     index = Index(["2020-01-01", "2020-02-01", "2020-03-01"])
-    assert infer_frequency(index) == "M"
+    assert infer_frequency(index) == "MS"  # Assuming pandas version >= 2.2.0
 
 
 def test_infer_frequency_invalid_index():

@@ -9,7 +9,7 @@ authors = [{ name = "Martin Vonk", email = "vonk.mart@gmail.com" }]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
         'Programming Language :: Python :: 3 :: Only',
@@ -58,7 +58,7 @@ fix = true
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py310, py311, py312, py313
+    env_list = ruff, type, py310, py311, py312, py313
 
     [testenv]
     description = run unit tests
@@ -68,7 +68,7 @@ legacy_tox_ini = """
 
     [testenv:type]
     description = run type checks
-    basepython = python3.9
+    basepython = python3.10
     extras = typing
     commands =
             mypy src
@@ -90,7 +90,7 @@ legacy_tox_ini = """
 
     [testenv:coverage]
     description = get coverage report xml
-    basepython = 3.9
+    basepython = 3.10
     extras = coveraging,pytesting
     commands =
             coverage run -m pytest tests
