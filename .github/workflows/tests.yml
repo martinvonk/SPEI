@@ -29,6 +29,7 @@ jobs:
             experimental: false
           - name: Test suite with py313-ubuntu
             python: "3.13-dev"
+            os: ubuntu-latest
             toxenv: py313
             experimental: true
           - name: Type check with mypy
