@@ -58,7 +58,7 @@ fix = true
 legacy_tox_ini = """
     [tox]
     requires = tox>=4
-    env_list = format, type, lint, py310, py311, py312, py313
+    env_list = ruff, type, py310, py311, py312, py313
 
     [testenv]
     description = run unit tests
