@@ -83,7 +83,7 @@ def test_fit_distribution_with_fit_window(prec: Series) -> None:
 
 
 def test_fit_distribution_with_fit_freq(prec: Series) -> None:
-    si = SI(prec, dist=norm, timescale=30, fit_freq="M")
+    si = SI(prec, dist=norm, timescale=30, fit_freq="ME")
     si.fit_distribution()
     assert (
         si._dist_dict

@@ -59,7 +59,7 @@ def test_infer_frequency_monthly_start():
 
 def test_infer_frequency_monthly_end():
     index = DatetimeIndex(["2020-01-31", "2020-02-28", "2020-03-31"])
-    assert infer_frequency(index) == "Me"  # Assuming pandas version >= 2.2.0
+    assert infer_frequency(index) == "BME"  # Assuming pandas version >= 2.2.0
 
 
 def test_infer_frequency_weekly():
