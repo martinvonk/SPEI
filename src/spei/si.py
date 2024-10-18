@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 from numpy import ceil, linspace, nan
 from pandas import DataFrame, Grouper, Series, Timedelta, Timestamp
-from scipy.stats import fisk, gamma, genextreme, norm
+from scipy.stats import beta, fisk, gamma, genextreme, norm
 
 from ._typing import ContinuousDist
 from .dist import Dist
@@ -206,9 +206,10 @@ def ssfi(
         should be a pandas DatetimeIndex.
     dist: scipy.stats.rv_continuous
         Can be any continuous distribution from the scipy.stats library.
-        However, for the SSFI generally the gamma probability density
-        function is recommended. Other appropriate choices could be the
-        normal, lognormal, pearsonIII, GEV or  Gen-Logistic distribution.
+        However, for the SSFI generally the gamma probability density function
+        is recommended. Other choices could be the normal, lognormal,
+        pearsonIII, GEV or Gen-Logistic distribution or any distribution deemed
+        appropriate.
     timescale : int, optional, default=0
         Size of the moving window over which the series is summed. If zero, no
         summation is performed over the time series. If the time series
@@ -250,6 +251,70 @@ def ssfi(
     )
     ssfi.fit_distribution()
     return ssfi.norm_ppf()
+
+
+def ssmsi(
+    series: Series,
+    dist: ContinuousDist = beta,
+    timescale: int = 0,
+    fit_freq: Optional[str] = None,
+    fit_window: int = 0,
+    prob_zero: bool = True,
+) -> Series:
+    """Method to compute the Standardized Soil Moisture Index [ssmi_2016]_.
+
+    Parameters
+    ----------
+    series: pandas.Series
+        Pandas time series of the precipitation. Time series index
+        should be a pandas DatetimeIndex.
+    dist: scipy.stats.rv_continuous
+        Can be any continuous distribution from the scipy.stats library.
+        However, for the SSMI generally the beta probability density function
+        is recommended. Other choices could be the normal or ECDF distribution
+        or any distribution deemed appropriate.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
+    fit_freq : str, optional, default=None
+        Frequency for fitting the distribution. Default is None in which case
+        the frequency of the series is inferred. If this fails a monthly
+        frequency is used.
+    fit_window : int, optional, default=0
+        Window size for fitting data in fit_freq frequency's unit. Default is
+        zero in which case only data within the fit_freq is considered. If
+        larger than zero data data within the window is used to fit the
+        distribution for the series. fit_window must be a odd number larger
+        than 3 when used.
+    prob_zero : bool, default=False
+        Flag indicating whether the probability of zero values in the series is
+        calculated by the occurence.
+
+    Returns
+    -------
+    pandas.Series
+
+    References
+    ----------
+    .. [ssmi_2016] Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An
+       empirical standardized soil moisture index for agricultural drought assessment
+       from remotely sensed data. International Journal of Applied Earth Observation
+       and Geoinformation, 48, 2016.
+    """
+
+    ssmi = SI(
+        series=series,
+        dist=dist,
+        timescale=timescale,
+        fit_freq=fit_freq,
+        fit_window=fit_window,
+        prob_zero=prob_zero,
+        normal_scores_transform=False,
+    )
+    ssmi.fit_distribution()
+    return ssmi.norm_ppf()
 
 
 @dataclass
