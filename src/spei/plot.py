@@ -5,7 +5,7 @@ from typing import List, Optional
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.dates import date2num
-from numpy import array, concatenate, linspace, meshgrid, reshape
+from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import DatetimeIndex, Series
 from scipy.stats import gaussian_kde
 
@@ -80,6 +80,7 @@ def si(
         lc.set_linewidth(1.2)
         _ = ax.add_collection(lc)
 
+    ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(1))
     ax.set_ylim(nmin, nmax)
 
     return ax
@@ -147,6 +148,73 @@ def monthly_density(
     ax.legend()
     ax.grid(True)
 
+    return ax
+
+
+def si_heatmap(
+    sis: List[Series],
+    cmap: str = "Reds_r",
+    vmin: float = -3.0,
+    vmax: float = -1.0,
+    yticklabels: List[str] | None = None,
+    ax: Optional[Axes] = None,
+) -> Axes:
+    """
+    Plots multiple standardized indices on a heatmap from [mourik_2024]_
+
+    Parameters
+    ----------
+    sis : List[Series]
+        A list of pandas Series objects, each representing a time series of SI values.
+    cmap : str, optional
+        The colormap to use for the heatmap. Default is "Reds_r".
+    vmin : float, optional
+        The minimum value for color normalization. Default is -3.0.
+    vmax : float, optional
+        The maximum value for color normalization. Default is -1.0.
+    yticklabels : List[str] or None, optional
+        Custom labels for the y-axis ticks. If None, the names of the Series objects are used. Default is None.
+    ax : Axes, optional
+        A matplotlib Axes object to plot on. If None, a new figure and axes are created. Default is None.
+    Returns
+    -------
+    Axes
+        The matplotlib Axes object with the heatmap.
+
+    References
+    ----------
+    .. [mourik_2024] van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger,
+    W., Wanders, N.: Regional drivers and characteristics of multi-year
+    droughts. 2024
+    """
+    if ax is None:
+        _, ax = plt.subplots(figsize=(6.5, 4))
+
+    if cmap in Crameri._available_cmaps:
+        colormap = Crameri(cmap).cmap
+    else:
+        colormap = plt.get_cmap(cmap)
+
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    for i, s in enumerate(sis):
+        _ = ax.pcolormesh(
+            [s.index, s.index],  # TODO check if the intervals and colors are correct
+            [i + 0.5, i + 1.5],
+            [s.values, s.values],
+            norm=norm,
+            cmap=colormap,
+            linewidth=0,
+            rasterized=True,
+        )
+
+    ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
+    ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
+    yticklabels = [s.name for s in sis] if yticklabels is None else yticklabels
+    ax.set_yticklabels(yticklabels)
+    for tick in ax.yaxis.get_major_ticks():  # don't show major ytick marker
+        tick.tick1line.set_visible(False)
+
+    ax.set_ylim(0, len(sis))
     return ax
 
 
