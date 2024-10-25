@@ -168,6 +168,8 @@ class Crameri:
             return self.vik()
         elif "lajolla" in self.name:
             return self.lajolla()
+        else:
+            raise ValueError(f"Invalid colormap name: {self.name}")
 
     @staticmethod
     def cmap_from_list(
