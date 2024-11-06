@@ -188,7 +188,9 @@ def si_heatmap(
     droughts. 2024
     """
     if ax is None:
-        _, ax = plt.subplots(figsize=(6.5, 4))
+        fig, ax = plt.subplots(figsize=(6.5, 4))
+    else:
+        fig = ax.get_figure()
 
     if cmap in Crameri._available_cmaps:
         colormap = Crameri(cmap).cmap
@@ -198,23 +200,34 @@ def si_heatmap(
     norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
     for i, s in enumerate(sis):
         _ = ax.pcolormesh(
-            [s.index, s.index],  # TODO check if the intervals and colors are correct
-            [i + 0.5, i + 1.5],
-            [s.values, s.values],
+            [s.index, s.index],
+            [i, i + 1],
+            [s.values[:-1]],
             norm=norm,
             cmap=colormap,
-            linewidth=0,
-            rasterized=True,
+            shading="flat",
         )
 
     ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
     ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
-    yticklabels = [s.name for s in sis] if yticklabels is None else yticklabels
+    yticklabels = (
+        [getattr(s, "name") for s in sis] if yticklabels is None else yticklabels
+    )
     ax.set_yticklabels(yticklabels)
     for tick in ax.yaxis.get_major_ticks():  # don't show major ytick marker
         tick.tick1line.set_visible(False)
 
     ax.set_ylim(0, len(sis))
+    scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
+    cax, cbar_kw = mpl.colorbar.make_axes(
+        ax, fraction=0.05, pad=0.01, orientation="vertical"
+    )
+    _ = fig.colorbar(
+        scm,
+        cax=cax,
+        **cbar_kw,
+    )
+
     return ax
 
 
