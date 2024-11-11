@@ -29,8 +29,9 @@ If you happen to use this package, please cite: Vonk, M. A. (2024). SPEI: A simp
 | Standardized Precipitation Evaporation Index | SPEI         | 2          |
 | Standardized Groundwater Index               | SGI          | 3,4        |
 | Standardized Streamflow Index                | SSFI         | 5          |
+| Standardized Soil Moisture Index             | SSMI         | 6          |
 
-The package is not limited to only these four drought indices. If any of the distributions in the Scipy library is valid, the drought index can be calculated.
+The package is not limited to only these five drought indices. If any of the distributions in the Scipy library is valid on the observed hydrological series, the drought index can be calculated.
 
 ## Installation
 
@@ -49,6 +50,7 @@ To get the development version download or clone the GitHub repository to your l
 3. J.P. Bloomfield and B.P. Marchant, B. P. (2013) - Analysis of groundwater drought building on the standardised precipitation index approach. DOI: 10.5194/hess-17-4769-2013
 4. A. Babre, A. Kalvāns, Z. Avotniece, I. Retiķe, J. Bikše, K.P.M. Jemeljanova, A. Zelenkevičs and A. Dēliņa (2022) - The use of predefined drought indices for the assessment of groundwater drought episodes in the Baltic States over the period 1989–2018. DOI: 10.1016/j.ejrh.2022.101049
 5. E. Tijdeman, K. Stahl and L.M. Tallaksen (2020) - Drought characteristics derived based on the Standardized Streamflow Index: A large sample comparison for parametric and nonparametric methods. DOI: 10.1029/2019WR026315
+6. Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An empirical standardized soil moisture index for agricultural drought assessment from remotely sensed data. DOI: 10.1016/j.jag.2015.06.011s
 
 Note that the method for calculating the drought indices does not come from these articles and SciPy is used for deriving the distribution. However the literature is helpful as a reference to understand the context and application of drought indices.
 
