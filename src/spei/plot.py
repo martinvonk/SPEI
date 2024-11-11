@@ -151,7 +151,7 @@ def monthly_density(
     return ax
 
 
-def si_heatmap(
+def heatmap(
     sis: List[Series],
     cmap: str = "Reds_r",
     vmin: float = -3.0,
