@@ -1,6 +1,5 @@
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, Optional
 
 from numpy import ceil, linspace, nan
 from pandas import DataFrame, Grouper, Series, Timedelta, Timestamp
@@ -19,7 +18,7 @@ from .utils import (
 
 def sgi(
     series: Series,
-    fit_freq: Optional[str] = None,
+    fit_freq: str | None = None,
 ) -> Series:
     """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
     method as in Pastas. Uses the normal scores transform to calculate the
@@ -63,7 +62,7 @@ def spi(
     series: Series,
     dist: ContinuousDist = gamma,
     timescale: int = 0,
-    fit_freq: Optional[str] = None,
+    fit_freq: str | None = None,
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
@@ -128,7 +127,7 @@ def spei(
     series: Series,
     dist: ContinuousDist = fisk,
     timescale: int = 0,
-    fit_freq: Optional[str] = None,
+    fit_freq: str | None = None,
     fit_window: int = 0,
     prob_zero: bool = False,
 ) -> Series:
@@ -193,7 +192,7 @@ def ssfi(
     series: Series,
     dist: ContinuousDist = genextreme,
     timescale: int = 0,
-    fit_freq: Optional[str] = None,
+    fit_freq: str | None = None,
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
@@ -257,7 +256,7 @@ def ssmsi(
     series: Series,
     dist: ContinuousDist = beta,
     timescale: int = 0,
-    fit_freq: Optional[str] = None,
+    fit_freq: str | None = None,
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
@@ -363,12 +362,12 @@ class SI:
     series: Series = field(repr=False)
     dist: ContinuousDist
     timescale: int = 0
-    fit_freq: Optional[str] = field(default=None)
+    fit_freq: str | None = field(default=None)
     fit_window: int = field(default=0)
     prob_zero: bool = field(default=False)
     normal_scores_transform: bool = field(default=False)
     _grouped_year: DataFrame = field(init=False, repr=False, compare=False)
-    _dist_dict: Dict[int, Dist] = field(
+    _dist_dict: dict[int, Dist] = field(
         default_factory=dict, init=False, repr=False, compare=False
     )
 

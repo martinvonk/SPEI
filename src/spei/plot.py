@@ -1,6 +1,5 @@
 from calendar import month_abbr
 from itertools import cycle
-from typing import List, Optional
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -17,9 +16,9 @@ def si(
     si: Series,
     ybound: float = 3.0,
     figsize: tuple = (6.5, 4),
-    cmap: str = "seismic_r",
+    cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
 ) -> Axes:
     """Plot the standardized index values as a time series.
 
@@ -88,10 +87,10 @@ def si(
 
 def monthly_density(
     si: Series,
-    years: List[int],
-    months: List[int],
+    years: list[int],
+    months: list[int],
     cmap: str = "tab20c",
-    ax: Optional[Axes] = None,
+    ax: Axes | None = None,
 ) -> Axes:
     """Plot the monthly kernel-density estimate for a specific year.
 
@@ -152,12 +151,12 @@ def monthly_density(
 
 
 def heatmap(
-    sis: List[Series],
+    sis: list[Series],
     cmap: str = "Reds_r",
     vmin: float = -3.0,
     vmax: float = -1.0,
-    yticklabels: List[str] | None = None,
-    ax: Optional[Axes] = None,
+    yticklabels: list[str] | None = None,
+    ax: Axes | None = None,
 ) -> Axes:
     """
     Plots multiple standardized indices on a heatmap from [mourik_2024]_
@@ -237,9 +236,9 @@ class Crameri:
     def __init__(self, name: str) -> None:
         self.name = name
         self._r = False if "_r" not in name else True
-        assert (
-            self.name in self._available_cmaps
-        ), f"Invalid colormap name: {self.name}. Available colormaps: {self._available_cmaps}"
+        assert self.name in self._available_cmaps, (
+            f"Invalid colormap name: {self.name}. Available colormaps: {self._available_cmaps}"
+        )
         self.cmap = self._get_cmap()
 
     def _get_cmap(self) -> mpl.colors.Colormap:
@@ -254,7 +253,7 @@ class Crameri:
 
     @staticmethod
     def cmap_from_list(
-        colors: List[List[float]],
+        colors: list[list[float]],
         name: str,
         _r: bool = False,
     ) -> mpl.colors.Colormap:

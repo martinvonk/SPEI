@@ -1,4 +1,5 @@
 from pandas import Series
+
 from spei import climdex
 
 

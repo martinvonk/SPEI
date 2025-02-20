@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Literal, Optional, Tuple
+from typing import Literal
 
 from numpy import std
 from pandas import Series
@@ -14,10 +14,10 @@ class Dist:
     dist: ContinuousDist
     loc: float = field(init=False, repr=True)
     scale: float = field(init=False, repr=True)
-    pars: Optional[List[float]] = field(init=False, repr=False)
+    pars: list[float] | None = field(init=False, repr=False)
     prob_zero: bool = field(default=False, init=True, repr=False)
     p0: float = field(default=0.0, init=False, repr=False)
-    data_window: Optional[Series] = field(default=None, init=True, repr=False)
+    data_window: Series | None = field(default=None, init=True, repr=False)
     """
     Represents a distribution associated with data.
 
@@ -74,7 +74,7 @@ class Dist:
     @staticmethod
     def fit_dist(
         data: Series, dist: ContinuousDist
-    ) -> Tuple[Optional[List[float]], float, float]:
+    ) -> tuple[list[float] | None, float, float]:
         """
         Fits a Scipy continuous distribution to the data.
 

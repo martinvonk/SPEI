@@ -1,6 +1,5 @@
 import logging
 from calendar import isleap
-from typing import Union
 
 from numpy import array, nan
 from pandas import (
@@ -62,7 +61,7 @@ def validate_index(index: Index) -> DatetimeIndex:
     return index
 
 
-def infer_frequency(index: Union[Index, DatetimeIndex]) -> str:
+def infer_frequency(index: Index | DatetimeIndex) -> str:
     """Infer frequency"""
 
     index = validate_index(index)
