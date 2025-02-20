@@ -48,10 +48,13 @@ def si(
     nmin = -ybound
     nmax = ybound
 
-    if cmap in Crameri._available_cmaps:
-        colormap = Crameri(cmap).cmap
+    if isinstance(cmap, str):
+        if cmap in Crameri._available_cmaps:
+            colormap = Crameri(cmap).cmap
+        else:
+            colormap = plt.get_cmap(cmap)
     else:
-        colormap = plt.get_cmap(cmap)
+        colormap = cmap
 
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
@@ -89,7 +92,7 @@ def monthly_density(
     si: Series,
     years: list[int],
     months: list[int],
-    cmap: str = "tab20c",
+    cmap: str | mpl.colors.Colormap = "tab20c",
     ax: Axes | None = None,
 ) -> Axes:
     """Plot the monthly kernel-density estimate for a specific year.
@@ -119,8 +122,8 @@ def monthly_density(
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4))
 
-    cm = plt.get_cmap(cmap, 20)
-    colors = reshape(array([cm(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
+    colormap = plt.get_cmap(cmap, 20) if isinstance(cmap, str) else cmap
+    colors = reshape(array([colormap(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
     lsts = cycle(["--", "-.", ":"])
 
     ind = linspace(-3.3, 3.3, 1000)
@@ -191,10 +194,13 @@ def heatmap(
     else:
         fig = ax.get_figure()
 
-    if cmap in Crameri._available_cmaps:
-        colormap = Crameri(cmap).cmap
+    if isinstance(cmap, str):
+        if cmap in Crameri._available_cmaps:
+            colormap = Crameri(cmap).cmap
+        else:
+            colormap = plt.get_cmap(cmap)
     else:
-        colormap = plt.get_cmap(cmap)
+        colormap = cmap
 
     norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
     for i, s in enumerate(sis):
