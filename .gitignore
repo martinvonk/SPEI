@@ -14,3 +14,4 @@
 /htmlcov
 coverage.xml
 *.code-workspace
+uv.lock
