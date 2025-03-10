@@ -57,4 +57,6 @@ These are scientific publications that use and cite this Python package via [Zen
 
 van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., & Wanders, N. (2025). Regional drivers and characteristics of multi-year droughts. Weather and Climate Extremes, 48, 100748. https://doi.org/10.1016/j.wace.2025.100748
 
+Segura-Barrero, R., Lauvaux, T., Lian, J., Ciais, P., Badia, A., Ventura, S., Bazzi, H., Abbessi, E., Fu, Z., Xiao, J., Li, X., & Villalba, G. (2025). Heat and Drought Events Alter Biogenic Capacity to Balance CO2 Budget in South-Western Europe. Global biogeochemical cycles, 39(1), e2024GB008163. https://doi.org/10.1029/2024GB008163
+
 Adla, S., Šaponjić, A., Tyagi, A., Nagi, A., Pastore, P., & Pande, S. (2024). Steering agricultural interventions towards sustained irrigation adoption by farmers: socio-psychological analysis of irrigation practices in Maharashtra, India. Hydrological Sciences Journal, 69(12), 1586–1603. https://doi.org/10.1080/02626667.2024.2376709
