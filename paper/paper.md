@@ -1,18 +1,17 @@
 ---
 title: 'SPEI: A simple Python package for calculating and visualizing drought indices'
 tags:
-  - Python
   - hydrology
   - drought
   - time series
+  - Python
 authors:
-  - name: Martin Vonk
+  - name: Martin A. Vonk
     orcid: 0009-0007-3528-2991
     affiliation: "1, 2"
 affiliations:
  - name: Department of Water Management, Faculty of Civil Engineering and Geosciences, Delft University of Technology, Delft, South Holland, The Netherlands
    index: 1
-   ror: 00hx57361
  - name: Artesia B.V., Schoonhoven, South Holland, The Netherlands
    index: 2
 date: 24 February 2025
@@ -21,9 +20,10 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a simple Python package to calculate drought indices for time series. This package uses popular Python packages such as Pandas [@pandas_paper_2010] and Scipy [@scipy_paper_2020] to make it easy and versatile for the user to calculate the drought indices. Matplotlib [@matplotlib_paper_2007] used for the visualization of th drought indices.
+SPEI is a simple Python package to calculate drought indices for time series. This package uses popular Python packages such as Pandas [@pandas_paper_2010] and Scipy [@scipy_paper_2020] to make it easy and versatile for the user to calculate the drought indices. Matplotlib [@matplotlib_paper_2007] used for the visualization of the drought indices.
 
 # Statement of need
+Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. To quantify droughts, many different indices have been developed. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
 
 # Mathematics
 
