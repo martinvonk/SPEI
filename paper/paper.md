@@ -34,7 +34,7 @@ The base of the Python package is Pandas [@pandas_paper_2010;@pandas_software_20
 
 For the drought index, sets of rolling average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability distribution to establish the relationship between the probability and the time series. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
 
-[^1]Please note that a month does not represent and unambiguous time delta since a month can have have 28 up to 31 days. This can result in some extra complexity in the computation.
+[^1]: Please note that a month does not represent and unambiguous time delta since a month can have have 28 up to 31 days. This can result in some extra complexity in the computation.
 
 The SciPy [@scipy_paper_2020] package provides continious distribution available via their `stats` library. General recommendations are provided in literature for the distributions of different drought indices, e.g. a gamma distribution for the SPI or log-logistic distribution for the SPEI. However, with this setup the Python allows for easy trial of different distribution which might be more suitable for for the relationship between the probability and the time series.
 
