@@ -25,7 +25,10 @@ SPEI is a simple Python package to calculate drought indices for time series. Th
 # Statement of need
 Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. To quantify droughts, many different indices have been developed. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
 
-# Mathematics
+Different drought indices exist to indicated different types of drought. For meteorological droughts common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,@lloydhughes_spi_2002], the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI/SSI) [@vicenteserrano_ssfi_2010] and the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004].
+
+# Methodology
+The most common meteorological drivers of drought are precipitation in the form of rain and (potential) evaporation. In this article an example dataset is considered with the precipitation and potential evaporation from the Royal Dutch Meteorological Institute (KNMI). To calculate the Standardized Precipitation Index, only the precipitation time series has to be considered. To calculate the Standardized Precipitation Index
 
 # Citations
 
