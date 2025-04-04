@@ -19,6 +19,7 @@ def si(
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
     ax: Axes | None = None,
+    **kwargs,
 ) -> Axes:
     """Plot the standardized index values as a time series.
 
@@ -53,7 +54,11 @@ def si(
     else:
         colormap = cmap
 
+    if "ybound" in kwargs:
+        DeprecationWarning("The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead")
+
     ymin, ymax = -3.0, 3.0
+
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
         ax.axhline(0, linestyle="--", linewidth=0.5, color="k")
