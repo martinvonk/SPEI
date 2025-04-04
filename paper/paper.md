@@ -38,30 +38,44 @@ The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_softwa
 The SciPy [@scipy_paper_2020] package provides probality density functions via their `stats` library. General recommendations are provided in literature about which probability density function to use for a drought index, e.g. a gamma distribution for the SPI or log-logistic/fisk distribution for the SPEI. However, with over 200 univariate continuous distributions in the scipy stats library, the user has freedom to easily try and find different relations between the probability and the time series. Each of SciPy continuous distribution has a `fit` method making it easy to fit the distribution to the time series using maximum likelihood estimation.
 
 ## Example
-In this article an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI). To calculate the SPI, only the precipitation time series is needed, while the SPEI uses precipitation excess (precipitation minus potential evaporation). When the time series is in the proper `pandas.Series` format, the Python package provides a function for each seperate drought index. For instance:
+In this article an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI). To calculate the SPI, only the precipitation time series is needed, while the SPEI uses precipitation surplus (precipitation minus potential evaporation), also called rainfall or precipitaiton excess. When the time series is in the proper `pandas.Series` format, the Python package provides a function for each seperate drought index. For instance:
+
+![Monthly precipitation surplus.\label{fig:prec_surplus}](figures/monthly_precipitation_surplus.png)
 
 ```python
 import spei as si
 import pandas as pd
 import scipy.stats as sps
 
-prec: pd.Series = pd.read_csv("prec.csv", index_col="datetime", parse_dates=["datetime"]).squeeze()
-prec_ms: pd.Series = prec.resample("MS").sum()
-spi3 = si.spi(
-  series=prec_ms,
-  dist=sps.gamma,
-  timescale=3, # the frequency of the data, in this case months
-  fit_freq="MS", # =Month-Start
-  prob_zero=True, # allow for separate computation of the probability of zero values in the series because the gamma distribution is not defined in zero
+surplusm: pd.Series = (prec - evap).resample("MS").sum()
+
+spei1 = si.spei(
+  series=surplus,
+  dist=sps.fisk, # fisk=log-logistic
+  timescale=1, # the frequency of the data, in this case months
+  fit_freq="MS", # MS=Month-Start
 )
 ```
+
+![a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
+
 By default, the pecage uses `fit_freq` do determine on what frequency to fit the data. For instance, if the frequency of the time series is daily, a probability density function is fitted for each day of the year. If no frequency is parsed, the frequency of the time series is inferred.
 
 One can also choose to use the `fit_window` argument, which is zero by default. This allows the window of the used data to be expanded up to a certain size. This means that for instance, to fit the distribution of March 2nd, additionaly the data from March 1st and March 3rd can be used. In this case `fit_window` would be equal to 3. This is especially helpful for smaller timescales, e.g. daily data where a small dataset (less than 30 values) can give an inaccurate fit for the probability density function.
 
+![Resulting SPEI-1 \label{fig:spei1}](figures/surplus_spei1.png)
+
 ## Visualization
 
-# Acknowledgements
+### Series
 
+![Visualisation of the SPEI-3 with color indication of the drought \label{fig:spei1}](figures/surplus_spei1.png)
+
+### Multiyear drought
+
+After [@mourik_use_2025] it is possible to visualize the drought indices over several time spans within one graph. This can help with the interpretation whether or not a drought persists over a long timespan. And in the case of hydrological drought what the systems response is to the drought.
+
+# Acknowledgements
+Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo.
 
 # References
