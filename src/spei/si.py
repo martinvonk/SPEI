@@ -196,7 +196,7 @@ def ssfi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
+    """Method to compute the Standardized StreamFlow Index [ssfi_2012]_.
 
     Parameters
     ----------
@@ -234,10 +234,10 @@ def ssfi(
 
     References
     ----------
-    .. [ssfi_2020] Tijdeman, E., Stahl, K., & Tallaksen, L. M.:
-       Drought characteristics derived based on the Standardized
-       Streamflow Index: A large sample comparison for parametric
-       and nonparametric methods. Water Resources Research, 56, 2020.
+    .. [ssfi_2012] Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería,
+    J. Lorenzo-Lacruz, C. Azorin-Molina, and E. Morán-Tejeda (2012). Accurate
+    Computation of a Streamflow Drought Index. Journal of Hydrologic
+    Engineering 17 (2): 318-332.
     """
     ssfi = SI(
         series=series,
