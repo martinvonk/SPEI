@@ -16,3 +16,6 @@ coverage.xml
 *.code-workspace
 uv.lock
 /paper/literature
+paper/data/meteo_synthetic_heads.csv
+paper/data/synthetic_heads.csv
+paper/create_data.py
