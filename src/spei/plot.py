@@ -14,7 +14,7 @@ from .utils import validate_index, validate_series
 
 def si(
     si: Series,
-    ybound: float = 3.0,
+    add_category: bool = True,
     figsize: tuple = (6.5, 4),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
@@ -26,14 +26,14 @@ def si(
     ----------
     si : pandas.Series
         Series of the standardized index
-    ybound : int, optional
-        Maximum and minimum ylim of plot
+    add_category: bool, optional
+        Add the category labels to the right y-axis, by default True
+    figsize : tuple, optional
+        Figure size, by default (8, 4)
     cmap: str, optional
         Colormap for the background or line fill
     background: bool, optional
         Color the background if True, else color the line
-    figsize : tuple, optional
-        Figure size, by default (8, 4)
     ax : matplotlib.Axes, optional
         Axes handle, by default None which create a new axes
 
@@ -45,9 +45,6 @@ def si(
     if ax is None:
         _, ax = plt.subplots(figsize=figsize)
 
-    nmin = -ybound
-    nmax = ybound
-
     if isinstance(cmap, str):
         if cmap in Crameri._available_cmaps:
             colormap = Crameri(cmap).cmap
@@ -56,6 +53,7 @@ def si(
     else:
         colormap = cmap
 
+    ymin, ymax = -3.0, 3.0
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
         ax.axhline(0, linestyle="--", linewidth=0.5, color="k")
@@ -65,10 +63,10 @@ def si(
         nodroughts = si.to_numpy(dtype=float, copy=True)
         nodroughts[nodroughts < 0] = 0
 
-        x, y = meshgrid(si.index, linspace(nmin, nmax, 100))
-        ax.contourf(x, y, y, cmap=colormap, levels=linspace(nmin, nmax, 100))
-        ax.fill_between(x=si.index, y1=droughts, y2=nmin, color="w")
-        ax.fill_between(x=si.index, y1=nodroughts, y2=nmax, color="w")
+        x, y = meshgrid(si.index, linspace(ymin, ymax, 100))
+        ax.contourf(x, y, y, cmap=colormap, levels=linspace(ymin, ymax, 100))
+        ax.fill_between(x=si.index, y1=droughts, y2=ymin, color="w")
+        ax.fill_between(x=si.index, y1=nodroughts, y2=ymax, color="w")
     else:
         datetime = DatetimeIndex(si.index).to_pydatetime()
         x = date2num(datetime)
@@ -76,14 +74,36 @@ def si(
         points = array([x, y]).T.reshape(-1, 1, 2)
         segments = concatenate([points[:-1], points[1:]], axis=1)
         lc = mpl.collections.LineCollection(
-            segments, cmap=colormap, norm=plt.Normalize(nmin, nmax)
+            segments, cmap=colormap, norm=plt.Normalize(ymin, ymax)
         )
         lc.set_array(y)
         lc.set_linewidth(1.2)
         _ = ax.add_collection(lc)
 
     ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(1))
-    ax.set_ylim(nmin, nmax)
+    ax.set_ylim(ymin, ymax)
+
+    if add_category:
+        axr = ax.secondary_yaxis("right")
+        axr.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
+        axr.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
+        axr.set_yticklabels(
+            [
+                "Extreme drought",
+                "Severe drought",
+                "Moderate drought",
+                "Mild drought",
+                "Mildly wet",
+                "Moderately wet",
+                "Severely wet",
+                "Extremely wet",
+            ],
+            minor=True,
+        )
+        axr.set_yticklabels([], minor=False)
+        for tick in axr.yaxis.get_minor_ticks():
+            tick.tick1line.set_markersize(0)
+            tick.tick2line.set_markersize(0)
 
     return ax
 
