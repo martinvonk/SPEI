@@ -30,7 +30,7 @@ def si(
     add_category: bool, optional
         Add the category labels to the right y-axis, by default True
     figsize : tuple, optional
-        Figure size, by default (8, 4)
+        Figure size, by default (6.5, 4)
     cmap: str, optional
         Colormap for the background or line fill
     background: bool, optional
@@ -91,30 +91,35 @@ def si(
     ax.set_ylim(ymin, ymax)
 
     if add_category:
-        ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
-        axr = ax.secondary_yaxis("right")
-        axr.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
-        axr.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
-        axr.set_yticklabels(
-            [
-                "Extreme drought",
-                "Severe drought",
-                "Moderate drought",
-                "Mild drought",
-                "Mildly wet",
-                "Moderately wet",
-                "Severely wet",
-                "Extremely wet",
-            ],
-            minor=True,
-        )
-        axr.set_yticklabels([], minor=False)
-        for tick in axr.yaxis.get_minor_ticks():
-            tick.tick1line.set_markersize(0)
-            tick.tick2line.set_markersize(0)
+        axr = _add_category_labels(ax)
 
     return ax
 
+
+def _add_category_labels(ax: plt.Axes) -> plt.Axes:
+    """Add category based on the standardized index values to the right y-axis."""
+    ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
+    axr = ax.secondary_yaxis("right")
+    axr.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
+    axr.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
+    axr.set_yticklabels(
+        [
+            "Extreme drought",
+            "Severe drought",
+            "Moderate drought",
+            "Mild drought",
+            "Mildly wet",
+            "Moderately wet",
+            "Severely wet",
+            "Extremely wet",
+        ],
+        minor=True,
+    )
+    axr.set_yticklabels([], minor=False)
+    for tick in axr.yaxis.get_minor_ticks():
+        tick.tick1line.set_markersize(0)
+        tick.tick2line.set_markersize(0)
+    return axr
 
 def monthly_density(
     si: Series,
@@ -183,6 +188,7 @@ def monthly_density(
 
 def heatmap(
     sis: list[Series],
+    add_category: bool = False,
     cmap: str = "Reds_r",
     vmin: float = -3.0,
     vmax: float = -1.0,
@@ -196,6 +202,8 @@ def heatmap(
     ----------
     sis : List[Series]
         A list of pandas Series objects, each representing a time series of SI values.
+    add_category : bool, optional
+        If True, adds category labels to the colorbar. Default is False.
     cmap : str, optional
         The colormap to use for the heatmap. Default is "Reds_r".
     vmin : float, optional
@@ -253,13 +261,14 @@ def heatmap(
     ax.set_ylim(0, len(sis))
     scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
     cax, cbar_kw = mpl.colorbar.make_axes(
-        ax, fraction=0.05, pad=0.01, orientation="vertical"
+        ax, fraction=0.05, pad=0.05 if add_category else 0.01, orientation="vertical"
     )
-    _ = fig.colorbar(
-        scm,
-        cax=cax,
-        **cbar_kw,
-    )
+    _ = fig.colorbar(scm, cax=cax, **cbar_kw)
+
+    if add_category:
+        cax.yaxis.set_ticks_position('left')
+        cax.yaxis.set_label_position('left')
+        _add_category_labels(cax)
 
     return ax
 
