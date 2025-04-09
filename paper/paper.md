@@ -20,7 +20,7 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a simple Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], Scipy [@scipy_paper_2020], Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics and visualization respectively. This makes calculating and visualising different drought indices with the SPEI package easy but versitile.
+SPEI is a simple Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], Scipy [@scipy_paper_2020], Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics and visualization respectively. This makes calculating and visualizing different drought indices with the SPEI package easy but versitile.
 
 # Statement of need
 Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. To quantify droughts, many different indices have been developed. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
@@ -50,10 +50,9 @@ import scipy.stats as sps
 surplusm: pd.Series = (prec - evap).resample("MS").sum()
 
 spei1 = si.spei(
-  series=surplus,
-  dist=sps.fisk, # fisk=log-logistic
-  timescale=1, # the frequency of the data, in this case months
-  fit_freq="MS", # MS=Month-Start
+  series=surplusm,
+  dist=sps.fisk, # fisk = log-logistic
+  timescale=1, # unit -> frequency of the data, in this case months
 )
 ```
 
@@ -63,19 +62,24 @@ By default, the pecage uses `fit_freq` do determine on what frequency to fit the
 
 One can also choose to use the `fit_window` argument, which is zero by default. This allows the window of the used data to be expanded up to a certain size. This means that for instance, to fit the distribution of March 2nd, additionaly the data from March 1st and March 3rd can be used. In this case `fit_window` would be equal to 3. This is especially helpful for smaller timescales, e.g. daily data where a small dataset (less than 30 values) can give an inaccurate fit for the probability density function.
 
-![Resulting SPEI-1 \label{fig:spei1}](figures/surplus_spei1.png)
+![Resulting SPEI-1 \label{fig:spei1}](figures/spei1.png)
 
 ## Visualization
 
 ### Series
+To visualize the drought indices as a time and increase the information value the SPEI package has multiple ways to visualize drought indices. For instance with background filling to indicate dry (red) or wet (blue) periods \ref{fig:spei3}. Additionaly, the drought category, as proposed by [@mckee_spi_1993], can be added for easier interpretation of the Z-scores
 
-![Visualisation of the SPEI-3 with color indication of the drought \label{fig:spei1}](figures/surplus_spei1.png)
+![Visualization of the SPEI-3 with background color indication of the drought \label{fig:spei3}](figures/spei3.png)
+
 
 ### Multiyear drought
 
 After [@mourik_use_2025] it is possible to visualize the drought indices over several time spans within one graph. This can help with the interpretation whether or not a drought persists over a long timespan. And in the case of hydrological drought what the systems response is to the drought.
 
+![Visualization of the SPEI as a heatmap with different timescales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
+
+
 # Acknowledgements
-Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo.
+Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
 
 # References
