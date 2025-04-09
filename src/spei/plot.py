@@ -55,7 +55,9 @@ def si(
         colormap = cmap
 
     if "ybound" in kwargs:
-        DeprecationWarning("The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead")
+        DeprecationWarning(
+            "The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead"
+        )
 
     ymin, ymax = -3.0, 3.0
 
@@ -89,6 +91,7 @@ def si(
     ax.set_ylim(ymin, ymax)
 
     if add_category:
+        ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
         axr = ax.secondary_yaxis("right")
         axr.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
         axr.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
