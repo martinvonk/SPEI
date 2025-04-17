@@ -121,6 +121,7 @@ def _add_category_labels(ax: plt.Axes) -> plt.Axes:
         tick.tick2line.set_markersize(0)
     return axr
 
+
 def monthly_density(
     si: Series,
     years: list[int],
@@ -266,8 +267,8 @@ def heatmap(
     _ = fig.colorbar(scm, cax=cax, **cbar_kw)
 
     if add_category:
-        cax.yaxis.set_ticks_position('left')
-        cax.yaxis.set_label_position('left')
+        cax.yaxis.set_ticks_position("left")
+        cax.yaxis.set_label_position("left")
         _add_category_labels(cax)
 
     return ax
