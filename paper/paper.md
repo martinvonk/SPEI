@@ -1,5 +1,5 @@
 ---
-title: 'SPEI: A simple Python package for calculating and visualizing drought indices'
+title: 'SPEI: A Python package for calculating and visualizing drought indices'
 tags:
   - hydrology
   - drought
@@ -20,7 +20,7 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a simple Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], Scipy [@scipy_paper_2020], Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics and visualization respectively. This makes calculating and visualizing different drought indices with the SPEI package easy but versitile.
+SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], Scipy [@scipy_paper_2020], Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics and visualization respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versitile.
 
 # Statement of need
 Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. To quantify droughts, many different indices have been developed. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
@@ -71,13 +71,23 @@ To visualize the drought indices as a time and increase the information value th
 
 ![Visualization of the SPEI-3 with background color indication of the drought \label{fig:spei3}](figures/spei3.png)
 
-
 ### Multiyear drought
 
-After [@mourik_use_2025] it is possible to visualize the drought indices over several time spans within one graph. This can help with the interpretation whether or not a drought persists over a long timespan. And in the case of hydrological drought what the systems response is to the drought.
+After [@mourik_use_2025] it is possible to visualize the drought indices over several time spans within one graph. This can help with the interpretation whether or not a drought persists over a long timespan. In the case of hydrological drought, there is a relation to the systems response time.
 
 ![Visualization of the SPEI as a heatmap with different timescales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
+## Supported drought indices
+At the time of writing the SPEI python package supports explicitly the SPI, SPEI, SSFI, SSMI and SGI. However any parametric standardized drought index can be computed with the package as long as an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by [@bloomfield_sgi_2013].
+
+## Other features
+Meteorological or hydrological data nowadays typically available on a daily basis. For this reason, the `timescale` argument in the package is designed to be flexible, with its unit matching that of the `fit_freq` argument. If `fit_freq` is not explicitly provided, the frequency of the data is inferred. If this inference fails, the default fallback is a monthly frequency.
+
+When working with daily data, the user can choose a timescale value of 30 for a drought index window of 1 month, 90 for 3 months, 180 for 6 months etc. This daily frequency allows a distribution to be fitted for every day of the year. However, this significantly increases the computational load, as 365 (or 366 in leap years) distributions must be fitted instead of just 12 for a monthly `fit_freq`.
+
+Fitting data on a daily basis can be challenging, as the number of observations per calendar day is often limited. For example, with a 30-year daily time series, only 30 values are available for the 15th of March. To address this, the fit_window argument allows the user to specify a window size (in days) for the fitting procedure. With a fit_window of 3, for instance, data from the 14th and 16th of March are also included alongside data from the 15th when fitting the distribution.
+
+This feature is still experimental but has shown to produce more stable results when fitting distributions to daily data.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
