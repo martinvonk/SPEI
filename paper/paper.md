@@ -38,7 +38,7 @@ The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_softwa
 The SciPy [@scipy_paper_2020] package provides probality density functions via their `stats` library. General recommendations are provided in literature about which probability density function to use for a drought index, e.g. a gamma distribution for the SPI or log-logistic/fisk distribution for the SPEI. However, with over 200 univariate continuous distributions in the scipy stats library, the user has freedom to easily try and find different relations between the probability and the time series. Each of SciPy continuous distribution has a `fit` method making it easy to fit the distribution to the time series using maximum likelihood estimation.
 
 ## Example
-In this article an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI). To calculate the SPI, only the precipitation time series is needed, while the SPEI uses precipitation surplus (precipitation minus potential evaporation), also called rainfall or precipitaiton excess. When the time series is in the proper `pandas.Series` format, the Python package provides a function for each seperate drought index. For instance:
+In this article an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI), as shown in Figure \autoref{fig:prec_surplus}a. To calculate the SPI, only the precipitation time series is needed, while the SPEI uses precipitation surplus (precipitation minus potential evaporation), also called rainfall or precipitation excess. The computed monthly precipitation surplus, used in this example is visible in figure \autoref{fig:prec_surplus}b. When the time series is in the proper type (`pandas.Series` with a `DatetimeIndex` as index), the Python package provides a function for each seperate drought index. For instance:
 
 ![Monthly precipitation surplus.\label{fig:prec_surplus}](figures/monthly_precipitation_surplus.png)
 
@@ -57,10 +57,12 @@ spei1 = si.spei(
 ```
 
 ![a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
+Figure \autoref{fig:surplus_fit}a shows the empirical cumulative distribution of precipitation surplus data for March (orange step plot), individual data points (red circles), and the fitted Fisk distribution (blue line). The Fisk distribution provides a good fit, capturing the skewed nature of the observed data. The dashed lines illustrate the cumulative probability of a specific precipitation value (~30 mm), corresponding to approximately the 66th percentile.
 
-By default, the pecage uses `fit_freq` do determine on what frequency to fit the data. For instance, if the frequency of the time series is daily, a probability density function is fitted for each day of the year. If no frequency is parsed, the frequency of the time series is inferred.
+Figure \autoref{fig:surplusfit}b demonstrates the standardization process. The fitted cumulative probabilities from the Fisk distribution are transformed to a standard normal distribution (purple line), resulting in standardized values (e.g., SPEI) shown by the blue circles. The same cumulative probability (~66%) corresponds to a Z-score slightly above 0. This transformation enables expression of precipitation anomalies on a normalized scale suitable for comparison across regions and timescales.
 
-One can also choose to use the `fit_window` argument, which is zero by default. This allows the window of the used data to be expanded up to a certain size. This means that for instance, to fit the distribution of March 2nd, additionaly the data from March 1st and March 3rd can be used. In this case `fit_window` would be equal to 3. This is especially helpful for smaller timescales, e.g. daily data where a small dataset (less than 30 values) can give an inaccurate fit for the probability density function.
+
+Doing this for all months and data poits results in the standardized index; SPEI1, as shown in figure \autoref{fig:spei1}.
 
 ![Resulting SPEI-1 \label{fig:spei1}](figures/spei1.png)
 
@@ -81,13 +83,13 @@ After [@mourik_use_2025] it is possible to visualize the drought indices over se
 At the time of writing the SPEI python package supports explicitly the SPI, SPEI, SSFI, SSMI and SGI. However any parametric standardized drought index can be computed with the package as long as an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by [@bloomfield_sgi_2013].
 
 ## Other features
-Meteorological or hydrological data nowadays typically available on a daily basis. For this reason, the `timescale` argument in the package is designed to be flexible, with its unit matching that of the `fit_freq` argument. If `fit_freq` is not explicitly provided, the frequency of the data is inferred. If this inference fails, the default fallback is a monthly frequency.
+Meteorological or hydrological data nowadays typically available on a daily basis. For this reason, the `timescale` argument in the package is designed to be flexible, with its unit matching that of the `fit_freq` argument.
 
 When working with daily data, the user can choose a timescale value of 30 for a drought index window of 1 month, 90 for 3 months, 180 for 6 months etc. This daily frequency allows a distribution to be fitted for every day of the year. However, this significantly increases the computational load, as 365 (or 366 in leap years) distributions must be fitted instead of just 12 for a monthly `fit_freq`.
 
-Fitting data on a daily basis can be challenging, as the number of observations per calendar day is often limited. For example, with a 30-year daily time series, only 30 values are available for the 15th of March. To address this, the fit_window argument allows the user to specify a window size (in days) for the fitting procedure. With a fit_window of 3, for instance, data from the 14th and 16th of March are also included alongside data from the 15th when fitting the distribution.
+By default, the package uses the `fit_freq` to determine on what frequency to fit the data. For instance, if the frequency of the time series is daily, a probability density function is fitted for each day of the year. If no frequency is parsed, the frequency of the time series is inferred. If this inference fails, the fallback is a monthly frequency.
 
-This feature is still experimental but has shown to produce more stable results when fitting distributions to daily data.
+Fitting data on a daily basis can be challenging, as the number of observations per calendar day is often limited. For example, with a 30-year daily time series, only 30 values are available for the 15th of March. To address this, the `fit_window` argument allows the user to specify a window size (in days) for the fitting procedure. With a `fit_window` of 3, for instance, data from the 14th and 16th of March are also included alongside data from the 15th when fitting the distribution. This feature is still experimental but has shown to produce more stable results when fitting distributions to daily data.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
