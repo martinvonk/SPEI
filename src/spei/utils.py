@@ -72,7 +72,7 @@ def infer_frequency(index: Index | DatetimeIndex) -> str:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "ME" if pd_version >= "2.2.0" else "M"
+        inf_freq = "MS" if pd_version >= "2.2.0" else "M"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
 
