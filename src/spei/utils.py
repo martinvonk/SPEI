@@ -107,7 +107,7 @@ def get_data_series(group_df: DataFrame) -> Series:
     idx = array(
         [(f"{col}-" + index.strftime(strfstr)).tolist() for col in group_df.columns]
     ).flatten()
-    # remove illegal 29 febraury for non leap years created by group_yearly_df
+    # remove illegal 29 february for non leap years created by group_yearly_df
     boolidx = ~array(
         [
             (x.split(" ")[0].split("-", 1)[1] == "02-29")
