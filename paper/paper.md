@@ -57,6 +57,7 @@ spei1 = si.spei(
 ```
 
 ![a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
+
 Figure \autoref{fig:surplus_fit}a shows the empirical cumulative distribution of precipitation surplus data for March (orange step plot), individual data points (red circles), and the fitted Fisk distribution (blue line). The Fisk distribution provides a good fit, capturing the skewed nature of the observed data. The dashed lines illustrate the cumulative probability of a specific precipitation value (~30 mm), corresponding to approximately the 66th percentile.
 
 Figure \autoref{fig:surplusfit}b demonstrates the standardization process. The fitted cumulative probabilities from the Fisk distribution are transformed to a standard normal distribution (purple line), resulting in standardized values (e.g., SPEI) shown by the blue circles. The same cumulative probability (~66%) corresponds to a Z-score slightly above 0. This transformation enables expression of precipitation anomalies on a normalized scale suitable for comparison across regions and timescales.
