@@ -28,12 +28,12 @@ Water is a vital natural resource essential for life on Earth. However, the glob
 # Computation
 Different drought indices exist to indicate different types of drought. For meteorological droughts, common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002], the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI/SSI) [@vicenteserrano_ssfi_2010], and the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004].
 
-These standardized drought indics transform a time series into a standardized normal distribution. Generally, a time series spanning at least 30 years is recommended [@mckee_spi_1993]. Sets of rolling average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
+These standardized drought indices transform a time series into a standardized normal distribution. Generally, a time series spanning at least 30 years is recommended [@mckee_spi_1993]. Sets of rolling average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
 
 [^1]: Please note that a month does not represent an unambiguous time delta since a month can have 28 up to 31 days. This can result in some extra complexity in the computation, which is dealt with by the SPEI package internally.
 
 ## Implementation
-The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_software_2020], which is heavily reliant on NumPy [@numpy_article_2020]. Pandas provides the pandas `Series` with a `DatetimeIndex` which supports extensive capabilities  for the manipulation of the time series. For instance, via the `resample` and `rolling` methods. Time series with outliers or missing values can also be handled by e.g., interpolation methods via Pandas` API.
+The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_software_2020], which is heavily reliant on NumPy [@numpy_article_2020]. Pandas provides the `pandas Series` with a `DatetimeIndex` which supports extensive capabilities  for the manipulation of the time series. For instance, via the `resample` and `rolling` methods. Time series with outliers or missing values can also be handled by e.g., interpolation methods via Pandas` API.
 
 The SciPy [@scipy_paper_2020] package provides probability density functions via its `stats` library. General recommendations are provided in literature about which probability density function to use for a drought index, e.g., a gamma distribution for the SPI or log-logistic/fisk distribution for the SPEI. However, with over 200 univariate continuous distributions in the scipy stats library, the user has the freedom to try and find different relations between the probability and the time series. Each SciPy continuous distribution has a `fit` method, making it easy to fit the distribution to the time series using maximum likelihood estimation.
 
@@ -51,8 +51,13 @@ import scipy.stats as sps
 import spei as si
 
 # load daily time series
-prec: pd.Series = pd.read_csv("precipitation.csv", index_col="datetime", parse_dates=["datetime"]).squeeze()
-evap: pd.Series = pd.read_csv("pot_evaporation.csv", index_col="datetime", parse_dates=["datetime"]).squeeze()
+meteo: pd.DataFrame = pd.read_csv(
+  "meteo.csv",
+  index_col="datetime",
+  parse_dates=["datetime"]
+)
+prec: pd.Series = meteo["precipitation"]
+evap: pd.Series = meteo["pot_evaporation"]
 
 # compute monthly precipitation surplus
 surplus: pd.Series = (prec - evap).resample("MS").sum() # MS: month-start
@@ -65,11 +70,11 @@ spei1: pd.Series = si.spei(
 )
 ```
 
+Figure \autoref{fig:surplus_fit}a shows the cumulative histogram of precipitation surplus data for March (orange step plot), individual data points (red circles, corresponding to the same points in Figure \autoref{fig:meteo_surplus}b), and the fitted Fisk distribution (blue line). The Fisk distribution provides a good fit for the data of March, capturing the skewed nature of the observed data. The dashed lines illustrate the cumulative probability of a specific precipitation value of 26 mm, corresponding to approximately the 64th percentile.
+
 ![a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
 
-Figure \autoref{fig:surplus_fit}a shows the cumulative histogram of precipitation surplus data for March (orange step plot), individual data points (red circles, corresponding to the same points in Figure \autoref{meteo_surplus}b), and the fitted Fisk distribution (blue line). The Fisk distribution provides a good fit for the data of March, capturing the skewed nature of the observed data. The dashed lines illustrate the cumulative probability of a specific precipitation value of 26 mm, corresponding to approximately the 64th percentile.
-
-Figure \autoref{fig:surplusfit}b demonstrates the standardization process. The fitted cumulative probabilities from the Fisk distribution are transformed to a standard normal distribution (purple line), resulting in standardized values or Z-scores, shown by the blue circles. The same cumulative probability (~64%) corresponds to a Z-score slightly around 0.37. This transformation enables the expression of precipitation anomalies on a normalized scale suitable for comparison across regions and timescales. Doing this for all months and data points results in the standardized index, SPEI-1, as shown in Figure \autoref{fig:spei1}.
+Figure \autoref{fig:surplus_fit}b demonstrates the standardization process. The fitted cumulative probabilities from the Fisk distribution are transformed to a standard normal distribution (purple line), resulting in standardized values or Z-scores, shown by the blue circles. The same cumulative probability (~64%) corresponds to a Z-score slightly around 0.37. This transformation enables the expression of precipitation anomalies on a normalized scale suitable for comparison across regions and timescales. Doing this for all months and data points results in the standardized index, SPEI-1, as shown in Figure \autoref{fig:spei1}.
 
 ![Resulting SPEI-1 from the monthly precipitation surplus \label{fig:spei1}](figures/spei1.png)
 
