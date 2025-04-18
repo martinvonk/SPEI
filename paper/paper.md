@@ -20,7 +20,7 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], Scipy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics, and visualization, respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versatile.
+SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics, and visualization, respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versatile.
 
 # Statement of need
 Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. Many different indices have been developed to quantify droughts. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
@@ -102,6 +102,6 @@ When working with daily data, the user can choose a time scale value of 30 for a
 Fitting data on a daily frequency can be challenging, as the number of observations per calendar day can often be limited or adhere to a different probability. To address this, the `fit_window` argument allows the user to specify a window size (in the frequency of the data) for the fitting procedure. With a `fit_window` of 3 (days), for instance, data from the 14th and 16th of March are also included alongside data from the 15th of March when fitting the distribution. This feature is still experimental but has been shown to produce more stable results when fitting distributions to daily data.
 
 # Acknowledgements
-Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
+Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to ... for reading this manuscript and providing feedback.
 
 # References
