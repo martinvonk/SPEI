@@ -3,37 +3,38 @@ from itertools import cycle
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import DatetimeIndex, Series
 from scipy.stats import gaussian_kde
 
-from ._typing import Axes
 from .utils import validate_index, validate_series
 
 
 def si(
     si: Series,
-    ybound: float = 3.0,
+    add_category: bool = True,
     figsize: tuple = (6.5, 4),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
-    ax: Axes | None = None,
-) -> Axes:
+    ax: plt.Axes | None = None,
+    **kwargs,
+) -> plt.Axes:
     """Plot the standardized index values as a time series.
 
     Parameters
     ----------
     si : pandas.Series
         Series of the standardized index
-    ybound : int, optional
-        Maximum and minimum ylim of plot
+    add_category: bool, optional
+        Add the category labels to the right y-axis, by default True
+    figsize : tuple, optional
+        Figure size, by default (6.5, 4)
     cmap: str, optional
         Colormap for the background or line fill
     background: bool, optional
         Color the background if True, else color the line
-    figsize : tuple, optional
-        Figure size, by default (8, 4)
     ax : matplotlib.Axes, optional
         Axes handle, by default None which create a new axes
 
@@ -45,9 +46,6 @@ def si(
     if ax is None:
         _, ax = plt.subplots(figsize=figsize)
 
-    nmin = -ybound
-    nmax = ybound
-
     if isinstance(cmap, str):
         if cmap in Crameri._available_cmaps:
             colormap = Crameri(cmap).cmap
@@ -55,6 +53,13 @@ def si(
             colormap = plt.get_cmap(cmap)
     else:
         colormap = cmap
+
+    if "ybound" in kwargs:
+        DeprecationWarning(
+            "The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead"
+        )
+
+    ymin, ymax = -3.0, 3.0
 
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
@@ -65,10 +70,10 @@ def si(
         nodroughts = si.to_numpy(dtype=float, copy=True)
         nodroughts[nodroughts < 0] = 0
 
-        x, y = meshgrid(si.index, linspace(nmin, nmax, 100))
-        ax.contourf(x, y, y, cmap=colormap, levels=linspace(nmin, nmax, 100))
-        ax.fill_between(x=si.index, y1=droughts, y2=nmin, color="w")
-        ax.fill_between(x=si.index, y1=nodroughts, y2=nmax, color="w")
+        x, y = meshgrid(si.index, linspace(ymin, ymax, 100))
+        ax.contourf(x, y, y, cmap=colormap, levels=linspace(ymin, ymax, 100))
+        ax.fill_between(x=si.index, y1=droughts, y2=ymin, color="w")
+        ax.fill_between(x=si.index, y1=nodroughts, y2=ymax, color="w")
     else:
         datetime = DatetimeIndex(si.index).to_pydatetime()
         x = date2num(datetime)
@@ -76,16 +81,45 @@ def si(
         points = array([x, y]).T.reshape(-1, 1, 2)
         segments = concatenate([points[:-1], points[1:]], axis=1)
         lc = mpl.collections.LineCollection(
-            segments, cmap=colormap, norm=plt.Normalize(nmin, nmax)
+            segments, cmap=colormap, norm=plt.Normalize(ymin, ymax)
         )
         lc.set_array(y)
         lc.set_linewidth(1.2)
         _ = ax.add_collection(lc)
 
     ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(1))
-    ax.set_ylim(nmin, nmax)
+    ax.set_ylim(ymin, ymax)
+
+    if add_category:
+        _ = _add_category_labels(ax)
 
     return ax
+
+
+def _add_category_labels(ax: plt.Axes) -> SecondaryAxis:
+    """Add category based on the standardized index values to the right y-axis."""
+    ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
+    sax = ax.secondary_yaxis("right")
+    sax.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
+    sax.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
+    sax.set_yticklabels(
+        [
+            "Extreme drought",
+            "Severe drought",
+            "Moderate drought",
+            "Mild drought",
+            "Mildly wet",
+            "Moderately wet",
+            "Severely wet",
+            "Extremely wet",
+        ],
+        minor=True,
+    )
+    sax.set_yticklabels([], minor=False)
+    for tick in sax.yaxis.get_minor_ticks():
+        tick.tick1line.set_markersize(0)
+        tick.tick2line.set_markersize(0)
+    return sax
 
 
 def monthly_density(
@@ -93,8 +127,8 @@ def monthly_density(
     years: list[int],
     months: list[int],
     cmap: str | mpl.colors.Colormap = "tab20c",
-    ax: Axes | None = None,
-) -> Axes:
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
     """Plot the monthly kernel-density estimate for a specific year.
 
     Parameters
@@ -155,12 +189,13 @@ def monthly_density(
 
 def heatmap(
     sis: list[Series],
+    add_category: bool = False,
     cmap: str = "Reds_r",
     vmin: float = -3.0,
     vmax: float = -1.0,
     yticklabels: list[str] | None = None,
-    ax: Axes | None = None,
-) -> Axes:
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
     """
     Plots multiple standardized indices on a heatmap from [mourik_2024]_
 
@@ -168,6 +203,8 @@ def heatmap(
     ----------
     sis : List[Series]
         A list of pandas Series objects, each representing a time series of SI values.
+    add_category : bool, optional
+        If True, adds category labels to the colorbar. Default is False.
     cmap : str, optional
         The colormap to use for the heatmap. Default is "Reds_r".
     vmin : float, optional
@@ -176,11 +213,11 @@ def heatmap(
         The maximum value for color normalization. Default is -1.0.
     yticklabels : List[str] or None, optional
         Custom labels for the y-axis ticks. If None, the names of the Series objects are used. Default is None.
-    ax : Axes, optional
+    ax : matplotlib Axes, optional
         A matplotlib Axes object to plot on. If None, a new figure and axes are created. Default is None.
     Returns
     -------
-    Axes
+    Matplotlib Axes
         The matplotlib Axes object with the heatmap.
 
     References
@@ -189,10 +226,11 @@ def heatmap(
     W., Wanders, N.: Regional drivers and characteristics of multi-year
     droughts. 2024
     """
+
     if ax is None:
-        fig, ax = plt.subplots(figsize=(6.5, 4))
-    else:
-        fig = ax.get_figure()
+        _, ax = plt.subplots(figsize=(6.5, 4))
+
+    fig = ax.get_figure()
 
     if isinstance(cmap, str):
         if cmap in Crameri._available_cmaps:
@@ -223,15 +261,22 @@ def heatmap(
         tick.tick1line.set_visible(False)
 
     ax.set_ylim(0, len(sis))
-    scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
-    cax, cbar_kw = mpl.colorbar.make_axes(
-        ax, fraction=0.05, pad=0.01, orientation="vertical"
-    )
-    _ = fig.colorbar(
-        scm,
-        cax=cax,
-        **cbar_kw,
-    )
+
+    if fig is not None:
+        # add colorbar
+        scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
+        cax, cbar_kw = mpl.colorbar.make_axes(
+            ax,
+            fraction=0.05,
+            pad=0.05 if add_category else 0.01,
+            orientation="vertical",
+        )
+        _ = fig.colorbar(scm, cax=cax, **cbar_kw)
+
+        if add_category:
+            cax.yaxis.set_ticks_position("left")
+            cax.yaxis.set_label_position("left")
+            _add_category_labels(cax)
 
     return ax
 
