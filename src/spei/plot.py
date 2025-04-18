@@ -8,7 +8,8 @@ from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import DatetimeIndex, Series
 from scipy.stats import gaussian_kde
 
-from ._typing import Axes
+from matplotlib.axes._secondary_axes import SecondaryAxis
+
 from .utils import validate_index, validate_series
 
 
@@ -18,9 +19,9 @@ def si(
     figsize: tuple = (6.5, 4),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
-    ax: Axes | None = None,
+    ax: plt.Axes | None = None,
     **kwargs,
-) -> Axes:
+) -> plt.Axes:
     """Plot the standardized index values as a time series.
 
     Parameters
@@ -91,18 +92,18 @@ def si(
     ax.set_ylim(ymin, ymax)
 
     if add_category:
-        axr = _add_category_labels(ax)
+        _ = _add_category_labels(ax)
 
     return ax
 
 
-def _add_category_labels(ax: plt.Axes) -> plt.Axes:
+def _add_category_labels(ax: plt.Axes) -> SecondaryAxis:
     """Add category based on the standardized index values to the right y-axis."""
     ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
-    axr = ax.secondary_yaxis("right")
-    axr.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
-    axr.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
-    axr.set_yticklabels(
+    sax = ax.secondary_yaxis("right")
+    sax.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
+    sax.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
+    sax.set_yticklabels(
         [
             "Extreme drought",
             "Severe drought",
@@ -115,11 +116,11 @@ def _add_category_labels(ax: plt.Axes) -> plt.Axes:
         ],
         minor=True,
     )
-    axr.set_yticklabels([], minor=False)
-    for tick in axr.yaxis.get_minor_ticks():
+    sax.set_yticklabels([], minor=False)
+    for tick in sax.yaxis.get_minor_ticks():
         tick.tick1line.set_markersize(0)
         tick.tick2line.set_markersize(0)
-    return axr
+    return sax
 
 
 def monthly_density(
@@ -127,8 +128,8 @@ def monthly_density(
     years: list[int],
     months: list[int],
     cmap: str | mpl.colors.Colormap = "tab20c",
-    ax: Axes | None = None,
-) -> Axes:
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
     """Plot the monthly kernel-density estimate for a specific year.
 
     Parameters
@@ -194,8 +195,8 @@ def heatmap(
     vmin: float = -3.0,
     vmax: float = -1.0,
     yticklabels: list[str] | None = None,
-    ax: Axes | None = None,
-) -> Axes:
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
     """
     Plots multiple standardized indices on a heatmap from [mourik_2024]_
 
@@ -213,11 +214,11 @@ def heatmap(
         The maximum value for color normalization. Default is -1.0.
     yticklabels : List[str] or None, optional
         Custom labels for the y-axis ticks. If None, the names of the Series objects are used. Default is None.
-    ax : Axes, optional
+    ax : matplotlib Axes, optional
         A matplotlib Axes object to plot on. If None, a new figure and axes are created. Default is None.
     Returns
     -------
-    Axes
+    Matplotlib Axes
         The matplotlib Axes object with the heatmap.
 
     References
@@ -226,10 +227,11 @@ def heatmap(
     W., Wanders, N.: Regional drivers and characteristics of multi-year
     droughts. 2024
     """
+
     if ax is None:
-        fig, ax = plt.subplots(figsize=(6.5, 4))
-    else:
-        fig = ax.get_figure()
+        _, ax = plt.subplots(figsize=(6.5, 4))
+
+    fig = ax.get_figure()
 
     if isinstance(cmap, str):
         if cmap in Crameri._available_cmaps:
@@ -260,16 +262,19 @@ def heatmap(
         tick.tick1line.set_visible(False)
 
     ax.set_ylim(0, len(sis))
-    scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
-    cax, cbar_kw = mpl.colorbar.make_axes(
-        ax, fraction=0.05, pad=0.05 if add_category else 0.01, orientation="vertical"
-    )
-    _ = fig.colorbar(scm, cax=cax, **cbar_kw)
 
-    if add_category:
-        cax.yaxis.set_ticks_position("left")
-        cax.yaxis.set_label_position("left")
-        _add_category_labels(cax)
+    if fig is not None:
+        # add colorbar
+        scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
+        cax, cbar_kw = mpl.colorbar.make_axes(
+            ax, fraction=0.05, pad=0.05 if add_category else 0.01, orientation="vertical"
+        )
+        _ = fig.colorbar(scm, cax=cax, **cbar_kw)
+
+        if add_category:
+            cax.yaxis.set_ticks_position("left")
+            cax.yaxis.set_label_position("left")
+            _add_category_labels(cax)
 
     return ax
 
