@@ -3,12 +3,11 @@ from itertools import cycle
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import DatetimeIndex, Series
 from scipy.stats import gaussian_kde
-
-from matplotlib.axes._secondary_axes import SecondaryAxis
 
 from .utils import validate_index, validate_series
 
@@ -267,7 +266,10 @@ def heatmap(
         # add colorbar
         scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
         cax, cbar_kw = mpl.colorbar.make_axes(
-            ax, fraction=0.05, pad=0.05 if add_category else 0.01, orientation="vertical"
+            ax,
+            fraction=0.05,
+            pad=0.05 if add_category else 0.01,
+            orientation="vertical",
         )
         _ = fig.colorbar(scm, cax=cax, **cbar_kw)
 
