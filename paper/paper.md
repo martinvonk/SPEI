@@ -20,23 +20,25 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling time series, statistics, and visualization, respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versatile.
+SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versatile.
 
 # Statement of need
 Water is a vital natural resource essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. If water availability is below normal conditions, a drought occurs. Droughts are classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading effects. Many different indices have been developed to quantify droughts. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of drought.
 
 # Computation
-Different drought indices exist to indicate different types of drought. For meteorological droughts, common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002], the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI/SSI) [@vicenteserrano_ssfi_2010], and the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004]. These standardized drought indices transform a time series into a standardized normal distribution. Generally, a time series spanning at least 30 years is recommended [@mckee_spi_1993]. Sets of rolling average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
+Different drought indices exist to indicate different types of drought. For meteorological droughts, common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002], the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010], and the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004]. These standardized drought indices transform a time series into a standardized normal distribution.
+
+Generally, a time series spanning at least 30 years is recommended [@mckee_spi_1993]. That way the series is long enough to have enough data points, but short enough to be stationary in time. Sets of rolling sum or average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. There are also non-parametric approaches using a normal-scores transform or kernel density estimate. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
 
 [^1]: Please note that a month does not represent an unambiguous time delta since a month can have 28 up to 31 days. This can result in some extra complexity in the computation, which is dealt with by the SPEI package internally.
 
 ## Implementation
-The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_software_2020], which is heavily reliant on NumPy [@numpy_article_2020]. Pandas provides the `pandas.Series` with a `DatetimeIndex` which supports extensive capabilities  for the manipulation of the time series. For instance, via the `resample` and `rolling` methods. Time series with outliers or missing values can also be handled by e.g., interpolation methods via Pandas` API.
+The base of the SPEI Python package is Pandas [@pandas_paper_2010;@pandas_software_2020], which is heavily reliant on NumPy [@numpy_article_2020]. Pandas provides the `pandas.Series` with a `DatetimeIndex` which supports extensive capabilities  for the manipulation of the time series. For instance, via the `resample` and `rolling` methods. Time series with outliers or missing values can also be handled by e.g., interpolation methods available in the Pandas library
 
 The SciPy [@scipy_paper_2020] package provides probability density functions via its `stats` library. General recommendations are provided in literature about which probability density functions might be appropriate for a certain drought index. For example, a gamma distribution is generally used for the SPI and a fisk (log-logistic) distribution for the SPEI. However, with over 200 univariate continuous distributions in the SciPy stats library, the user has the freedom to try and find different relations between the probability and the time series. Each SciPy continuous distribution has a `fit` method, making it easy to fit the distribution to the time series using maximum likelihood estimation.
 
 ## Example
-In this article, an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI), as shown in Figure \autoref{fig:meteo_surplus}a. To calculate the SPI, only the precipitation time series is needed, while the SPEI uses the precipitation surplus (precipitation minus potential evaporation), also called rainfall or precipitation excess. The computed monthly precipitation surplus, used in this example, is visible in figure \autoref{fig:meteo_surplus}b.
+In this article, an example dataset is considered with the measured daily precipitation and potential evaporation sum from the Royal Dutch Meteorological Institute (KNMI), as shown in Figure \autoref{fig:meteo_surplus}a. To calculate the SPI, only the precipitation time series is needed, while the SPEI uses the precipitation surplus (precipitation minus potential evaporation), also called rainfall or precipitation excess. The (computed) monthly precipitation surplus, used in this example, is visible in figure \autoref{fig:meteo_surplus}b.
 
 ![(a) Precipitation and potential (Makkink) evaporation flux from a weather station in Cabauw (Royal Netherlands Meteorological Institute) from January 1, 1990 until December 31, 2020. (b) Monthly precipitation surplus. \label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
 
@@ -79,13 +81,13 @@ Figure \autoref{fig:surplus_fit}b demonstrates the standardization process. The 
 ## Visualization
 
 ### Series
-Figure \autoref{fig:spei1} for instance, is not very informative if the user is not familiar with the standardized index methodology and the meaning of the corresponding z-scores. Therefore, to visualize the drought indices in time and increase the information value, the SPEI package has multiple ways to visualize drought indices. For instance, with background filling to indicate dry (red) or wet (blue) periods \ref{fig:spei3}. Additionally, the drought category, as proposed by [@mckee_spi_1993], can be added for easier interpretation of the Z-scores.
+Figure \autoref{fig:spei1} for instance, is not very informative if the user is not familiar with the standardized index methodology and the meaning of the corresponding z-scores. Therefore, to visualize the drought indices in time and increase the information value, the SPEI package has multiple ways to visualize drought indices. For instance, with background filling to indicate dry (red) or wet (blue) periods \ref{fig:spei3}. Additionally, the drought category, as proposed by [@mckee_spi_1993], can be added for easier interpretation of the z-scores.
 
 ![Visualization of the SPEI-3 with background color indication of the drought \label{fig:spei3}](figures/spei3.png)
 
 ### Multiyear drought
 
-After [@mourik_use_2025] it is possible to visualize the standardized drought indices over several time scales (1, 3, 6, 12, and 24 months) within one graph. This can help with the interpretation of whether or not a drought persists over a long time span. In the case of hydrological drought, there is a relation to the systems response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI.
+After [@mourik_use_2025], it is possible to visualize the standardized drought indices over several time scales (1, 3, 6, 9, 12, and 24 months) within one graph. This can help with the interpretation of whether or not a drought persists over a long time span. In the case of hydrological drought, there is a relation to the systems response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI, over 6 time scale intervals.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
@@ -119,6 +121,10 @@ The bottom panel compares the resulting SPEI-1 time series for 2001:
 These settings allow users to tailor the standardization process to their data and desired level of temporal precision.
 
 ![Results for the SPEI-1 with different settings for the fit frequency and window \label{fig:surplus_fit_window}](figures/surplus_fit_cdf_window.png)
+
+### Climdex
+
+Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of this platform are available in the SPEI python package.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to ... for reading this manuscript and providing feedback.
