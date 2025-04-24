@@ -107,7 +107,7 @@ At the time of writing the SPEI Python package supports explicitly the SPI, SPEI
 Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
 
 # Reproducibility
-On the SPEI repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
+On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
