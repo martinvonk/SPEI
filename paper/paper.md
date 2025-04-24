@@ -78,6 +78,22 @@ Figure \autoref{fig:surplus_fit}b demonstrates the standardization process. The 
 
 ![Resulting SPEI-1 from the monthly precipitation surplus \label{fig:spei1}](figures/spei1.png)
 
+### Flexible time scales and distribution fitting
+
+Meteorological and hydrological time series are nowadays typically available at a daily frequency. To accommodate this, the `timescale` argument in the drought index function is designed to be flexible, with units that match the frequency of the input time series. For example, when using daily data, a `timescale` value of `30` corresponds approximately to a one-month drought index, `90` for three months, `180` for six months, and so on.
+
+The frequency at which distributions are fitted (`fit_freq`) determines how many different distributions are fitted throughout the year. With a daily fit frequency (`fit_freq="D"`), one distribution is fitted per day — 365 or 366 in total, depending on leap years. In contrast, a monthly fit (`fit_freq="MS"` or `"ME"`) fits only 12 distributions. Although daily fitting is more computationally intensive, it can yield more precise results, as shown in later sections.
+
+The number of data points available for each distribution fit depends on both `fit_freq`, the frequency and the time length of the time series. For instance, with 30 years of monthly data and `fit_freq="MS"`, each monthly distribution is based on 30 data points. However, fitting a distribution to just 30 values can be challenging — especially for daily data, which is more prone to noise and outliers.
+
+To improve fit stability, the `fit_window` argument allows users to include additional data points around each time step. The window size is specified in the same unit as the time series frequency. For example for daily data, `fit_window=3` includes data from the day before and after a given date (e.g., March 14th–16th for March 15th). A `fit_window=31` for daily data provides a sample size similar to monthly fitting, while retaining daily resolution. Though experimental, this feature has shown to improve the robustness of daily fits.
+
+By default, the package attempts to infer `fit_freq` based on the time series frequency. If inference fails, it defaults to a monthly fit. Users can also specify `fit_freq` manually for full control.
+
+Figure \autoref{fig:surplus_fit_window} illustrates the influence of different distribution fitting strategies—namely, `fit_freq` and `fit_window` on the calculation of the SPEI-1 index over the year 2001. The top row displays the cumulative distribution functions of precipitation surplus data for an excerpt of the data in April (the 15th). The left panel (blue) shows the case where distributions are fitted daily (`fit_freq="D"`) without using a fitting window. Here, the fit is based solely on data from April 15th across 30 years, resulting in a limited sample size and consequently a noisier empirical distribution with a less stable fit. The middle panel (orange) also uses a daily fitting frequency but applies a 31-day fitting window (`fit_window=31`) centered on April 15th. This expands the sample to include 31 days of data, significantly increasing the total number of observations and yielding a much smoother and more robust distribution fit. In contrast, the right panel (red) shows a monthly fitting approach (`fit_freq="MS"`) with no fit window, where all April data from each year is used. This produces a stable fit, but because each month is treated separately, sharp transitions can occur at month boundaries, which may introduce artificial discontinuities into the resulting index. This is shown in the red line of the bottom pannel,  corresponding to the monthly fit. The red line is smoother overall but exhibits abrupt changes at the start of each month (e.g., April 1st and November 1st), due to transitions between monthly distributions. These settings allow users to tailor the standardization process to their data and desired level of temporal precision.
+
+![Results for the SPEI-1 with different settings for the fit frequency and window \label{fig:surplus_fit_window}](figures/surplus_fit_cdf_window.png)
+
 ## Visualization
 
 ### Series
@@ -94,37 +110,7 @@ After [@mourik_use_2025], it is possible to visualize the standardized drought i
 ## Supported drought indices
 At the time of writing the SPEI Python package supports explicitly the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed with the package as long as an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by [@bloomfield_sgi_2013].
 
-## Other features
-
-### Flexible time scales and distribution fitting
-Meteorological and hydrological time series are nowadays typically available at a daily frequency. To accommodate this, the `timescale` argument in the drought index function is designed to be flexible, with units that match the frequency of the input time series. For example, when using daily data, a `timescale` value of `30` corresponds approximately to a one-month drought index, `90` for three months, `180` for six months, and so on.
-
-The frequency at which distributions are fitted (`fit_freq`) determines how many different distributions are fitted throughout the year. With a daily fit frequency (`fit_freq="D"`), one distribution is fitted per day — 365 or 366 in total, depending on leap years. In contrast, a monthly fit (`fit_freq="MS"` or `"ME"`) fits only 12 distributions. Although daily fitting is more computationally intensive, it can yield more precise results, as shown in later sections.
-
-The number of data points available for each distribution fit depends on both `fit_freq`, the frequency and the time length of the time series. For instance, with 30 years of monthly data and `fit_freq="MS"`, each monthly distribution is based on 30 data points. However, fitting a distribution to just 30 values can be challenging — especially for daily data, which is more prone to noise and outliers.
-
-To improve fit stability, the `fit_window` argument allows users to include additional data points around each time step. The window size is specified in the same unit as the time series frequency. For example for daily data, `fit_window=3` includes data from the day before and after a given date (e.g., March 14th–16th for March 15th). A `fit_window=31` for daily data provides a sample size similar to monthly fitting, while retaining daily resolution. Though experimental, this feature has shown to improve the robustness of daily fits.
-
-By default, the package attempts to infer `fit_freq` based on the time series frequency. If inference fails, it defaults to a monthly fit. Users can also specify `fit_freq` manually for full control.
-
-Figure \autoref{fig:surplus_fit_window} shows an example of the impact of different `fit_freq` and `fit_window` settings on the SPEI-1 index in 2001:
-
-- **Left panel (blue)**: `fit_freq="D"` without `fit_window` for April 15th only. The limited sample size (30 years × 1 day) results in a noisy empirical distribution and unstable fit.
-- **Middle panel (orange)**: `fit_freq="D"` with `fit_window=31`, using 31 days × 30 years of data. The fit is smoother and more robust.
-- **Right panel (red)**: `fit_freq="MS"` (monthly fit), using all April data each year. The result is stable but transitions sharply at month boundaries.
-
-The bottom panel compares the resulting SPEI-1 time series for 2001:
-- The **daily fit** (blue) captures high-resolution variability but is sensitive to noise.
-- The **windowed daily fit** (orange) offers a compromise between resolution and stability.
-- The **monthly fit** (red) is smooth but introduces discontinuities at month transitions (e.g., April 1st, November 1st).
-
-These settings allow users to tailor the standardization process to their data and desired level of temporal precision.
-
-![Results for the SPEI-1 with different settings for the fit frequency and window \label{fig:surplus_fit_window}](figures/surplus_fit_cdf_window.png)
-
-### Climdex
-
-Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of this platform are available in the SPEI python package.
+Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to ... for reading this manuscript and providing feedback.
