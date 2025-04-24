@@ -70,7 +70,7 @@ spei1: pd.Series = si.spei(
 )
 ```
 
-Figure \autoref{fig:surplus_fit}a shows the cumulative histogram of precipitation surplus data for March (orange step plot), individual data points (red dots, corresponding to the same points in Figure \autoref{fig:meteo_surplus}b), and the fitted fisk distribution (blue line). The fisk distribution provides a good fit for the data of March, capturing the skewed nature of the observed data. The black dashed line illustrates the cumulative probability of a specific precipitation surplus value of 31 mm from March 1994, corresponding to approximately the 69th percentile.
+Figure \autoref{fig:surplus_fit}a shows the cumulative histogram of precipitation surplus data for March (orange cumulative histogram), individual data points (red dots, corresponding to the same points in Figure \autoref{fig:meteo_surplus}b), and the fitted fisk distribution (blue line). The fisk distribution provides a good fit for the data of March, capturing the skewed nature of the observed data. The black dashed line illustrates the cumulative probability of a specific precipitation surplus value of 31 mm from March 1994, corresponding to approximately the 69th percentile.
 
 ![(a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and (b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
 
@@ -112,7 +112,10 @@ At the time of writing the SPEI Python package supports explicitly the SPI, SPEI
 
 Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
 
+# Reproducibility
+On the SPEI repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
+
 # Acknowledgements
-Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to ... for reading this manuscript and providing feedback.
+Thanks to all the scientists who used and cited this package [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
 
 # References
