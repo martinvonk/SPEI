@@ -94,20 +94,20 @@ Figure \autoref{fig:surplus_fit_window} illustrates the influence of different 
 
 ![Example of the results for the SPEI-1 from a daily surplus time series due to different settings in the fit frequency and window. (a) uses `fit_freq="D" and `fit_window=0`, (b) uses `fit_freq="D" and `fit_window=31`, (c) uses `fit_freq="MS" and `fit_window=0`. \label{fig:surplus_fit_window}](figures/surplus_fit_cdf_window.png)
 
-## Visualization
+# Visualization
 
-### Series
+## Series
 Figure \autoref{fig:spei1} for instance, is not very informative if the user is not familiar with the standardized index methodology and the meaning of the corresponding z-scores. Therefore, to visualize the drought indices in time and increase the information value, the SPEI package has multiple ways to visualize drought indices. For instance, with background filling to indicate dry (red) or wet (blue) periods \ref{fig:spei3}. Additionally, the drought category, as proposed by @mckee_spi_1993, can be added for easier interpretation of the z-scores.
 
 ![Visualization of the SPEI-3 with background color and categorical indication and of the drought \label{fig:spei3}](figures/spei3.png)
 
-### Heatmap
+## Heatmap
 
 If multiple time scales are used, the standardized drought indices can be visualized within one graph. This can help with the interpretation of whether or not a drought persists over a long time span, and identify multi-year droughts [@mourik_use_2025]. In the case of hydrological drought, there is a relation to the systems response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI, over 6 time scale intervals, 1, 3, 6, 9, 12, and 24 months.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
-## Supported drought indices
+# Supported drought indices
 At the time of writing the SPEI Python package supports explicitly the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed with the package as long as an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by @bloomfield_sgi_2013.
 
 Climdex is an online platform that offers a range of different indices describe changes in heat, cold, precipitation and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
