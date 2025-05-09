@@ -76,7 +76,7 @@ spei1: pd.Series = si.spei(
 
 The cumulative histogram of precipitation surplus data for March is shown in Figure \autoref{fig:surplus_fit}a (orange cumulative histogram); individual data points (red dots, corresponding to the same points in Figure \autoref{fig:meteo_surplus}b), and the fitted fisk distribution (blue line). The fisk distribution provides a good fit for the data of March, capturing the skewed nature of the observed data. The black dashed line illustrates the cumulative probability of a specific precipitation surplus value of 31 mm from March 1994, corresponding to approximately the 69th percentile.
 
-![(a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and (b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
+![(a) Surplus in a certain month with the fit of the fisk (log-logistic) cumulative probability density function and (b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}. Figure adapted from @edwards_transformation_1997.](figures/surplus_fit_cdf.png)
 
 The standardization process is demonstrated in Figure \autoref{fig:surplus_fit}b. The fitted cumulative probabilities from the fisk distribution (blue dots) are transformed to a standard normal distribution (purple line), resulting in standardized values or Z-score. The black dashed line again indicating the same cumulative probability (~68.9%), which corresponds to a Z-score around 0.4925. Doing this for all data point and months results in the standardized index, SPEI-1, as shown in Figure \autoref{fig:spei1}.
 
