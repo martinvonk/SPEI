@@ -26,7 +26,7 @@ SPEI is a Python package to calculate drought indices for time series. Popular P
 Water is a vital natural resource, essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. At its core, drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011]. Droughts can be classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading [@vanloon_hydrodrought_2015]. However, many definitions of drought exist, and the definition and quantification drought might depends on the purpose and context of the analysis being conducted [@dracup_droughtdefinition_1980]. For this purpose many different indices have been developed to quantify droughts. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of a drought. Using this package, the quantification of drought is made simple, and the choices of the users (definition of drought) are made are fully reproducible through scripting.
 
 # Standardized drought indices
-The most common class of drought indices are the standardized drought indices and are advocated by the World Meteorological Organisation @wmo_spi_2012 in case of the Standardized Precipitation Index.
+The most common class of drought indices are the standardized drought indices and are advocated by the World Meteorological Organisation [@wmo_spi_2012] in case of the Standardized Precipitation Index.
 
 ## Computation
 Different drought indices exist to indicate different types of drought. For meteorological droughts, common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010]. For agricultural drought the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used. These standardized drought indices transform a time series into a standardized normal distribution.
@@ -134,6 +134,6 @@ KNMI precipitation deficit.
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
 
 # Acknowledgements
-Thanks to all the scientists who used and cited this package so far [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via @vonk_spei_zenodo. Thanks to Mark Bakker for reading this manuscript and providing feedback.
+Thanks to all the scientists who used and cited this package so far [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via Zenodo [@vonk_spei_zenodo]. Thanks to Mark Bakker for reading this manuscript and providing feedback.
 
 # References
