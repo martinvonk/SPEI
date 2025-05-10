@@ -532,7 +532,11 @@ class SI:
             ):
                 data = get_data_series(grval).sort_values()
                 cdf_i = cdf.loc[data.index]
-                ppf.loc[data.index] = interp(x=q, xp=cdf_i.values, fp=data.values)
+                ppf.loc[data.index] = interp(
+                    x=q,
+                    xp=cdf_i.values.astype(float),
+                    fp=data.values.astype(float),
+                )
         else:
             for k in self._dist_dict:
                 ppf_k = self._dist_dict[k].ppf(q=q)

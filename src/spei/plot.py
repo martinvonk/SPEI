@@ -123,20 +123,23 @@ def threshold(
     if ax is None:
         _, ax = plt.subplots(figsize=(7.0, 2.0))
 
-    ax.plot(series.index, series.values, color="k", label=series.name)
+    series_values = series.values.astype(float)
+    threshold_values = threshold.values.astype(float)
+    ax.plot(series.index, series_values, color="k", label=series.name)
     ax.plot(
         threshold.index,
-        threshold.values,
+        threshold_values,
         color="grey",
         label=threshold.name,
         linestyle="--",
         linewidth=1.0,
     )
+    where = (series_values < threshold_values).ravel().tolist()
     ax.fill_between(
         x=series.index,
-        y1=series.values,
-        y2=threshold.values,
-        where=series.values < threshold.values,
+        y1=series_values,
+        y2=threshold_values,
+        where=where,
         interpolate=True,
         color=color,
     )
