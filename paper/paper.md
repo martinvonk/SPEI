@@ -124,8 +124,29 @@ If multiple time scales are used, the standardized drought indices can be visual
 At the time of writing the SPEI Python package explicitly supports the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed on any time series if an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by @bloomfield_sgi_2013.
 
 # Other drought indices
+## Threshold
+@vanloon_hydrodrought_2015
+
 ## Climdex
 Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
+
+| Function Name | Description                                                                                 |
+|---------------|---------------------------------------------------------------------------------------------|
+| `rxnday`      | Maximum consecutive precipitation amount over an interval                                   |
+| `rx1day`      | Maximum 1-day precipitation amount                                                          |
+| `rx5day`      | Maximum consecutive precipitation amount over a 5-day interval                              |
+| `sdii`        | Simple precipitation intensity index                                                        |
+| `rnmm`        | Annual count of days when precipitation ≥ n mm                                              |
+| `r10mm`       | Annual count of days when precipitation ≥ 10 mm                                             |
+| `r20mm`       | Annual count of days when precipitation ≥ 20 mm                                             |
+| `cdd`         | Maximum length of dry spell: maximum number of consecutive days with precipitation < 1 mm   |
+| `cwd`         | Maximum length of wet spell: maximum number of consecutive days with precipitation ≥ 1 mm   |
+| `prcptot`     | Total precipitation on wet days over a certain period                                       |
+| `rnnp`        | Total amount of precipitation on wet days above a certain quantile                          |
+| `r95p`        | Total amount of precipitation on very wet days                                              |
+| `r99p`        | Total amount of precipitation on extremely wet days                                         |
+| `r95ptot`     | Contribution to total precipitation from very wet days                                      |
+| `r99ptot`     | Contribution to total precipitation from extremely wet days                                 |
 
 ## KNMI
 KNMI precipitation deficit.
