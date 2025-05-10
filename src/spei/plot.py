@@ -96,6 +96,53 @@ def si(
     return ax
 
 
+def threshold(
+    series: Series,
+    threshold: Series,
+    color: str = "red",
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
+    """Plot the time series with a threshold line and fill the area below the threshold.
+
+    Parameters
+    ----------
+    series : pandas.Series
+        Time series of the meteorological of hydrological data
+    threshold : pandas.Series
+        Series of the threshold, must have the same index as series
+    color : str, optional
+        Color for the fill area, by default 'red'
+    ax : matplotlib.Axes, optional
+        Axes handle, by default None which create a new axes
+
+    Returns
+    -------
+    matplotlib.Axes
+        Axes handle
+    """
+    if ax is None:
+        _, ax = plt.subplots(figsize=(7.0, 2.0))
+
+    ax.plot(series.index, series.values, color="k", label=series.name)
+    ax.plot(
+        threshold.index,
+        threshold.values,
+        color="grey",
+        label=threshold.name,
+        linestyle="--",
+        linewidth=1.0,
+    )
+    ax.fill_between(
+        x=series.index,
+        y1=series.values,
+        y2=threshold.values,
+        where=series.values < threshold.values,
+        interpolate=True,
+        color=color,
+    )
+    return ax
+
+
 def _add_category_labels(ax: plt.Axes) -> SecondaryAxis:
     """Add category based on the standardized index values to the right y-axis."""
     ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
