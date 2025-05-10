@@ -1,7 +1,7 @@
 import matplotlib as mpl
 from pandas import Series
 
-from spei.plot import heatmap, monthly_density
+from spei.plot import heatmap, monthly_density, threshold
 from spei.plot import si as plot_si
 
 mpl.use("Agg")  # prevent _tkinter.TclError: Can't find a usable tk.tcl error
@@ -25,4 +25,4 @@ def test_plot_heatmap(si: Series) -> None:
 
 def test_plot_threshold(head: Series) -> None:
     th = Series(head.mean(), index=head.index, dtype=float)
-    _ = plot_si(series=head, threshold=th, color="orange")
+    _ = threshold(series=head, threshold=th, color="orange")
