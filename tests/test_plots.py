@@ -25,4 +25,4 @@ def test_plot_heatmap(si: Series) -> None:
 
 def test_plot_threshold(head: Series) -> None:
     th = Series(head.mean(), index=head.index, dtype=float)
-    _ = threshold(series=head, threshold=th, color="orange")
+    _ = threshold(series=head, threshold=th, fill_color="orange")
