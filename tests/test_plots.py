@@ -21,3 +21,8 @@ def test_plot_monthly_density(si: Series) -> None:
 
 def test_plot_heatmap(si: Series) -> None:
     _ = heatmap([si], cmap="vik", vmin=-3.0, vmax=3.0)
+
+
+def test_plot_threshold(head: Series) -> None:
+    th = Series(head.mean(), index=head.index, dtype=float)
+    _ = plot_si(series=head, threshold=th, color="orange")
