@@ -15,7 +15,7 @@ from .utils import validate_index, validate_series
 def si(
     si: Series,
     add_category: bool = True,
-    figsize: tuple = (6.5, 4),
+    figsize: tuple[float] = (6.5, 4.0),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
     ax: plt.Axes | None = None,
@@ -29,7 +29,7 @@ def si(
         Series of the standardized index
     add_category: bool, optional
         Add the category labels to the right y-axis, by default True
-    figsize : tuple, optional
+    figsize : tuple[float], optional
         Figure size, by default (6.5, 4)
     cmap: str, optional
         Colormap for the background or line fill
@@ -72,8 +72,8 @@ def si(
 
         x, y = meshgrid(si.index, linspace(ymin, ymax, 100))
         ax.contourf(x, y, y, cmap=colormap, levels=linspace(ymin, ymax, 100))
-        ax.fill_between(x=si.index, y1=droughts, y2=ymin, color="w")
-        ax.fill_between(x=si.index, y1=nodroughts, y2=ymax, color="w")
+        ax.fill_between(x=si.index, y1=droughts, y2=ymin, color="w", interpolate=True)
+        ax.fill_between(x=si.index, y1=nodroughts, y2=ymax, color="w", interpolate=True)
     else:
         datetime = DatetimeIndex(si.index).to_pydatetime()
         x = date2num(datetime)
@@ -99,8 +99,10 @@ def si(
 def threshold(
     series: Series,
     threshold: Series,
-    color: str = "red",
+    figsize: tuple[float] = (6.5, 4.0),
+    fill_color: str = "red",
     ax: plt.Axes | None = None,
+    **kwargs,
 ) -> plt.Axes:
     """Plot the time series with a threshold line and fill the area below the threshold.
 
@@ -121,11 +123,17 @@ def threshold(
         Axes handle
     """
     if ax is None:
-        _, ax = plt.subplots(figsize=(7.0, 2.0))
+        _, ax = plt.subplots(figsize=figsize)
+
+    if kwargs is None:
+        kwargs = {}
 
     series_values = series.values.astype(float)
     threshold_values = threshold.values.astype(float)
-    ax.plot(series.index, series_values, color="k", label=series.name)
+
+    line_color = kwargs.pop("color", "k")
+    label = kwargs.pop("label", series.name)
+    ax.plot(series.index, series_values, color=line_color, label=label, **kwargs)
     ax.plot(
         threshold.index,
         threshold_values,
@@ -141,7 +149,8 @@ def threshold(
         y2=threshold_values,
         where=where,
         interpolate=True,
-        color=color,
+        color=fill_color,
+        label="Drought",
     )
     return ax
 
