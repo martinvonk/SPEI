@@ -116,7 +116,7 @@ Figure \autoref{fig:spei1} is not very informative if the user is not familiar w
 ![Visualization of the SPEI-3 with background color and categorical indication and of the drought \label{fig:spei3}](figures/spei3.png)
 
 ### Heatmap
-If multiple time scales are used, the standardized drought indices can be visualized within one graph. This can help with the interpretation of whether or not a drought persists over a long time span, and identify multi-year droughts [@mourik_use_2025]. In the case of hydrological drought, there is a relation to the system response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI with 6 time scale intervals; 1, 3, 6, 9, 12, and 24 months.
+If multiple time scales are used, the standardized drought indices can be visualized within one graph. This can help with the interpretation of whether or not a drought persists over a long time span, and identify the build-up to multi-year droughts [@mourik_use_2025]. In the case of hydrological drought, there is a relation to the system response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI with 6 time scale intervals; 1, 3, 6, 9, 12, and 24 months.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
