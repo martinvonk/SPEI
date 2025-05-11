@@ -11,6 +11,7 @@ from spei.knmi import (
     get_cumulative_deficit,
     get_yearly_temp_date,
 )
+from spei.plot import deficit_knmi
 
 
 @pytest.fixture
@@ -65,3 +66,15 @@ def test_deficit_wet(deficit):
     result = deficit_wet(deficit=deficit)
     assert isinstance(result, pd.Series)
     assert result.name == "DIwet"
+
+
+def test_plot_knmi_deficit(deficit: pd.Series):
+    """Test the plot function for the deficit."""
+    startdate = pd.Timestamp("2000-04-01")
+    enddate = pd.Timestamp("2000-09-30")
+    cumdf = get_cumulative_deficit(
+        deficit=deficit, startdate=startdate, enddate=enddate, allow_below_zero=False
+    )
+    ax = deficit_knmi(cumdf)
+    assert ax is not None
+    assert ax.get_ylabel() == "Precipitaton deficit (mm)"

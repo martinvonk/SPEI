@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
-from pandas import DatetimeIndex, Series
+from pandas import DataFrame, DatetimeIndex, Series, Timestamp
 from scipy.stats import gaussian_kde
 
 from .utils import validate_index, validate_series
@@ -337,6 +337,32 @@ def heatmap(
             cax.yaxis.set_label_position("left")
             _add_category_labels(cax)
 
+    return ax
+
+
+def deficit_knmi(df: DataFrame) -> plt.Axes:
+    _, ax = plt.subplots(figsize=(7, 5), layout="tight")
+    ax.plot(df.quantile(0.95, axis=1), label="5% dryest years", color="lime")
+    ax.plot(df.median(axis=1), label="median", color="blue")
+    ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
+    ax.plot(df.loc[:, 2018], label="year 2018", color="grey")
+    ax.plot(
+        df.max(axis=1),
+        label=f"maximum ({df.columns[0]}-{df.columns[-1]})",
+        color="orange",
+        linestyle=":",
+    )
+    year_today = Timestamp.today().year
+    if year_today in df.columns:
+        ax.plot(df.loc[:, year_today], label=f"year {year_today}", color="k")
+    ax.grid(True, axis="y")
+    ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(100.0))
+    ax.set_ylabel("Precipitaton deficit (mm)")
+    ax.xaxis.set_major_locator(mpl.dates.MonthLocator())
+    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%b"))
+    ax.set_xlim(Timestamp("2000-04-01"), Timestamp("2000-10-01"))
+    ax.legend()
+    ax.set_ylim(bottom=0.0)
     return ax
 
 
