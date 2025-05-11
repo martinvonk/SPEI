@@ -43,7 +43,7 @@ def deficit_oct1(deficit: pd.Series) -> pd.Series:
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.loc[enddate]
+    return cumdf.loc[enddate].rename("Doct1")
 
 
 def deficit_max(deficit: pd.Series) -> pd.Series:
@@ -53,7 +53,7 @@ def deficit_max(deficit: pd.Series) -> pd.Series:
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.max()
+    return cumdf.max().rename("Dmax")
 
 
 def deficit_apr1(deficit: pd.Series) -> pd.Series:
@@ -63,7 +63,7 @@ def deficit_apr1(deficit: pd.Series) -> pd.Series:
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.max() - cumdf.min()
+    return (cumdf.max() - cumdf.min()).rename("DIapr1")
 
 
 def deficit_gdd(
@@ -75,7 +75,7 @@ def deficit_gdd(
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.max()
+    return cumdf.max().rename("DIgdd")
 
 
 def deficit_wet(deficit: pd.Series) -> pd.Series:
@@ -85,4 +85,4 @@ def deficit_wet(deficit: pd.Series) -> pd.Series:
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.max()
+    return cumdf.max().rename("DIwet")
