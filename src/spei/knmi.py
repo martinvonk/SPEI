@@ -16,6 +16,8 @@ def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
     if allow_below_zero:
         return deficit.cumsum()
     else:
+        if deficit.iat[0] < 0.0:
+            deficit.iat[0] = 0.0
         sumlm = np.frompyfunc(lambda a, b: 0.0 if a + b < 0.0 else a + b, nin=2, nout=1)
         return pd.Series(sumlm.accumulate(deficit.values), deficit.index, dtype=float)
 
