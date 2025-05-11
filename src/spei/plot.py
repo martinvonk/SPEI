@@ -15,7 +15,7 @@ from .utils import validate_index, validate_series
 def si(
     si: Series,
     add_category: bool = True,
-    figsize: tuple[float] = (6.5, 4.0),
+    figsize: tuple[float, float] = (6.5, 4.0),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
     ax: plt.Axes | None = None,
@@ -99,7 +99,7 @@ def si(
 def threshold(
     series: Series,
     threshold: Series,
-    figsize: tuple[float] = (6.5, 4.0),
+    figsize: tuple[float, float] = (6.5, 4.0),
     fill_color: str = "red",
     ax: plt.Axes | None = None,
     **kwargs,

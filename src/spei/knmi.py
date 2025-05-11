@@ -4,7 +4,7 @@ import pandas as pd
 from .utils import group_yearly_df
 
 
-def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Timestamp:
+def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
     """Get the first date of the temperature data."""
     temp_group_df = group_yearly_df(series=temp).cumsum(axis=0)
     first_date_above_threshold = temp_group_df.gt(threshold).idxmax()
@@ -43,7 +43,13 @@ def deficit_oct1(deficit: pd.Series) -> pd.Series:
     cumdf = get_cumulative_deficit(
         deficit=deficit, startdate=startdate, enddate=enddate
     )
-    return cumdf.loc[enddate].rename("Doct1")
+    doct1 = pd.Series(
+        data=cumdf.loc[enddate].values,
+        index=cumdf.columns,
+        dtype=float,
+        name="Doct1",
+    )
+    return doct1
 
 
 def deficit_max(deficit: pd.Series) -> pd.Series:
