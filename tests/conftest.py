@@ -40,7 +40,12 @@ def head() -> Series:
 
 
 @pytest.fixture
-def si() -> Series:
-    prec = read_data("Prec [m/d] 081_JOURE").dropna()
+def si(prec: Series) -> Series:
     si = spi(prec.rolling("30D", min_periods=30).sum().dropna(), prob_zero=True)
     return si
+
+
+@pytest.fixture
+def deficit(prec: Series, evap: Series) -> Series:
+    deficit = (evap - prec).rename("deficit")
+    return deficit
