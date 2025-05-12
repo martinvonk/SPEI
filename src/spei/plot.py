@@ -213,7 +213,7 @@ def monthly_density(
     index = validate_index(si.index)
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(6.5, 4))
+        _, ax = plt.subplots(figsize=(6.5, 4.0))
 
     colormap = plt.get_cmap(cmap, 20) if isinstance(cmap, str) else cmap
     colors = reshape(array([colormap(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
@@ -287,7 +287,7 @@ def heatmap(
     """
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(6.5, 4))
+        _, ax = plt.subplots(figsize=(6.5, 4.0))
 
     fig = ax.get_figure()
 
@@ -340,7 +340,7 @@ def heatmap(
     return ax
 
 
-def deficit_knmi(df: DataFrame) -> plt.Axes:
+def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
     """
     Plots the precipitation deficit for various scenarios using the given DataFrame.
 
@@ -370,7 +370,8 @@ def deficit_knmi(df: DataFrame) -> plt.Axes:
     - If the current year is present in the DataFrame, it is highlighted in black.
     - The maximum deficit is annotated with the range of years in the dataset.
     """
-    _, ax = plt.subplots(figsize=(7, 5), layout="tight")
+    if ax is None:
+        _, ax = plt.subplots(figsize=(6.5, 4.5), layout="tight")
     ax.plot(df.quantile(0.95, axis=1), label="5% driest years", color="lime")
     ax.plot(df.median(axis=1), label="median", color="blue")
     ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
@@ -384,16 +385,16 @@ def deficit_knmi(df: DataFrame) -> plt.Axes:
     year_today = Timestamp.today().year
     if year_today in df.columns:
         ax.plot(df.loc[:, year_today], label=f"year {year_today}", color="k")
-    ax.grid(True, axis="y")
-    ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(100.0))
+    ax.grid(visible=True, axis="y")
+    ax.yaxis.set_major_locator(locator=mpl.ticker.MultipleLocator(100.0))
     ax.set_ylabel("Precipitaton deficit (mm)")
-    ax.xaxis.set_major_locator(mpl.dates.MonthLocator())
-    ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%b"))
+    ax.xaxis.set_major_locator(locator=mpl.dates.MonthLocator())
+    ax.xaxis.set_major_formatter(formatter=mpl.dates.DateFormatter("%b"))
     ax.set_xlim(
         left=mpl.dates.date2num(Timestamp("2000-04-01")),
         right=mpl.dates.date2num(Timestamp("2000-10-01")),
     )
-    ax.legend()
+    ax.legend(loc="upper left")
     ax.set_ylim(bottom=0.0)
     return ax
 
