@@ -389,7 +389,10 @@ def deficit_knmi(df: DataFrame) -> plt.Axes:
     ax.set_ylabel("Precipitaton deficit (mm)")
     ax.xaxis.set_major_locator(mpl.dates.MonthLocator())
     ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%b"))
-    ax.set_xlim(Timestamp("2000-04-01"), Timestamp("2000-10-01"))
+    ax.set_xlim(
+        left=mpl.dates.date2num(Timestamp("2000-04-01")),
+        right=mpl.dates.date2num(Timestamp("2000-10-01")),
+    )
     ax.legend()
     ax.set_ylim(bottom=0.0)
     return ax
