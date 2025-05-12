@@ -387,7 +387,7 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
         ax.plot(df.loc[:, year_today], label=f"year {year_today}", color="k")
     ax.grid(visible=True, axis="y")
     ax.yaxis.set_major_locator(locator=mpl.ticker.MultipleLocator(100.0))
-    ax.set_ylabel("Precipitaton deficit (mm)")
+    ax.set_ylabel("Precipitation deficit (mm)")
     ax.xaxis.set_major_locator(locator=mpl.dates.MonthLocator())
     ax.xaxis.set_major_formatter(formatter=mpl.dates.DateFormatter("%b"))
     ax.set_xlim(

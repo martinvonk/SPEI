@@ -84,4 +84,4 @@ def test_plot_knmi_deficit(deficit: pd.Series):
     )
     ax = deficit_knmi(cumdf)
     assert ax is not None
-    assert ax.get_ylabel() == "Precipitaton deficit (mm)"
+    assert ax.get_ylabel() == "Precipitation deficit (mm)"
