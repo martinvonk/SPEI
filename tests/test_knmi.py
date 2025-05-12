@@ -57,7 +57,11 @@ def test_deficit_apr1(deficit):
 
 def test_deficit_gdd(deficit, temp):
     threshold = 440
-    result = deficit_gdd(deficit=deficit, temp=temp, threshold=threshold)
+    result = deficit_gdd(
+        deficit=deficit,
+        temp=temp,
+        threshold=threshold,
+    )
     assert isinstance(result, pd.Series)
     assert result.name == "DIgdd"
 
@@ -73,7 +77,10 @@ def test_plot_knmi_deficit(deficit: pd.Series):
     startdate = pd.Timestamp("2000-04-01")
     enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
-        deficit=deficit, startdate=startdate, enddate=enddate, allow_below_zero=False
+        deficit=deficit,
+        startdate=startdate,
+        enddate=enddate,
+        allow_below_zero=False,
     )
     ax = deficit_knmi(cumdf)
     assert ax is not None

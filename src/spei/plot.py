@@ -341,8 +341,37 @@ def heatmap(
 
 
 def deficit_knmi(df: DataFrame) -> plt.Axes:
+    """
+    Plots the precipitation deficit for various scenarios using the given DataFrame.
+
+    The function generates a plot that visualizes the precipitation deficit over time
+    for different statistical measures and specific years. It includes the 5% driest years,
+    the median, specific record years (1976 and 2018), the maximum deficit, and optionally
+    the current year if present in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        A DataFrame where:
+        - Rows represent time (e.g., days or months within a year).
+        - Columns represent years (e.g., 1976, 2018, etc.).
+        - Values represent cumulative precipitation deficit (in millimeters).
+
+    Returns:
+    --------
+    matplotlib.axes._axes.Axes
+        The Axes object of the generated plot.
+
+    Notes:
+    ------
+    - The x-axis represents the time of year, formatted as months (April to October).
+    - The y-axis represents the precipitation deficit in millimeters.
+    - The plot includes a grid on the y-axis for better readability.
+    - If the current year is present in the DataFrame, it is highlighted in black.
+    - The maximum deficit is annotated with the range of years in the dataset.
+    """
     _, ax = plt.subplots(figsize=(7, 5), layout="tight")
-    ax.plot(df.quantile(0.95, axis=1), label="5% dryest years", color="lime")
+    ax.plot(df.quantile(0.95, axis=1), label="5% driest years", color="lime")
     ax.plot(df.median(axis=1), label="median", color="blue")
     ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
     ax.plot(df.loc[:, 2018], label="year 2018", color="grey")
