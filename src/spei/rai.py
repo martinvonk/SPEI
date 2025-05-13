@@ -4,7 +4,7 @@ import pandas as pd
 from spei.utils import get_data_series, group_yearly_df
 
 
-def rai(series: pd.Series, sf: float = 3.0) -> pd.Series:
+def rai(series: pd.Series) -> pd.Series:
     """
     Calculate the Rainfall Anomaly Index (RAI) for a given time
     series of precipitation data. [vanrooy_1965]_
@@ -27,8 +27,10 @@ def rai(series: pd.Series, sf: float = 3.0) -> pd.Series:
     pm = series.mean()
     pi_above = series > pm
     rai = pd.Series(np.nan, index=series.index, dtype=float)
-    rai[pi_above] = sf * (series[pi_above] - pm) / (series.nlargest(10).mean() - pm)
-    rai[~pi_above] = -sf * (series[~pi_above] - pm) / (series.nsmallest(10).mean() - pm)
+    rai[pi_above] = 3.0 * (series[pi_above] - pm) / (series.nlargest(10).mean() - pm)
+    rai[~pi_above] = (
+        -3.0 * (series[~pi_above] - pm) / (series.nsmallest(10).mean() - pm)
+    )
     return rai
 
 
