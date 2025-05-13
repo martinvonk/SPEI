@@ -72,7 +72,7 @@ def infer_frequency(index: Index | DatetimeIndex) -> str:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "ME" if pd_version >= "2.2.0" else "M"
+        inf_freq = "MS" if pd_version >= "2.2.0" else "M"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
 
@@ -107,7 +107,7 @@ def get_data_series(group_df: DataFrame) -> Series:
     idx = array(
         [(f"{col}-" + index.strftime(strfstr)).tolist() for col in group_df.columns]
     ).flatten()
-    # remove illegal 29 febraury for non leap years created by group_yearly_df
+    # remove illegal 29 february for non leap years created by group_yearly_df
     boolidx = ~array(
         [
             (x.split(" ")[0].split("-", 1)[1] == "02-29")

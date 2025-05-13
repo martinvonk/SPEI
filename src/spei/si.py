@@ -1,7 +1,8 @@
 import logging
 from dataclasses import dataclass, field
+from typing import Literal
 
-from numpy import ceil, linspace, nan
+from numpy import ceil, interp, linspace, nan
 from pandas import DataFrame, Grouper, Series, Timedelta, Timestamp
 from scipy.stats import beta, fisk, gamma, genextreme, norm
 
@@ -18,6 +19,7 @@ from .utils import (
 
 def sgi(
     series: Series,
+    timescale: int = 0,
     fit_freq: str | None = None,
 ) -> Series:
     """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
@@ -49,11 +51,12 @@ def sgi(
     sgi = SI(
         series=series,
         dist=mock_dist,
-        timescale=0,
+        timescale=timescale,
         fit_freq=fit_freq,
         fit_window=0,
         prob_zero=False,
         normal_scores_transform=True,
+        agg_func="mean",
     )
     return sgi.norm_ppf()
 
@@ -118,6 +121,7 @@ def spi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="sum",
     )
     spi.fit_distribution()
     return spi.norm_ppf()
@@ -183,6 +187,7 @@ def spei(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="sum",
     )
     spei.fit_distribution()
     return spei.norm_ppf()
@@ -196,7 +201,7 @@ def ssfi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized StreamFlow Index [ssfi_2020]_.
+    """Method to compute the Standardized StreamFlow Index [ssfi_2012]_.
 
     Parameters
     ----------
@@ -234,10 +239,10 @@ def ssfi(
 
     References
     ----------
-    .. [ssfi_2020] Tijdeman, E., Stahl, K., & Tallaksen, L. M.:
-       Drought characteristics derived based on the Standardized
-       Streamflow Index: A large sample comparison for parametric
-       and nonparametric methods. Water Resources Research, 56, 2020.
+    .. [ssfi_2012] Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería,
+    J. Lorenzo-Lacruz, C. Azorin-Molina, and E. Morán-Tejeda (2012). Accurate
+    Computation of a Streamflow Drought Index. Journal of Hydrologic
+    Engineering 17 (2): 318-332.
     """
     ssfi = SI(
         series=series,
@@ -247,12 +252,13 @@ def ssfi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="mean",
     )
     ssfi.fit_distribution()
     return ssfi.norm_ppf()
 
 
-def ssmsi(
+def ssmi(
     series: Series,
     dist: ContinuousDist = beta,
     timescale: int = 0,
@@ -311,6 +317,7 @@ def ssmsi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="mean",
     )
     ssmi.fit_distribution()
     return ssmi.norm_ppf()
@@ -348,6 +355,9 @@ class SI:
     normal_scores_transform : bool, default=False
         Flag to use the normal scores transformation for calculating the
         cumulative density function.
+    agg_func: Literal['sum', 'mean'], default='sum'
+        String of the function to use for aggregating the time series if the
+        timescale is larger than 0. Can either be 'sum' or 'mean'.
 
     Attributes
     ----------
@@ -356,7 +366,6 @@ class SI:
         original years as columns
     _dist_dict : Dict[int, Dist]
         Dictionary of distributions used to fit the data.
-
     """
 
     series: Series = field(repr=False)
@@ -366,6 +375,7 @@ class SI:
     fit_window: int = field(default=0)
     prob_zero: bool = field(default=False)
     normal_scores_transform: bool = field(default=False)
+    agg_func: Literal["sum", "mean"] = "sum"
     _grouped_year: DataFrame = field(init=False, repr=False, compare=False)
     _dist_dict: dict[int, Dist] = field(
         default_factory=dict, init=False, repr=False, compare=False
@@ -381,7 +391,7 @@ class SI:
         if self.timescale > 0:
             self.series = (
                 self.series.rolling(self.timescale, min_periods=self.timescale)
-                .sum()
+                .agg(self.agg_func)
                 .dropna()
                 .copy()
             )
@@ -404,7 +414,7 @@ class SI:
                 )
                 self.fit_window += 1  # make sure window is odd
 
-    def fit_distribution(self):
+    def fit_distribution(self) -> None:
         """
         Fit distribution on the time series per fit_frequency and/or fit_window
         """
@@ -463,7 +473,7 @@ class SI:
                 )
                 self._dist_dict[date] = fd
 
-    def cdf(self):
+    def cdf(self) -> Series:
         """Compute the cumulative density function"""
         if self.normal_scores_transform:
             cdf = self.cdf_nsf()
@@ -475,14 +485,15 @@ class SI:
 
         return cdf
 
-    def pdf(self):
+    def pdf(self) -> Series:
         """Compute the probability density function"""
         if self.normal_scores_transform:
             pdf = self.cdf().diff()
-        pdf = Series(nan, index=self.series.index, dtype=float)
-        for k in self._dist_dict:
-            pdf_k = self._dist_dict[k].pdf()
-            pdf.loc[pdf_k.index] = pdf_k.values
+        else:
+            pdf = Series(nan, index=self.series.index, dtype=float)
+            for k in self._dist_dict:
+                pdf_k = self._dist_dict[k].pdf()
+                pdf.loc[pdf_k.index] = pdf_k.values
         return pdf
 
     def cdf_nsf(self) -> Series:
@@ -501,6 +512,41 @@ class SI:
             n = len(data)
             cdf.loc[data.index] = linspace(1 / (2 * n), 1 - 1 / (2 * n), n)
         return cdf
+
+    def ppf(self, q: float) -> Series:
+        """
+        Method to calculate the percentile point function
+        (inverse of cdf — percentiles) of a fitted
+        distribution.
+
+        Parameters
+        ----------
+        q : float
+            The quantile value (between 0 and 1) for which to calculate the
+            percentile point function.
+
+        Returns
+        -------
+        Series
+        """
+        ppf = Series(nan, index=self.series.index, dtype=float)
+        if self.normal_scores_transform:
+            cdf = self.cdf_nsf()
+            for _, grval in self._grouped_year.groupby(
+                Grouper(freq=str(self.fit_freq))
+            ):
+                data = get_data_series(grval).sort_values()
+                cdf_i = cdf.loc[data.index]
+                ppf.loc[data.index] = interp(
+                    x=q,
+                    xp=cdf_i.values.astype(float),
+                    fp=data.values.astype(float),
+                )
+        else:
+            for k in self._dist_dict:
+                ppf_k = self._dist_dict[k].ppf(q=q)
+                ppf.loc[ppf_k.index] = ppf_k.values
+        return ppf
 
     def norm_ppf(self) -> Series:
         """

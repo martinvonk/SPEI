@@ -75,7 +75,7 @@ def test_infer_frequency_daily():
 
 def test_infer_frequency_no_infer():
     index = DatetimeIndex(["2020-01-01", "2020-01-03", "2020-01-07"])
-    assert infer_frequency(index) == "ME"  # Assuming pandas version >= 2.2.0
+    assert infer_frequency(index) == "MS"  # Assuming pandas version >= 2.2.0
 
 
 def test_infer_frequency_non_datetime_index():

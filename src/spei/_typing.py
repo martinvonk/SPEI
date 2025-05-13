@@ -6,6 +6,5 @@ from numpy.typing import NDArray
 from scipy.stats._continuous_distns import rv_continuous
 
 ContinuousDist = Any | rv_continuous
-Axes = Any
-NDArrayAxes = NDArray[Axes]
+NDArrayAxes = NDArray[Any]
 NDArrayFloat = NDArray[float64]

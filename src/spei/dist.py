@@ -122,9 +122,20 @@ class Dist:
         else:
             pdf = self.dist.pdf(data_pdf.values, loc=self.loc, scale=self.scale)
 
-        # TODO: check what to do if prob_zero
+        if self.prob_zero:
+            pdf = self.p0 + (1 - self.p0) * pdf
+            pdf[self.data == 0.0] = self.p0
 
         return Series(pdf, index=data_pdf.index, dtype=float)
+
+    def ppf(self, q: float) -> Series:
+        """Compute percent point function (inverse of cdf) at q"""
+        if self.pars is not None:
+            ppf = self.dist.ppf(q, *self.pars, loc=self.loc, scale=self.scale)
+        else:
+            ppf = self.dist.ppf(q, loc=self.loc, scale=self.scale)
+
+        return Series(ppf, index=self.data.index, dtype=float)
 
     def ks_test(
         self,

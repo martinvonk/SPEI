@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from pandas import Series, read_csv
 
@@ -6,7 +8,7 @@ from spei.si import spi
 
 def read_data(column: str) -> Series:
     df = read_csv(
-        "https://raw.githubusercontent.com/pastas/test-datasets/main/vanderspek_bakker_2017/B11C0329_EAGMARYP.csv",
+        Path(__file__).parent / "data/B11C0329_EAGMARYP.csv",
         index_col=0,
         parse_dates=True,
         sep=";",
@@ -22,7 +24,7 @@ def prec() -> Series:
 
 @pytest.fixture
 def precmm(prec) -> Series:
-    return prec.multiply(1e3).rename("Prec [mm/d]  081_JOURE")
+    return prec.multiply(1e3).rename("Prec [mm/d] 081_JOURE")
 
 
 @pytest.fixture
@@ -38,7 +40,12 @@ def head() -> Series:
 
 
 @pytest.fixture
-def si() -> Series:
-    prec = read_data("Prec [m/d] 081_JOURE").dropna()
+def si(prec: Series) -> Series:
     si = spi(prec.rolling("30D", min_periods=30).sum().dropna(), prob_zero=True)
     return si
+
+
+@pytest.fixture
+def deficit(prec: Series, evap: Series) -> Series:
+    deficit = (evap - prec).rename("deficit")
+    return deficit

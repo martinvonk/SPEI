@@ -1,17 +1,17 @@
-
 *.pyc
-*.png
-*.coverage
+*.egg-info
 
-/src/spei.egg-info
 /dist
 /doc/references
+/paper/literature
+/paper/data
 
 /.vscode
+*.code-workspace
 /.mypy_cache
 /.tox
 /.pytest_cache
 /htmlcov
 coverage.xml
-*.code-workspace
+*.coverage
 uv.lock
