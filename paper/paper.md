@@ -124,6 +124,11 @@ If multiple time scales are used, the standardized drought indices can be visual
 At the time of writing the SPEI Python package explicitly supports the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed on any time series if an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by @bloomfield_sgi_2013.
 
 # Other drought indices
+Relative or absolute
+
+## Rainfall anomaly index
+The Rainfall Anomaly Index (RAI) offers a comparable index to the SPI by analyzing the precipitation time series but without needing to fit a probability density function. The RAI effectively quantifies deviations from historical rainfall norms to identify both dry and wet periods [@vanrooy_rai_1965]. This package also includes the Modified Rainfall Anomaly Index (mRAI) [@hansel_mrai_2016], which enhances the RAI by incorporating a scaling factor to account for specific local conditions.
+
 ## Threshold
 @vanloon_hydrodrought_2015
 
@@ -151,10 +156,15 @@ Climdex is an online platform that offers a range of different indices to descri
 | `r99ptot`     | Contribution to total precipitation from extremely wet days                                      |
 
 ## KNMI
-KNMI precipitation deficit.
+The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions, after @witte_knmi_2025, are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands but can be applied elsewhere.
 
-## Rainfall anomaly index
-The Rainfall Anomaly Index (RAI) offers a comparable index to the SPI by analyzing the precipitation time series but without needing to fit a probability density function. The RAI effectively quantifies deviations from historical rainfall norms to identify both dry and wet periods [@vanrooy_rai_1965]. This package also includes the Modified Rainfall Anomaly Index (mRAI) [@hansel_mrai_2016], which enhances the RAI by incorporating a scaling factor to account for specific local conditions.
+| Function Name  | Description                                                                                                                                         |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `deficit_oct1` | The cumulative deficit on October 1st, considering the period between April 1st and September 30th.                                                 |
+| `deficit_max`  | The maximum cumulative deficit within the period from April 1st to September 30th.                                                                  |
+| `deficit_apr1` | The maximum change in cumulative deficit between April 1st and September 30th.                                                                      |
+| `deficit_gdd`  | The maximum cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. |
+| `deficit_wet`  | The maximum cumulative deficit from January 1st to September 30th.                                                                                  |
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
