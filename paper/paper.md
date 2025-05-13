@@ -120,6 +120,10 @@ If multiple time scales are used, the standardized drought indices can be visual
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
+### Kernel density estimate
+
+![Visualization of the SPEI-1 as a kernel density estimate to compare the drought distribution months from different years \label{fig:spei_density}](figures/spei_density.png){width="50%"}
+
 ## Supported standardized indices
 At the time of writing the SPEI Python package explicitly supports the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed on any time series if an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by @bloomfield_sgi_2013.
 
