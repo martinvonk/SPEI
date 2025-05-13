@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from spei.utils import get_data_series, group_yearly_df
+from .utils import get_data_series, group_yearly_df, validate_series
 
 
 def rai(series: pd.Series) -> pd.Series:
@@ -24,6 +24,7 @@ def rai(series: pd.Series) -> pd.Series:
     .. [vanrooy_1965] van Rooy, M.P. (1965). A Rainfall Anomaly
        Index Independent of Time and Space. Notos.
     """
+    series = validate_series(series)
     pm = series.mean()
     pi_above = series > pm
     rai = pd.Series(np.nan, index=series.index, dtype=float)
@@ -58,6 +59,7 @@ def mrai(series: pd.Series, sf: float = 1.7) -> pd.Series:
        extreme precipitation characteristics? Theoretical and Applied
        Climatology. doi.org/10.1007/s00704-015-1389-y.
     """
+    series = validate_series(series)
     mrai = pd.Series(np.nan, index=series.index, dtype=float)
     group_df = group_yearly_df(series=series)
     for _, gr in group_df.groupby(pd.Grouper(freq="MS")):
