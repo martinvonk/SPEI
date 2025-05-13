@@ -253,7 +253,7 @@ def ssfi(
     return ssfi.norm_ppf()
 
 
-def ssmsi(
+def ssmi(
     series: Series,
     dist: ContinuousDist = beta,
     timescale: int = 0,
