@@ -32,6 +32,12 @@ def test_window(prec: Series, evap: Series) -> None:
     spei(n, fit_freq="W", fit_window=3)
 
 
+def test_window_even(prec: Series, evap: Series, caplog) -> None:
+    n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
+    spei(n, fit_freq="W", fit_window=4)
+    assert "Window should be odd. Setting the window value to" in caplog.text
+
+
 def test_SI(prec: Series) -> None:
     si = SI(prec, dist=norm, timescale=30, fit_freq="MS")
     si.fit_distribution()
