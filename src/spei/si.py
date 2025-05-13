@@ -19,6 +19,7 @@ from .utils import (
 
 def sgi(
     series: Series,
+    timescale: int = 0,
     fit_freq: str | None = None,
 ) -> Series:
     """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
@@ -50,7 +51,7 @@ def sgi(
     sgi = SI(
         series=series,
         dist=mock_dist,
-        timescale=0,
+        timescale=timescale,
         fit_freq=fit_freq,
         fit_window=0,
         prob_zero=False,

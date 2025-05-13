@@ -9,7 +9,7 @@ from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import DataFrame, DatetimeIndex, Series, Timestamp
 from scipy.stats import gaussian_kde
 
-from .utils import validate_index, validate_series
+from .utils import get_data_series, group_yearly_df, validate_index
 
 
 def si(
@@ -209,9 +209,6 @@ def monthly_density(
         Axes handle
     """
 
-    si = validate_series(si)
-    index = validate_index(si.index)
-
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.0))
 
@@ -219,9 +216,13 @@ def monthly_density(
     colors = reshape(array([colormap(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
     lsts = cycle(["--", "-.", ":"])
 
-    ind = linspace(-3.3, 3.3, 1000)
+    ind = linspace(-3.3, 3.3, 100)
+    si_grdf = group_yearly_df(si)
+    index = validate_index(si_grdf.index)
     for i, month in enumerate(months):
-        gkde_all = gaussian_kde(si[(index.month == month)])
+        si_month = get_data_series(si_grdf.loc[index.month == month])
+        si_month_index = validate_index(si_month.index)
+        gkde_all = gaussian_kde(si_month)
         ax.plot(
             ind,
             gkde_all.evaluate(ind),
@@ -229,7 +230,7 @@ def monthly_density(
             label=f"{month_abbr[month]} all",
         )
         for j, year in enumerate(years, start=1):
-            gkde_spec = gaussian_kde(si[(index.month == month) & (index.year == year)])
+            gkde_spec = gaussian_kde(si_month[si_month_index.year == year])
             ax.plot(
                 ind,
                 gkde_spec.evaluate(ind),
