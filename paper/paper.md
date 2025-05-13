@@ -153,6 +153,9 @@ Climdex is an online platform that offers a range of different indices to descri
 ## KNMI
 KNMI precipitation deficit.
 
+## Rainfall anomaly index
+The Rainfall Anomaly Index (RAI) offers a comparable index to the SPI by analyzing the precipitation time series but without needing to fit a probability density function. The RAI effectively quantifies deviations from historical rainfall norms to identify both dry and wet periods [@vanrooy_rai_1965]. This package also includes the Modified Rainfall Anomaly Index (mRAI) [@hansel_mrai_2016], which enhances the RAI by incorporating a scaling factor to account for specific local conditions.
+
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
 
