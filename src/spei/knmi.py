@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .utils import group_yearly_df
+from .utils import group_yearly_df, validate_series
 
 
 def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
@@ -91,6 +91,7 @@ def get_cumulative_deficit(
         over the specified time period. The index represents the date
         range, and the columns correspond to the year.
     """
+    deficit = validate_series(deficit)
     group_df = group_yearly_df(series=deficit)
     if isinstance(startdate, pd.Timestamp):
         if startdate.year != 2000:
@@ -221,8 +222,9 @@ def deficit_gdd(
     deficit: pd.Series, temp: pd.Series, threshold: float = 440.0
 ) -> pd.Series:
     """
-    Calculate the maximum cumulative deficit starting from the first day
-    when the growing degree days (GDD) exceed a specified threshold.
+    Calculate the maximum change in cumulative deficit starting from the
+    first day when the temperature sum (growing degree days; GDD)
+    exceeds a specified threshold.
 
     Parameters:
     -----------
@@ -231,14 +233,16 @@ def deficit_gdd(
     temp : pd.Series
         A pandas Series representing the daily temperature values.
     threshold : float, optional
-        The GDD threshold to determine the starting date for the calculation.
+        The temperature sum GDD threshold to determine the starting date for the calculation.
         Defaults to 440.0.
 
     Returns:
     --------
     pd.Series
-        A pandas Series containing the maximum cumulative deficit, labeled as "DIgdd".
+        A pandas Series containing the maximum change in cumulative deficit,
+        labeled as "DIgdd".
     """
+    temp = validate_series(temp)
     startdate = get_yearly_temp_date(temp=temp, threshold=threshold)
     enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
@@ -247,16 +251,17 @@ def deficit_gdd(
         enddate=enddate,
         allow_below_zero=True,
     )
-    return cumdf.max().rename("DIgdd")
+    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIgdd")
 
 
 def deficit_wet(deficit: pd.Series) -> pd.Series:
     """
-    Calculate the maximum cumulative deficit for a specified period.
+    Calculate the maximum change in cumulative deficit for a specified period.
 
-    This function computes the maximum cumulative deficit from January 1st
-    to September 30th of a given year. The cumulative deficit is calculated
-    using the `get_cumulative_deficit` function, allowing values below zero.
+    This function computes the maximum change in  cumulative deficit from
+    January 1st to September 30th of a given year. The cumulative deficit
+    is calculated using the `get_cumulative_deficit` function, allowing
+    values below zero.
 
     Parameters:
     -----------
@@ -266,8 +271,8 @@ def deficit_wet(deficit: pd.Series) -> pd.Series:
     Returns:
     --------
     pd.Series
-        A pandas Series containing the maximum cumulative deficit for the
-        specified period, labeled as "DIwet".
+        A pandas Series containing the maximum change in cumulative deficit
+        for the specified period, labeled as "DIwet".
     """
     startdate = pd.Timestamp("2000-01-01")
     enddate = pd.Timestamp("2000-09-30")
@@ -277,4 +282,4 @@ def deficit_wet(deficit: pd.Series) -> pd.Series:
         enddate=enddate,
         allow_below_zero=True,
     )
-    return cumdf.max().rename("DIwet")
+    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIwet")
