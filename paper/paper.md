@@ -23,15 +23,15 @@ bibliography: paper.bib
 SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. This makes calculating and visualizing different drought indices with the SPEI package simple but versatile.
 
 # Statement of need
-Water is a vital natural resource, essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. At its core, drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011]. Droughts can be classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading [@vanloon_hydrodrought_2015]. However, many definitions of drought exist, and the definition and quantification drought might depends on the purpose and context of the analysis being conducted [@dracup_droughtdefinition_1980]. For this purpose many different indices have been developed to quantify droughts. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of a drought. Using this package, the quantification of drought is made simple, and the choices of the users (definition of drought) are made are fully reproducible through scripting.
+Water is a vital natural resource, essential for life on Earth. However, the global availability of freshwater is increasingly threatened by the impacts of climate change and human activities. At its core, drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011]. Droughts can be classified as meteorological, hydrological, agricultural, or socioeconomic, often starting with meteorological droughts that trigger cascading [@vanloon_hydrodrought_2015]. However, many definitions of drought exist, and the definition and quantification drought might depends on the purpose and context of the analysis being conducted [@dracup_droughtdefinition_1980]. For this purpose many different indices have been developed to quantify droughts. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of a drought.
+
+Generally, there are two types of metrics; absolute and relative. Absolute metrics have the advantage that they can still be related to the water balance. The disadvantage is that they are location dependent, meaning that it is difficult to compare them across regions. The relative metrics are generally unitless makig them easy to compare between regions and different hydrological systems. Using this package, the quantification of drought is made simple, and the choices of the users (definition of drought) are made are fully reproducible through scripting.
 
 # Standardized drought indices
-The most common class of drought indices are the standardized drought indices and are advocated by the World Meteorological Organisation [@wmo_spi_2012] in case of the Standardized Precipitation Index.
+The most common class of drought indices are the standardized drought indices. These standardized indicess are advocated by the World Meteorological Organisation [@wmo_spi_2012] in case of the Standardized Precipitation Index. For meteorological droughts, the common standardized indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, those are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010]. Agricultural drought the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used. These standardized drought indices transform a time series into a standardized normal distribution.
 
 ## Computation
-Different drought indices exist to indicate different types of drought. For meteorological droughts, common indices are the Standardized Precipitation Index (SPI) [@mckee_spi_1993,;@lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]. For hydrological droughts, common indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013], the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010]. For agricultural drought the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used. These standardized drought indices transform a time series into a standardized normal distribution.
-
-Generally, it is recommended to use a time series spanning at least 30 years [@mckee_spi_1993]. That way the series is long enough to have enough data points, but generally short enough to be (somewhat) stationary. Sets of rolling sum or average periods are computed to define various time scales, typically spanning 1, 3, 6, 12, 24, or 48 months[^1]. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. There are also non-parametric approaches using a normal-scores transform or kernel density estimate. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
+Generally, it is recommended to use a time series spanning at least 30 years [@mckee_spi_1993]. That way the series is long enough to have enough data points, but generally short enough to be (somewhat) stationary. Sets of rolling sum or average periods are computed to define various time scales $N_m$, typically spanning 1, 3, 6, 12, 24, or 48 months[^1], denoted by `SI-`$N_m$. Each dataset is fitted to a continuous probability density function to establish the relationship between the probability and the time series. There are also non-parametric approaches using a normal-scores transform or kernel density estimate. The probability of any data point is determined and then transformed using the inverse normal distribution, assuming a normally distributed probability density function with a mean of zero and a standard deviation of one.
 
 [^1]: A month does not represent an unambiguous time period since a month can have 28 up to 31 days. This can result in some extra complexity in the computation, which is dealt with by the SPEI package internally via Pandas.
 
@@ -46,7 +46,7 @@ As an example, drought indices are computed for an example dataset is considered
 
 ![(a) Precipitation and potential (Makkink) evaporation flux from a weather station in Cabauw (Royal Netherlands Meteorological Institute) from January 1, 1990 until December 31, 2020. (b) Monthly precipitation surplus. \label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
 
-The time series must be a `pandas.Series` with a `DatetimeIndex` as index. The Python package provides a function to compute each separate drought index. For instance, when computing the SPEI-1 (`-1` denoting one month time scale), using a fisk distribution for the example dataset is as follows:
+The time series must be a `pandas.Series` with a `DatetimeIndex` as index. The Python package provides a function to compute each separate drought index. For instance, when computing the SPEI-1 (`-1` denoting a one month time scale), using a fisk distribution for the example dataset is as follows:
 
 ```python
 # load packages
@@ -113,16 +113,15 @@ Figure \autoref{fig:surplus_fit_window} illustrates the influence of different 
 ### Series
 Figure \autoref{fig:spei1} is not very informative if the user is not familiar with the standardized index methodology and the meaning of the corresponding z-scores. Therefore, to visualize the drought indices in time and increase the information value, the SPEI package has multiple ways to visualize drought indices. For instance, with background filling to indicate dry (red) or wet (blue) periods as seen in Figure \ref{fig:spei3}. Additionally, the drought category, as proposed by @mckee_spi_1993, can be added for easier interpretation of the z-scores.
 
-![Visualization of the SPEI-3 with background color and categorical indication and of the drought \label{fig:spei3}](figures/spei3.png)
+![Visualization of a SPEI-3 example with background color and categorical indication and of the drought \label{fig:spei3}](figures/spei3.png)
 
 ### Heatmap
 If multiple time scales are used, the standardized drought indices can be visualized within one graph. This can help with the interpretation of whether or not a drought persists over a long time span, and identify the build-up to multi-year droughts [@mourik_use_2025]. In the case of hydrological drought, there is a relation to the system response (and recovery) time. The heatmap, as shown in Figure \autoref{fig:spei_heatmap}, indicates such a graph for the SPEI with 6 time scale intervals; 1, 3, 6, 9, 12, and 24 months.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
-### Kernel density estimate
-
-![Visualization of the SPEI-1 as a kernel density estimate to compare the drought distribution months from different years \label{fig:spei_density}](figures/spei_density.png){width="50%"}
+<!-- ### Kernel density estimate -->
+<!-- ![Visualization of the SPEI-1 as a kernel density estimate to compare the drought distribution months from different years \label{fig:spei_density}](figures/spei_density.png){width="50%"} -->
 
 ## Supported standardized indices
 At the time of writing the SPEI Python package explicitly supports the SPI, SPEI, SSFI, SSMI and SGI. However, any parametric standardized drought index can be computed on any time series if an appropriate distribution is available in the SciPy library. A non-parametric approach, using the normal-scores transform to find the probability density function, is also available. The normal-scores transform is used by default for the SGI as proposed by @bloomfield_sgi_2013.
@@ -162,13 +161,13 @@ Climdex is an online platform that offers a range of different indices to descri
 ## KNMI
 The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions, after @witte_knmi_2025, are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands but can be applied elsewhere.
 
-| Function Name  | Description                                                                                                                                         |
-|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `deficit_oct1` | The cumulative deficit on October 1st, considering the period between April 1st and September 30th.                                                 |
-| `deficit_max`  | The maximum cumulative deficit within the period from April 1st to September 30th.                                                                  |
-| `deficit_apr1` | The maximum change in cumulative deficit between April 1st and September 30th.                                                                      |
-| `deficit_gdd`  | The maximum cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. |
-| `deficit_wet`  | The maximum cumulative deficit from January 1st to September 30th.                                                                                  |
+| Function Name     | Description                                                                                                                                          |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `deficit_oct1`    | The cumulative deficit on October 1st, considering the period between April 1st and September 30th.                                                                                                                                                |
+| `deficit_max`     | The maximum cumulative deficit within the period from April 1st to September 30th.                                                                                                                                                |
+| `deficit_apr1`    | The maximum change in cumulative deficit between April 1st and September 30th.                                                                                                                                                |
+| `deficit_gdd`     | The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. |
+| `deficit_wet`     | The maximum change in cumulative deficit from January 1st to September 30th.                                                                                                                                                |
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
