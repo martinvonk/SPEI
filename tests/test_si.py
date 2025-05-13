@@ -1,7 +1,7 @@
 from pandas import DataFrame, Series, Timestamp
 from scipy.stats import norm
 
-from spei import SI, sgi, spei, spi, ssfi
+from spei import SI, sgi, spei, spi, ssfi, ssmi
 from spei.dist import Dist
 
 
@@ -23,9 +23,19 @@ def test_sffi_timescale(prec: Series) -> None:
     ssfi(prec, timescale=30)
 
 
+def test_ssmi(prec: Series) -> None:
+    ssmi(prec, fit_freq="MS")
+
+
 def test_window(prec: Series, evap: Series) -> None:
     n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
     spei(n, fit_freq="W", fit_window=3)
+
+
+def test_window_even(prec: Series, evap: Series, caplog) -> None:
+    n = (prec - evap).rolling("30D", min_periods=30).sum().dropna()
+    spei(n, fit_freq="W", fit_window=4)
+    assert "Window should be odd. Setting the window value to" in caplog.text
 
 
 def test_SI(prec: Series) -> None:

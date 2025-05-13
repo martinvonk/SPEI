@@ -55,6 +55,7 @@ def sgi(
         fit_window=0,
         prob_zero=False,
         normal_scores_transform=True,
+        agg_func="mean",
     )
     return sgi.norm_ppf()
 
@@ -119,6 +120,7 @@ def spi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="sum",
     )
     spi.fit_distribution()
     return spi.norm_ppf()
@@ -184,6 +186,7 @@ def spei(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="sum",
     )
     spei.fit_distribution()
     return spei.norm_ppf()
@@ -248,12 +251,13 @@ def ssfi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="mean",
     )
     ssfi.fit_distribution()
     return ssfi.norm_ppf()
 
 
-def ssmsi(
+def ssmi(
     series: Series,
     dist: ContinuousDist = beta,
     timescale: int = 0,
@@ -312,6 +316,7 @@ def ssmsi(
         fit_window=fit_window,
         prob_zero=prob_zero,
         normal_scores_transform=False,
+        agg_func="mean",
     )
     ssmi.fit_distribution()
     return ssmi.norm_ppf()

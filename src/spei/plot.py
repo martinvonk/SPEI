@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
-from pandas import DatetimeIndex, Series
+from pandas import DataFrame, DatetimeIndex, Series, Timestamp
 from scipy.stats import gaussian_kde
 
 from .utils import validate_index, validate_series
@@ -15,7 +15,7 @@ from .utils import validate_index, validate_series
 def si(
     si: Series,
     add_category: bool = True,
-    figsize: tuple[float] = (6.5, 4.0),
+    figsize: tuple[float, float] = (6.5, 4.0),
     cmap: str | mpl.colors.Colormap = "seismic_r",
     background: bool = True,
     ax: plt.Axes | None = None,
@@ -99,7 +99,7 @@ def si(
 def threshold(
     series: Series,
     threshold: Series,
-    figsize: tuple[float] = (6.5, 4.0),
+    figsize: tuple[float, float] = (6.5, 4.0),
     fill_color: str = "red",
     ax: plt.Axes | None = None,
     **kwargs,
@@ -213,7 +213,7 @@ def monthly_density(
     index = validate_index(si.index)
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(6.5, 4))
+        _, ax = plt.subplots(figsize=(6.5, 4.0))
 
     colormap = plt.get_cmap(cmap, 20) if isinstance(cmap, str) else cmap
     colors = reshape(array([colormap(x) for x in range(20)], dtype="f,f,f,f"), (5, 4))
@@ -287,7 +287,7 @@ def heatmap(
     """
 
     if ax is None:
-        _, ax = plt.subplots(figsize=(6.5, 4))
+        _, ax = plt.subplots(figsize=(6.5, 4.0))
 
     fig = ax.get_figure()
 
@@ -340,7 +340,75 @@ def heatmap(
     return ax
 
 
+def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
+    """
+    Plots the precipitation deficit for various scenarios using the given DataFrame.
+
+    The function generates a plot that visualizes the precipitation deficit over time
+    for different statistical measures and specific years. It includes the 5% driest years,
+    the median, specific record years (1976 and 2018), the maximum deficit, and optionally
+    the current year if present in the DataFrame.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        A DataFrame where:
+        - Rows represent time (e.g., days or months within a year).
+        - Columns represent years (e.g., 1976, 2018, etc.).
+        - Values represent cumulative precipitation deficit (in millimeters).
+
+    Returns:
+    --------
+    matplotlib.axes._axes.Axes
+        The Axes object of the generated plot.
+
+    Notes:
+    ------
+    - The x-axis represents the time of year, formatted as months (April to October).
+    - The y-axis represents the precipitation deficit in millimeters.
+    - The plot includes a grid on the y-axis for better readability.
+    - If the current year is present in the DataFrame, it is highlighted in black.
+    - The maximum deficit is annotated with the range of years in the dataset.
+    """
+    if ax is None:
+        _, ax = plt.subplots(figsize=(6.5, 4.5), layout="tight")
+    ax.plot(df.quantile(0.95, axis=1), label="5% driest years", color="lime")
+    ax.plot(df.median(axis=1), label="median", color="blue")
+    ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
+    ax.plot(df.loc[:, 2018], label="year 2018", color="grey")
+    ax.plot(
+        df.max(axis=1),
+        label=f"maximum ({df.columns[0]}-{df.columns[-1]})",
+        color="orange",
+        linestyle=":",
+    )
+    year_today = Timestamp.today().year
+    if year_today in df.columns:
+        ax.plot(df.loc[:, year_today], label=f"year {year_today}", color="k")
+    ax.grid(visible=True, axis="y")
+    ax.yaxis.set_major_locator(locator=mpl.ticker.MultipleLocator(100.0))
+    ax.set_ylabel("Precipitation deficit (mm)")
+    ax.xaxis.set_major_locator(locator=mpl.dates.MonthLocator())
+    ax.xaxis.set_major_formatter(formatter=mpl.dates.DateFormatter("%b"))
+    ax.set_xlim(
+        left=mpl.dates.date2num(Timestamp("2000-04-01")),
+        right=mpl.dates.date2num(Timestamp("2000-10-01")),
+    )
+    ax.legend(loc="upper left")
+    ax.set_ylim(bottom=0.0)
+    return ax
+
+
 class Crameri:
+    """Colormaps for matplotlib, useful for drought, based on [crameri_2020].
+
+    References
+    ----------
+    .. [crameri_2020] Crameri, F., G.E. Shephard, and P.J. Heron (2020):
+    The misuse of colour in science communication, Nature Communications,
+    11, 5444. doi.org/10.1038/s41467-020-19160-7
+    """
+
     _available_cmaps = ("roma", "roma_r", "vik", "vik_r", "lajolla", "lajolla_r")
 
     def __init__(self, name: str) -> None:
