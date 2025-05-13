@@ -24,7 +24,7 @@ def test_sffi_timescale(prec: Series) -> None:
 
 
 def test_ssmi(prec: Series) -> None:
-    ssmi(prec, fit_freq="MS", fit_window=2)
+    ssmi(prec, fit_freq="MS")
 
 
 def test_window(prec: Series, evap: Series) -> None:
