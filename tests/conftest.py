@@ -8,7 +8,7 @@ from spei.si import spi
 
 def read_data(column: str) -> Series:
     df = read_csv(
-        Path(__file__).parent / "test_data/B11C0329_EAGMARYP.csv",
+        Path(__file__).parent / "data/B11C0329_EAGMARYP.csv",
         index_col=0,
         parse_dates=True,
         sep=";",

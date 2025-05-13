@@ -365,7 +365,6 @@ class SI:
         original years as columns
     _dist_dict : Dict[int, Dist]
         Dictionary of distributions used to fit the data.
-
     """
 
     series: Series = field(repr=False)
