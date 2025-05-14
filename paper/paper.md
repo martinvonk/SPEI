@@ -148,7 +148,7 @@ Climdex is an online platform that offers a range of different indices to descri
 
 \begin{table}[h]
 \centering
-\caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
+<!-- \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}} -->
 \begin{tabular}{ll}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
