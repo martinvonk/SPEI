@@ -149,7 +149,7 @@ Climdex is an online platform that offers a range of different indices to descri
 \begin{table}[h]
 \centering
 \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
-\begin{tabularx}{lX}
+\begin{tabular}{ll}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
 \midrule
@@ -160,8 +160,8 @@ Climdex is an online platform that offers a range of different indices to descri
 \texttt{rnmm}     & Annual count of days when precipitation $\geq$ n mm \\
 \texttt{r10mm}    & Annual count of days when precipitation $\geq$ 10 mm \\
 \texttt{r20mm}    & Annual count of days when precipitation $\geq$ 20 mm \\
-\texttt{cdd}      & Maximum length of dry spell: maximum number of consecutive days with precipitation $<$ 1 mm \\
-\texttt{cwd}      & Maximum length of wet spell: maximum number of consecutive days with precipitation $\geq$ 1 mm \\
+\texttt{cdd}      & \begin{tabular}[c]{l}Maximum length of dry spell: maximum number of consecutive days\\with precipitation $<$ 1 mm\end{tabular} \\
+\texttt{cwd}      & \begin{tabular}[c]{l}Maximum length of wet spell: maximum number of consecutive days\\ with precipitation $\geq$ 1 mm\end{tabular} \\
 \texttt{prcptot}  & Total precipitation on wet days over a certain period \\
 \texttt{rnnp}     & Total amount of precipitation on wet days above a certain quantile \\
 \texttt{r95p}     & Total amount of precipitation on very wet days \\
@@ -169,7 +169,7 @@ Climdex is an online platform that offers a range of different indices to descri
 \texttt{r95ptot}  & Contribution to total precipitation from very wet days \\
 \texttt{r99ptot}  & Contribution to total precipitation from extremely wet days \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table}
 
 ## Precipitation deficit (KNMI)
