@@ -173,7 +173,7 @@ Climdex is an online platform that offers a range of different indices to descri
 \end{table}
 
 ## Precipitation deficit (KNMI)
-The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions after [@witte_knmi_2025] aree shown in Table \autoref{tab:knmi_drought} that are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
+The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions after @witte_knmi_2025 aree shown in Table \autoref{tab:knmi_drought} that are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
 
 \begin{table}[h]
 \centering
