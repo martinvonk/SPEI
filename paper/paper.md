@@ -83,9 +83,9 @@ The standardization process is demonstrated in Figure \autoref{fig:surplus_fit}b
 
 ![Resulting SPEI-1 from the monthly precipitation surplus \label{fig:spei1}](figures/spei1.png)
 
-Drought intensity is arbitrarily defined for the Z-scores of the standardized drought index with the following categories. From this it can be concluded that for instance 1995 and 2018 were both extremely dry years.
+Drought intensity is arbitrarily defined for the Z-scores of the standardized drought index with the categories from Table \autoref{tab:si_categories}. From this it can be concluded that for instance 1995 and 2018 were both extremely dry years.
 
-![Table with drought categories of the Z-scores in standardized indices based [@mckee_spi_1993;@lloydhughes_spi_2002] \label{tab:si_categories}](
+\caption{Table with drought categories of the Z-scores in standardized indices based \label{tab:si_categories}}
 | Z-score               | Category            | Probability (%) |
 |-----------------------|---------------------|-----------------|
 | ≥ 2.00                | Extremely wet       | 2.3             |
@@ -96,7 +96,7 @@ Drought intensity is arbitrarily defined for the Z-scores of the standardized dr
 | -1.50 < Z ≤ -1.00     | Moderate drought    | 9.2             |
 | -2.00 < Z ≤ -1.50     | Severe drought      | 4.4             |
 | ≤ -2.00               | Extreme drought     | 2.3             |
-)
+
 
 #### Flexible time scales and distribution fitting
 Meteorological and hydrological time series are nowadays typically available at a daily frequency. To accommodate this, the `timescale` argument in the drought index function is designed to be flexible, with units that match the frequency of the input time series. For example, when using daily data, a `timescale` value of `30` corresponds approximately to a one-month drought index, `90` for three months, `180` for six months, and so on.
