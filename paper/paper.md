@@ -144,36 +144,52 @@ Drought characteristics can also be derived from time series using a threshold l
 ![Visualization of drought based on a threshold \label{fig:threshold}](figures/threshold.png)
 
 ## Climdex
-Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
+Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package and documented in Table \autoref{tab:climdex}.
 
-| Function Name | Description                                                                                      |
-|---------------|--------------------------------------------------------------------------------------------------|
-| `rxnday`      | Maximum consecutive precipitation amount over an interval                                        |
-| `rx1day`      | Maximum 1-day precipitation amount                                                               |
-| `rx5day`      | Maximum consecutive precipitation amount over a 5-day interval                                   |
-| `sdii`        | Simple precipitation intensity index                                                             |
-| `rnmm`        | Annual count of days when precipitation $\geq$ n mm                                              |
-| `r10mm`       | Annual count of days when precipitation $\geq$ 10 mm                                             |
-| `r20mm`       | Annual count of days when precipitation $\geq$ 20 mm                                             |
-| `cdd`         | Maximum length of dry spell: maximum number of consecutive days with precipitation $<$ 1 mm      |
-| `cwd`         | Maximum length of wet spell: maximum number of consecutive days with precipitation $\geq$ 1 mm   |
-| `prcptot`     | Total precipitation on wet days over a certain period                                            |
-| `rnnp`        | Total amount of precipitation on wet days above a certain quantile                               |
-| `r95p`        | Total amount of precipitation on very wet days                                                   |
-| `r99p`        | Total amount of precipitation on extremely wet days                                              |
-| `r95ptot`     | Contribution to total precipitation from very wet days                                           |
-| `r99ptot`     | Contribution to total precipitation from extremely wet days                                      |
+\begin{table}[h]
+\centering
+\caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
+\begin{tabular}{ll}
+\toprule
+\textbf{Function Name} & \textbf{Description} \\
+\midrule
+\texttt{rxnday}   & Maximum consecutive precipitation amount over an interval \\
+\texttt{rx1day}   & Maximum 1-day precipitation amount \\
+\texttt{rx5day}   & Maximum consecutive precipitation amount over a 5-day interval \\
+\texttt{sdii}     & Simple precipitation intensity index \\
+\texttt{rnmm}     & Annual count of days when precipitation $\geq$ n mm \\
+\texttt{r10mm}    & Annual count of days when precipitation $\geq$ 10 mm \\
+\texttt{r20mm}    & Annual count of days when precipitation $\geq$ 20 mm \\
+\texttt{cdd}      & Maximum length of dry spell: maximum number of consecutive days with precipitation $<$ 1 mm \\
+\texttt{cwd}      & Maximum length of wet spell: maximum number of consecutive days with precipitation $\geq$ 1 mm \\
+\texttt{prcptot}  & Total precipitation on wet days over a certain period \\
+\texttt{rnnp}     & Total amount of precipitation on wet days above a certain quantile \\
+\texttt{r95p}     & Total amount of precipitation on very wet days \\
+\texttt{r99p}     & Total amount of precipitation on extremely wet days \\
+\texttt{r95ptot}  & Contribution to total precipitation from very wet days \\
+\texttt{r99ptot}  & Contribution to total precipitation from extremely wet days \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 ## Precipitation deficit (KNMI)
-The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions, after @witte_knmi_2025, are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
+The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions after @witte_knmi_2025 aree shown in Table \autoref{tab:knmi_drought} that are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
 
-| Function Name     | Description                                                                                                                                                                               |
-|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `deficit_oct1`    | The cumulative deficit on October 1st, considering the period between April 1st and September 30th.                                                                                       |
-| `deficit_max`     | The maximum cumulative deficit within the period from April 1st to September 30th.                                                                                                        |
-| `deficit_apr1`    | The maximum change in cumulative deficit between April 1st and September 30th.                                                                                                            |
-| `deficit_gdd`     | The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. |
-| `deficit_wet`     | The maximum change in cumulative deficit from January 1st to September 30th.                                                                                                              |
+\begin{table}[h]
+\centering
+\caption{Overview of supported KNMI precipitation deficit indices \label{tab:knmi_drought}}
+\begin{tabular}{ll}
+\toprule
+\textbf{Function Name} & \textbf{Description} \\
+\midrule
+\texttt{deficit\_oct1}  & The cumulative deficit on October 1st, considering the period between April 1st and September 30th. \\
+\texttt{deficit\_max}   & The maximum cumulative deficit within the period from April 1st to September 30th. \\
+\texttt{deficit\_apr1}  & The maximum change in cumulative deficit between April 1st and September 30th. \\
+\texttt{deficit\_gdd}   & The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. \\
+\texttt{deficit\_wet}   & The maximum change in cumulative deficit from January 1st to September 30th. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
