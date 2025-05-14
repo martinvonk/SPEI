@@ -87,16 +87,21 @@ Drought intensity is arbitrarily defined for the Z-scores of the standardized dr
 
 \begin{table}
 \caption{Table with drought categories of the Z-scores in standardized indices based \label{tab:si_categories}}
-| Z-score               | Category            | Probability (%) |
-|-----------------------|---------------------|-----------------|
-| ≥ 2.00                | Extremely wet       | 2.3             |
-| 1.50 ≤ Z < 2.00       | Severely wet        | 4.4             |
-| 1.00 ≤ Z < 1.50       | Moderately wet      | 9.2             |
-| 0.00 ≤ Z < 1.00       | Mildly wet          | 34.1            |
-| -1.00 < Z < 0.00      | Mild drought        | 34.1            |
-| -1.50 < Z ≤ -1.00     | Moderate drought    | 9.2             |
-| -2.00 < Z ≤ -1.50     | Severe drought      | 4.4             |
-| ≤ -2.00               | Extreme drought     | 2.3             |
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Z-score}         & \textbf{Category}        & \textbf{Probability (\%)} \\
+\midrule
+$\geq 2.00$              & Extremely wet            & 2.3                       \\
+$1.50 \leq Z < 2.00$     & Severely wet             & 4.4                       \\
+$1.00 \leq Z < 1.50$     & Moderately wet           & 9.2                       \\
+$0.00 \leq Z < 1.00$     & Mildly wet               & 34.1                      \\
+$-1.00 < Z < 0.00$       & Mild drought             & 34.1                      \\
+$-1.50 < Z \leq -1.00$   & Moderate drought         & 9.2                       \\
+$-2.00 < Z \leq -1.50$   & Severe drought           & 4.4                       \\
+$\leq -2.00$             & Extreme drought          & 2.3                       \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 #### Flexible time scales and distribution fitting
