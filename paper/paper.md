@@ -146,7 +146,7 @@ Drought characteristics can also be derived from time series using a threshold l
 ## Climdex
 Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package and documented in Table \autoref{tab:climdex}.
 
-<!-- \begin{table}[h]
+\begin{table}[h]
 \centering
 \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
 \begin{tabular}{ll}
@@ -170,12 +170,12 @@ Climdex is an online platform that offers a range of different indices to descri
 \texttt{r99ptot}  & Contribution to total precipitation from extremely wet days \\
 \bottomrule
 \end{tabular}
-\end{table} -->
+\end{table}
 
 ## Precipitation deficit (KNMI)
-The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions [after @witte_knmi_2025] aree shown in Table \autoref{tab:knmi_drought} that are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
+The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions [after s@witte_knmi_2025] aree shown in Table \autoref{tab:knmi_drought} that are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
 
-\begin{table}[h]
+<!-- \begin{table}[h]
 \centering
 \caption{Overview of supported KNMI precipitation deficit indices \label{tab:knmi_drought}}
 \begin{tabular}{ll}
@@ -189,7 +189,7 @@ The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation
 \texttt{deficit\_wet}   & The maximum change in cumulative deficit from January 1st to September 30th. \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table} -->
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
