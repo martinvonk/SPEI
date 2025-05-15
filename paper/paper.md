@@ -175,15 +175,7 @@ Climdex is an online platform that offers a range of different indices to descri
 ## Precipitation deficit (KNMI)
 The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions, after @witte_knmi_2025, are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
 
-| **Function Name**      | **Description**                                                                                                                                         |
-|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `deficit oct1`         | The cumulative deficit on October 1st within the period from April 1st through September 30th.                                                          |
-| `deficit max`          | The maximum cumulative deficit within the period from April 1st through September 30th.                                                                 |
-| `deficit apr1`         | The maximum change in cumulative deficit within the period from April 1st through September 30th.                                                       |
-| `deficit gdd`          | The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) through September 30th. |
-| `deficit wet`          | The maximum change in cumulative deficit within the period from January 1st through September 30th.                                                     |
-
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Overview of supported KNMI precipitation deficit functions}
 \begin{tabular}{p{2cm}p{10cm}}
