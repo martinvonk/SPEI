@@ -19,7 +19,7 @@ bibliography: paper.bib
 
 ---
 
-\doublespacing
+\openup 1em
 
 # Summary
 SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. This makes calculating and visualizing drought indices straightforward and flexible.
