@@ -19,7 +19,7 @@ bibliography: paper.bib
 
 ---
 
-\linespread{2.0}
+\doublespacing
 
 # Summary
 SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. This makes calculating and visualizing drought indices straightforward and flexible.
@@ -97,8 +97,8 @@ The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies dev
 ## Climdex
 Climdex is an online platform providing indices for heat, cold, precipitation, and drought changes over time [@alexander_climdex_2025], with several of its precipitation indices available in the SPEI Python package.
 
-## Precipitation deficit (KNMI)
-The Royal Dutch Meteorological Institute (KNMI) defines drought during the growing season using the precipitation deficit (potential evaporation minus precipitation). This package includes five functions [after @witte_knmi_2025] to calculate this absolute drought index, primarily for the Netherlands but adaptable to other regions by adjusting the keyword arguments.
+## Precipitation deficit
+The KNMI defines drought during the growing season using the precipitation deficit (potential evaporation minus precipitation). This package includes five functions [after @witte_knmi_2025] to calculate this absolute drought index, primarily for the Netherlands but adaptable to other regions by adjusting the keyword arguments.
 
 # Acknowledgements
 Thanks to all the scientists who used and cited this package so far [@adla_use_2024;@segura_use_2025;@mourik_use_2025;@panigrahi_use_2025] via Zenodo [@vonk_spei_zenodo]. Thanks to Mark Bakker for reading this manuscript and providing feedback.
