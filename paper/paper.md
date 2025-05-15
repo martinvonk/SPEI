@@ -19,8 +19,10 @@ bibliography: paper.bib
 
 ---
 
+\linespread{2.0}
+
 # Summary
-SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. TThis makes calculating and visualizing drought indices straightforward and flexible.
+SPEI is a Python package to calculate drought indices for time series. Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively. This makes calculating and visualizing drought indices straightforward and flexible.
 
 # Statement of need
 Water is a vital natural resource and essential for all life on Earth. However, the availability of freshwater is increasingly threatened by the impacts of droughts caused by climate change and human activities. At its core, drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011]. Importantly, both the definition of drought and the baseline for what constitutes "normal" conditions vary depending on the context and objectives of a given analysis [@dracup_droughtdefinition_1980]. As a result, many different drought indices have been developed to quantify drought characteristics. These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of a drought.
@@ -39,9 +41,9 @@ The SPEI Python package is built on Pandas [@pandas_paper_2010; @pandas_software
 #### Example
 As an example, drought indices are computed using a dataset with daily precipitation and potential evaporation from the Royal Dutch Meteorological Institute (KNMI), shown in \autoref{fig:meteo_surplus}a. The SPI requires only precipitation, while the SPEI uses the precipitation surplus (precipitation minus potential evaporation), which is aggregated monthly and shown in \autoref{fig:meteo_surplus}b.
 
-![\label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
+![Meteorological time series \label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
 
-The package provides functions for each drought index; for example, computing SPEI-1 (`-1` denoting a one month time scale) with a fisk distribution::
+The package provides functions for each drought index; for example, computing SPEI-1 (`-1` denoting a one month time scale) with a fisk distribution:
 
 ```python
 # load packages
@@ -65,15 +67,15 @@ surplus: pd.Series = (prec - evap).resample("MS").sum() # MS: month-start
 spei1: pd.Series = si.spei(
   series=surplus,
   dist=sps.fisk,
-  timescale=1, # unit -> frequency of the data, in this case months
+  timescale=1, # unit: frequency of the data (months in this case)
 )
 ```
 
 The standardization process is illustrated in \autoref{fig:surplus_fit}. The empirical cumulative density function of the surplus in March (red dots, matching \autoref{fig:meteo_surplus}b) with the fitted fisk distribution are shown in \autoref{fig:surplus_fit}a. The fitted probabilities (blue dots) are transformed into a standard normal distribution (purple line), producing Z-scores. The black dashed line traces this for a 31 mm surplus from March 1994, near the 69th percentile, corresponding to a Z-score of about 0.4925.
 
-![(a) Surplus in the month March with the fit of the fisk cumulative probability density function and (b) the transformation of to the standardized normal distribution \label{fig:surplus_fit}. Figure adapted from @edwards_transformation_1997.](figures/surplus_fit_cdf.png)
+![Example equiprobability transformation for the precipitation surplus in March. Figure adapted from @edwards_transformation_1997. \label{fig:surplus_fit}](figures/surplus_fit_cdf.png)
 
-Doing this for all data point and months results in the standardized index, SPEI-1, as shown in \autoref{fig:spei1}. The background filling and categories [based on @mckee_spi_1993] in \autoref{fig:spei1} allow for the interpretation of the drought during the 1990-2020 period. The package has extra options to allow for other time scales, time series frequencies (e.g. daily) and fit window options to ensure valid distribution fit.
+Doing this for all data points and months results in the standardized index, SPEI-1, as shown in \autoref{fig:spei1}. The background filling and categories [based on @mckee_spi_1993] in \autoref{fig:spei1} allow for the interpretation of the drought during the 1990-2020 period. The package has extra options to allow for other time scales, time series frequencies (e.g., daily) and fit window options to ensure valid distribution fit.
 
 ![Resulting SPEI-1 from the monthly precipitation surplus \label{fig:spei1}](figures/spei1.png)
 
@@ -83,14 +85,14 @@ Drought characteristics can also be derived from time series using a threshold l
 ![Visualization of drought based on a variable threshold level \label{fig:threshold}](figures/threshold.png)
 
 ## Heatmap
-When multiple time scales are used, standardized drought indices can be visualized in a single graph to reveal whether a drought persists over time and to identify the build-up to multi-year droughts [@mourik_use_2025]. For hydrological droughts, this persistence relates to the system’s storage capacity and memory (i.e., response time) [e.g. @bloomfield_sgi_2013], as illustrated by the SPEI heatmap in \autoref{fig:spei_heatmap}, which shows six time scales: 1, 3, 6, 9, 12, and 24 months.
+When multiple time scales are used, standardized drought indices can be visualized in a single graph to reveal whether a drought persists over time and to identify the build-up to multi-year droughts [@mourik_use_2025]. For hydrological droughts, this persistence relates to the system’s storage capacity and memory (i.e., response time) [e.g., @bloomfield_sgi_2013], as illustrated by the SPEI heatmap in \autoref{fig:spei_heatmap}, which shows six time scales: 1, 3, 6, 9, 12, and 24 months.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
 # Other drought indices
 
 ## Rainfall anomaly index
-The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies deviations from historical precipitation to identify dry and wet periods [@vanrooy_rai_1965], without fitting a probability density function like the SPI . This package also includes the Modified RAI (mRAI) [@hansel_mrai_2016], which adds a scaling factor for local conditions.
+The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies deviations from historical precipitation to identify dry and wet periods [@vanrooy_rai_1965], without fitting a probability density function. This package also includes the Modified RAI (mRAI) [@hansel_mrai_2016], which adds a scaling factor for local conditions.
 
 ## Climdex
 Climdex is an online platform providing indices for heat, cold, precipitation, and drought changes over time [@alexander_climdex_2025], with several of its precipitation indices available in the SPEI Python package.
