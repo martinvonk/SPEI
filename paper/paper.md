@@ -148,8 +148,8 @@ Climdex is an online platform that offers a range of different indices to descri
 
 \begin{table}[h]
 \centering
-<!-- \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}} -->
-\begin{tabular}{ll}
+\caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
+\begin{tabular}{{p{3cm} p{11cm}}}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
 \midrule
@@ -160,8 +160,8 @@ Climdex is an online platform that offers a range of different indices to descri
 \texttt{rnmm}     & Annual count of days when precipitation $\geq$ n mm \\
 \texttt{r10mm}    & Annual count of days when precipitation $\geq$ 10 mm \\
 \texttt{r20mm}    & Annual count of days when precipitation $\geq$ 20 mm \\
-\texttt{cdd}      & \begin{tabular}[c]{l}Maximum length of dry spell: maximum number of consecutive days\\with precipitation $<$ 1 mm\end{tabular} \\
-\texttt{cwd}      & \begin{tabular}[c]{l}Maximum length of wet spell: maximum number of consecutive days\\ with precipitation $\geq$ 1 mm\end{tabular} \\
+\texttt{cdd}      & Maximum length of dry spell: maximum number of consecutive days with precipitation $<$ 1 mm \\
+\texttt{cwd}      & Maximum length of wet spell: maximum number of consecutive days with precipitation $\geq$ 1 mm\\
 \texttt{prcptot}  & Total precipitation on wet days over a certain period \\
 \texttt{rnnp}     & Total amount of precipitation on wet days above a certain quantile \\
 \texttt{r95p}     & Total amount of precipitation on very wet days \\
@@ -175,13 +175,21 @@ Climdex is an online platform that offers a range of different indices to descri
 ## Precipitation deficit (KNMI)
 The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate during drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions, after @witte_knmi_2025, are implemented to indicate drought based on the precipitation deficit. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions can be applied on other locations if different settings are chosen by the users for the keyword arguments for the startdate, enddate and thresholds.
 
-| Function Name     | Description                                                                                                                                                                               |
-|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `deficit_oct1`    | The cumulative deficit on October 1st, considering the period between April 1st and September 30th.                                                                                       |
-| `deficit_max`     | The maximum cumulative deficit within the period from April 1st to September 30th.                                                                                                        |
-| `deficit_apr1`    | The maximum change in cumulative deficit between April 1st and September 30th.                                                                                                            |
-| `deficit_gdd`     | The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. |
-| `deficit_wet`     | The maximum change in cumulative deficit from January 1st to September 30th.                                                                                                              |
+\begin{table}[h]
+\centering
+\caption{Overview of supported KNMI precipitation deficit functions \label{tab:knmi}}
+\begin{tabular}{p{3cm} p{11cm}}
+\toprule
+\textbf{Function Name} & \textbf{Description} \\
+\midrule
+\texttt{deficit\_oct1} & The cumulative deficit on October 1st, considering the period between April 1st and September 30th. \\
+\texttt{deficit\_max}  & The maximum cumulative deficit within the period from April 1st to September 30th. \\
+\texttt{deficit\_apr1} & The maximum change in cumulative deficit between April 1st and September 30th. \\
+\texttt{deficit\_gdd}  & The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440°C) and ending on September 30th. \\
+\texttt{deficit\_wet}  & The maximum change in cumulative deficit from January 1st to September 30th. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
