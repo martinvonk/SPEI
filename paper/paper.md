@@ -144,12 +144,12 @@ Drought characteristics can also be derived from time series using a threshold l
 ![Visualization of drought based on a threshold \label{fig:threshold}](figures/threshold.png)
 
 ## Climdex
-Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package.
+Climdex is an online platform that offers a range of different indices to describe changes in heat, cold, precipitation, and drought over time [@climdex]. Several precipitation indices of the climdex platform are available in the SPEI python package as described in Table \autoref{tab:climdex}.
 
 \begin{table}[h]
 \centering
 \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
-\begin{tabular}{p{2cm}p{10cm}}
+\begin{tabular}{p{3cm}p{10cm}}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
 \midrule
