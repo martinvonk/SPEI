@@ -186,10 +186,12 @@ The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation
 \texttt{deficit max} & The maximum cumulative deficit within the period from April 1st through September 30th. \\
 \texttt{deficit apr1} & The maximum change in cumulative deficit within the period from April 1st through September 30th. \\
 \texttt{deficit gdd} & The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days, GDD) exceeds a threshold (default 440$^{\circ}$C) through September 30th. \\
-\texttt{deficit wet} & The maximum change in cumulative deficit within the period 8from January 1st through September 30th. \\
+\texttt{deficit wet} & The maximum change in cumulative deficit within the period from January 1st through September 30th. \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+this is getting weird.
 
 # Reproducibility
 On the SPEI GitHub repository [@vonk_spei_github] there is a Jupyter Notebook available to reproduce the figures form this article.
