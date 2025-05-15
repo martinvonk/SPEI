@@ -175,6 +175,14 @@ Climdex is an online platform that offers a range of different indices to descri
 ## Precipitation deficit (KNMI)
 The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation deficit (potential evaporation minus precipitation) to indicate drought in the Netherlands. The functions are mainly useful to indicate drought in the growing season, generally indicated between April 1st and ending on September 30th. Five functions [after @witte_knmi_2025] that calculate the drought based on the precipitation deficit are implemented as can be seen in \autoref{tab:knmi_deficit}. These indices give an absolute measure of drought that are mainly usefull in the Netherlands. The functions might be applied to other regions if different settings are chosen by the user for the keyword arguments of the startdate, enddate and thresholds.
 
+| **Function Name**      | **Description**                                                                                                                                         |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `deficit_oct1`         | The cumulative deficit on October 1st within the period from April 1st through September 30th                                                          |
+| `deficit_max`          | The maximum cumulative deficit within the period from April 1st through September 30th                                                                 |
+| `deficit_apr1`         | The maximum change in cumulative deficit within the period from April 1st through September 30th                                                       |
+| `deficit_gdd`          | The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days, GDD) exceeds a threshold (default 440°C) through September 30th |
+| `deficit_wet`          | The maximum change in cumulative deficit within the period from January 1st through September 30th                                                     |
+
 \begin{table}[h]
 \centering
 \caption{Overview of supported KNMI precipitation deficit functions \label{tab:knmi_deficit}}
@@ -185,7 +193,7 @@ The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation
 \texttt{deficit\_oct1} & The cumulative deficit on October 1st within the period from April 1st through September 30th \\
 \texttt{deficit\_max} & The maximum cumulative deficit within the period from April 1st through September 30th \\
 \texttt{deficit\_apr1} & The maximum change in cumulative deficit within the period from April 1st through September 30th \\
-\texttt{deficit\_gdd} & The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days, GDD) exceeds a threshold (default 440°C) through September 30th \\
+\texttt{deficit\_gdd} & The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days, GDD) exceeds a threshold (default 440 degrees Celsius) through September 30th \\
 \texttt{deficit\_wet} & The maximum change in cumulative deficit within the period from January 1st through September 30th \\
 \bottomrule
 \end{tabular}
