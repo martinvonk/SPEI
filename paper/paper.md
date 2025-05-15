@@ -149,7 +149,7 @@ Climdex is an online platform that offers a range of different indices to descri
 \begin{table}[h]
 \centering
 \caption{Overview of supported Climdex precipitation indices \label{tab:climdex}}
-\begin{tabular}{p{3cm}p{10cm}}
+\begin{tabular}{p{2cm}p{10cm}}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
 \midrule
@@ -178,15 +178,15 @@ The Royal Dutch Meteorological Institute (KNMI) generally uses the precipitation
 \begin{table}[h]
 \centering
 \caption{Overview of supported KNMI precipitation deficit functions}
-\begin{tabular}{p{3cm}p{12cm}}
+\begin{tabular}{p{2cm}p{10cm}}
 \toprule
 \textbf{Function Name} & \textbf{Description} \\
 \midrule
-\texttt{deficit\_oct1} & The cumulative deficit on October 1st, considering the period between April 1st and September 30th. \\
-\texttt{deficit\_max} & The maximum cumulative deficit within the period from April 1st to September 30th. \\
-\texttt{deficit\_apr1} & The maximum change in cumulative deficit between April 1st and September 30th. \\
-\texttt{deficit\_gdd} & The maximum change in cumulative deficit starting on the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440$^\circ$C) and ending on September 30th. \\
-\texttt{deficit\_wet} & The maximum change in cumulative deficit from January 1st to September 30th. \\
+\texttt{deficit\_oct1} & The cumulative deficit on October 1st within the period from April 1st through September 30th. \\
+\texttt{deficit\_max} & The maximum cumulative deficit within the period from April 1st through September 30th. \\
+\texttt{deficit\_apr1} & The maximum change in cumulative deficit within the period from April 1st through September 30th. \\
+\texttt{deficit\_gdd} & The maximum change in cumulative deficit within the day when the yearly temperature sum (growing degree days; GDD) exceeds a threshold (default 440C) through September 30th. \\
+\texttt{deficit\_wet} & The maximum change in cumulative deficit within the period 8from January 1st through September 30th. \\
 \bottomrule
 \end{tabular}
 \end{table}
