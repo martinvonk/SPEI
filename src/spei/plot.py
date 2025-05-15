@@ -133,7 +133,9 @@ def threshold(
 
     line_color = kwargs.pop("color", "k")
     label = kwargs.pop("label", series.name)
-    ax.plot(series.index, series_values, color=line_color, label=label, **kwargs)
+    ax.plot(
+        series.index, series_values, color=line_color, label=label, zorder=2, **kwargs
+    )
     ax.plot(
         threshold.index,
         threshold_values,
@@ -141,6 +143,7 @@ def threshold(
         label=threshold.name,
         linestyle="--",
         linewidth=1.0,
+        zorder=0,
     )
     where = (series_values < threshold_values).ravel().tolist()
     ax.fill_between(
@@ -151,6 +154,7 @@ def threshold(
         interpolate=True,
         color=fill_color,
         label="Drought",
+        zorder=1,
     )
     return ax
 
