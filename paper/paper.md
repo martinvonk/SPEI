@@ -28,19 +28,19 @@ This makes calculating and visualizing drought indices straightforward and flexi
 
 # Statement of need
 Water is a vital natural resource and essential for all life on Earth.
-However, the availability of freshwater is increasingly threatened by the impacts of droughts caused by climate change and human activities.
-At its core, drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011].
-Importantly, both the definition of drought and the baseline for what constitutes "normal" conditions vary depending on the context and objectives of a given analysis [@dracup_droughtdefinition_1980].
+The availability of freshwater is increasingly threatened by the impacts of droughts caused by climate change and human activities.
+Drought refers to a water deficit when compared to normal conditions [@sheffield_droughtdefinition_2011].
+Both the definition of drought and the baseline for what constitutes "normal" conditions vary depending on the context and objective of a given analysis [@dracup_droughtdefinition_1980].
 As a result, many different drought indices have been developed to quantify drought characteristics.
-These indices provide a way to quantitatively describe the severity, location, timing, and duration of a drought and are essential in tracking and predicting the impact of a drought.
+Each index quantitatively describes the severity, location, timing, and duration of a drought and can be used to track and predict the impact of a drought.
 
 # Standardized drought indices
-The most common drought indices are standardized indices, which fit a time series to a probability distribution and transform it into a standardized normal distribution.
-For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; for hydrological droughts, the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010]; and for agricultural drought, the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004].
-All of these standardized indices are explicitly supported, though any other standardized drought index can also be computed using the same methodology.
+The most common drought indices are standardized indices, which fit a time series to a probability distribution and translate it into a Z-score of the standardized normal distribution.
+For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the SPEI package. For hydrological droughts, standardized indices are the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010]. For agricultural droughts, the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used.
+All of these standardized indices are explicitly supported by the SPEI package, though any other standardized drought index can also be computed using the same methodology.
 
 ## Computation
-A time series of at least 30 years is recommended for calculating standardized indices [@mckee_spi_1993].
+Standardized indices are commonly calculated from a time series of at least 30 years [@mckee_spi_1993].
 Rolling sums or averages are computed over typical time scales (e.g., 1, 3, 6, 12, 24, or 48 months)[^1], and each is fitted to a continuous probability distribution to relate probabilities to the data.
 Alternatively, non-parametric methods like normal-scores transforms or kernel density estimates can be used.
 The probability of each value is then transformed using the inverse normal distribution, yielding a standardized index with a mean of zero and standard deviation of one.
