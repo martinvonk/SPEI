@@ -111,17 +111,18 @@ A variable threshold, as shown in \autoref{fig:threshold} for part of the series
 
 ## Heatmap
 When multiple time scales are used, standardized drought indices can be visualized in a single graph to reveal whether a drought persists over time and to identify the build-up to multi-year droughts [@mourik_use_2025].
-For hydrological droughts, this persistence relates to the system’s storage capacity and memory (i.e., response time) [e.g., @bloomfield_sgi_2013], as illustrated by the SPEI heatmap in \autoref{fig:spei_heatmap}, which shows six time scales: 1, 3, 6, 9, 12, and 24 months. For example, this graph shows a persistent drought from 1996-1999 as can be seen from the large red zone.
+For hydrological droughts, this persistence relates to the system’s storage capacity and response time [e.g., @bloomfield_sgi_2013].
+The SPEI heatmap (\autoref{fig:spei_heatmap}) illustrates this across six time scales (1, 3, 6, 9, 12, and 24 months), clearly highlighting the 1995–1998 multi-year drought as a large red zone.
 
 ![Visualization of the SPEI as a heatmap with different time scales \label{fig:spei_heatmap}](figures/spei_heatmap.png)
 
 # Other drought indices in the SPEI package
 
-There are several other drought indices available in the scientific literature, some of which are also implemented in the SPEI package. The following sections provide a brief overview of the other supported drought indices in the SPEI package.
+Several other drought indices from the literature are also supported by the SPEI package, briefly outlined below.
 
 ## Rainfall anomaly index
-The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies deviations from historical precipitation to identify dry and wet periods [@vanrooy_rai_1965], without fitting a probability density function.
-This package also includes the Modified RAI (mRAI) [@hansel_mrai_2016], which adds a scaling factor for local conditions.
+The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies deviations from historical precipitation without fitting a distribution [@vanrooy_rai_1965].
+The package also includes the Modified RAI (mRAI), which adds a scaling factor for local conditions. [@hansel_mrai_2016].
 
 ## Climdex
 Climdex is an online platform providing indices for heat, cold, precipitation, and drought changes over time [@alexander_climdex_2025], with several of its precipitation indices available in the SPEI package.
