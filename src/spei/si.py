@@ -471,7 +471,7 @@ class SI:
                     prob_zero=self.prob_zero,
                     data_window=None,
                 )
-                self._dist_dict[date] = fd
+                self._dist_dict[date] = fd  # type: ignore
 
     def cdf(self) -> Series:
         """Compute the cumulative density function"""
