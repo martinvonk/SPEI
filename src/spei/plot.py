@@ -1,3 +1,4 @@
+import logging
 from calendar import month_abbr
 from itertools import cycle
 
@@ -6,7 +7,15 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
-from pandas import DataFrame, DatetimeIndex, Series, Timedelta, Timestamp
+from pandas import (
+    DataFrame,
+    DatetimeIndex,
+    Series,
+    Timedelta,
+    Timestamp,
+    concat,
+    infer_freq,
+)
 from scipy.stats import gaussian_kde
 
 from .utils import get_data_series, group_yearly_df, validate_index
@@ -305,16 +314,34 @@ def heatmap(
         colormap = cmap
 
     norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-    for i, s in enumerate(sis):
-        _ = ax.pcolormesh(
-            [s.index, s.index],
-            [i, i + 1],
-            [s.values[:-1]],
-            norm=norm,
-            cmap=colormap,
-            shading="flat",
-        )
 
+    sisdf = concat(sis, axis=1)
+    freq = infer_freq(DatetimeIndex(sisdf.index))
+    # Efficiently extend the index for pcolormesh based on frequency
+    if freq in ("MS", "YS"):
+        dt = sisdf.index[1] - sisdf.index[0]
+        index = sisdf.index.insert(0, sisdf.index[0] - dt)
+    elif freq in ("ME", "YE", "D"):
+        if freq == "D":
+            logging.info(
+                "With freq='D', it is assumed that the value is recored"
+                "at the end of the index value."
+            )
+        dt = sisdf.index[-1] - sisdf.index[-2]
+        index = sisdf.index.append(DatetimeIndex([sisdf.index[-1] + dt]))
+    else:
+        raise ValueError(
+            f"Unsupported frequency '{freq}' for the index of the Series. "
+            "Expected 'MS', 'ME', 'YS', 'YE', or 'D'."
+        )
+    _ = ax.pcolormesh(
+        index,
+        arange(0.0, len(sis) + 1.0, 1.0),
+        sisdf.values.T,
+        cmap=colormap,
+        norm=norm,
+        shading="flat",
+    )
     ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
     ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
     yticklabels = (
@@ -341,6 +368,8 @@ def heatmap(
             cax.yaxis.set_ticks_position("left")
             cax.yaxis.set_label_position("left")
             _add_category_labels(cax)
+            for tick in cax.yaxis.get_minor_ticks():  # don't show minor ytick marker
+                tick.tick1line.set_visible(False)
 
     return ax
 
