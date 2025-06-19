@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
-from pandas import DataFrame, DatetimeIndex, Series, Timestamp
+from pandas import DataFrame, DatetimeIndex, Series, Timedelta, Timestamp
 from scipy.stats import gaussian_kde
 
 from .utils import get_data_series, group_yearly_df, validate_index
@@ -345,7 +345,9 @@ def heatmap(
     return ax
 
 
-def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
+def deficit_knmi(
+    df: DataFrame, ax: plt.Axes | None = None, window: int = 0
+) -> plt.Axes:
     """
     Plots the precipitation deficit for various scenarios using the given DataFrame.
 
@@ -361,6 +363,11 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
         - Rows represent time (e.g., days or months within a year).
         - Columns represent years (e.g., 1976, 2018, etc.).
         - Values represent cumulative precipitation deficit (in millimeters).
+    ax : matplotlib.axes._axes.Axes, optional
+        An Axes object to plot on. If None, a new figure and axes are created.
+    window : int, optional
+        If True, applies a rolling mean over a n-day window to the median and
+        95th percentile. This is also done by the KNMI but not documented.
 
     Returns:
     --------
@@ -377,8 +384,18 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.5), layout="tight")
-    ax.plot(df.quantile(0.95, axis=1), label="5% driest years", color="lime")
-    ax.plot(df.median(axis=1), label="median", color="blue")
+    quant = (
+        df.quantile(0.95, axis=1).rolling(Timedelta(days=window)).mean()
+        if window
+        else df.quantile(0.95, axis=1)
+    )
+    ax.plot(quant, label="5% driest years", color="lime")
+    median = (
+        df.median(axis=1).rolling(Timedelta(days=window)).mean()
+        if window
+        else df.median(axis=1)
+    )
+    ax.plot(median, label="median", color="blue")
     ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
     ax.plot(df.loc[:, 2018], label="year 2018", color="grey")
     ax.plot(
