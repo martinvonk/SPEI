@@ -21,7 +21,7 @@ bibliography: paper.bib
 
 # Summary
 SPEI is a Python package for calculating drought indices from time series.
-Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization, respectively.
+Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization respectively.
 This makes the calculation and visualization of drought indices straightforward and flexible.
 
 # Statement of need
@@ -32,7 +32,7 @@ As a result, many drought indices have been developed to quantify drought charac
 Each index quantifies a drought's severity, location, timing, and duration, helping to track and predict its impact.
 
 # Standardized drought indices
-The most common drought indices are standardized indices, which fit a time series to a probability distribution and converted it into a Z-score of the standardized normal distribution.
+The most common drought indices are standardized indices, which fit a time series to a probability distribution and convert it into a Z-score of the standardized normal distribution.
 For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the SPEI package.
 Hydrological droughts are often measured using the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010].
 For agricultural droughts, the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used.
