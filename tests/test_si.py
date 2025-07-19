@@ -1,5 +1,5 @@
 from pandas import DataFrame, Series, Timestamp
-from scipy.stats import norm, pearson3
+from scipy.stats import norm
 
 from spei import SI, sgi, spei, spi, ssfi, ssmi
 from spei.dist import Dist
@@ -24,7 +24,7 @@ def test_ssfi_timescale(prec: Series) -> None:
 
 
 def test_ssmi(prec: Series) -> None:
-    ssmi(prec, dist=pearson3, fit_freq="MS")
+    ssmi(prec, dist=norm, fit_freq="MS")
 
 
 def test_window(prec: Series, evap: Series) -> None:
