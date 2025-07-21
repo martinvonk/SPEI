@@ -14,9 +14,8 @@ from pandas import (
     infer_freq,
     to_datetime,
 )
-from pandas import __version__ as pd_version
 
-pd_version = parse_version(pd_version)
+pd_version = parse_version(__import__("pandas").__version__)
 
 
 def validate_series(series: Series) -> Series:
