@@ -59,7 +59,7 @@ fix = true
 requires = ["tox>=4"]
 env_list = ["py310", "py311", "py312", "py313", "type", "ruff"]
 
-[tool.tox.env.pytesting]
+[tool.tox.env_run_base]
 description = "run unit tests"
 extras = ["pytesting"]
 commands = ["pytest tests"]
