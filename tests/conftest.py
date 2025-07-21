@@ -47,5 +47,5 @@ def si(prec: Series) -> Series:
 
 @pytest.fixture
 def deficit(prec: Series, evap: Series) -> Series:
-    deficit = (evap - prec).rename("deficit").dropna()
+    deficit = (evap - prec).dropna().rename("deficit")
     return deficit
