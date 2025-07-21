@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from pandas import Series, read_csv
+from pandas import Series, Timestamp, read_csv
 
 from spei.si import spi
 
@@ -47,5 +47,9 @@ def si(prec: Series) -> Series:
 
 @pytest.fixture
 def deficit(prec: Series, evap: Series) -> Series:
-    deficit = (evap - prec).fillna(0.0).rename("deficit")
+    deficit = deficit = (
+        (evap - prec)
+        .loc[Timestamp("1965-01-01") : Timestamp("2020-12-31")]
+        .rename("deficit")
+    )
     return deficit
