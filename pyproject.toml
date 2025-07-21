@@ -62,22 +62,22 @@ env_list = ["py310", "py311", "py312", "py313", "type", "ruff"]
 [tool.tox.env_run_base]
 description = "run unit tests"
 extras = ["pytesting"]
-commands = ["pytest tests"]
+commands = [["pytest tests"]]
 
 [tool.tox.env.type]
 description = "run type checks"
 base-python = "py310"
 extras = ["typing"]
-commands = ["mypy src"]
+commands = [["mypy src"]]
 
 [tool.tox.env.ruff]
 description = "run ruff checks"
 base-python = "py310"
 extras = ["ruffing"]
-commands = ["ruff check --extend-select I --preview", "ruff format --check"]
+commands = [["ruff check --extend-select I --preview"], ["ruff format --check"]]
 
 [tool.tox.env.coverage]
 description = "get coverage report xml"
 base_python = "py310"
 extras = ["coveraging", "pytesting"]
-commands = ["coverage run -m pytest tests", "coverage xml"]
+commands = [["coverage run -m pytest tests"], ["coverage xml"]]
