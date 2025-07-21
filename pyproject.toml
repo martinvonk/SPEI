@@ -29,11 +29,12 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
+notebook = ["ipykernel", "pastas"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
-dev = ["spei[ruffing,typing,pytesting,coveraging]"]
+dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -55,44 +56,28 @@ show-fixes = true
 fix = true
 
 [tool.tox]
-legacy_tox_ini = """
-    [tox]
-    requires = tox>=4
-    env_list = ruff, type, py310, py311, py312, py313
+requires = ["tox>=4"]
+env_list = ["py310", "py311", "py312", "py313", "type", "ruff"]
 
-    [testenv]
-    description = run unit tests
-    extras = pytesting
-    commands =
-            pytest tests
+[tool.tox.env.pytesting]
+description = "run unit tests"
+extras = ["pytesting"]
+commands = ["pytest tests"]
 
-    [testenv:type]
-    description = run type checks
-    basepython = python3.10
-    extras = typing
-    commands =
-            mypy src
+[tool.tox.env.type]
+description = "run type checks"
+base-python = "py310"
+extras = ["typing"]
+commands = ["mypy src"]
 
-    [testenv:ruff]
-    description = run ruff checks
-    basepython = python3.10
-    extras = ruffing
-    commands =
-            ruff check --extend-select I --preview
-            ruff format --check
+[tool.tox.env.ruff]
+description = "run ruff checks"
+base-python = "py310"
+extras = ["ruffing"]
+commands = ["ruff check --extend-select I --preview", "ruff format --check"]
 
-    [testenv:ruff_fix]
-    description = run ruff locally and fix issues
-    extras = ruffing
-    commands =
-            ruff check --extend-select I --fix
-            ruff format
-
-    [testenv:coverage]
-    description = get coverage report xml
-    basepython = 3.10
-    extras = coveraging,pytesting
-    commands =
-            coverage run -m pytest tests
-            coverage xml
-"""
+[tool.tox.env.coverage]
+description = "get coverage report xml"
+base_python = "py310"
+extras = ["coveraging", "pytesting"]
+commands = ["coverage run -m pytest tests", "coverage xml"]
