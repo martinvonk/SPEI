@@ -65,10 +65,11 @@ def si(
 
     if "ybound" in kwargs:
         DeprecationWarning(
-            "The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead"
+            "The 'ybound' argument is deprecated and will be ignored. To set y-axis "
+            "limits, use the 'set_ylim()' method on the returned Axes instance."
         )
 
-    ymin, ymax = -3.0, 3.0
+    ymin, ymax = -3.0, 3.0  # default y-axis limits, also used for colormap norm
 
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
