@@ -32,9 +32,6 @@ class Dist:
         calculated by the occurence.
     data_window : Optional[Series], default=None
         Subset of data for fitting more data (if provided).
-
-    Attributes
-    ----------
     loc : float
         Location of the distribution
     scale : float

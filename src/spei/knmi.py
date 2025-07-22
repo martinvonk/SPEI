@@ -168,12 +168,12 @@ def deficit_max(deficit: pd.Series) -> pd.Series:
     function, ensuring that values below zero are not allowed.
 
     Parameters:
-    ----------
+    -----------
     deficit : pd.Series
         A pandas Series representing the deficit values over time.
 
     Returns:
-    -------
+    --------
     pd.Series
         A pandas Series containing the maximum cumulative deficit
         within the specified period, labeled as "Dmax".
