@@ -35,8 +35,8 @@ def rai(series: pd.Series) -> pd.Series:
 
 
 def mrai(series: pd.Series, sf: float = 1.7) -> pd.Series:
-    """Calculate the Modified Rainfall Anomaly Index (MRAI) for a
-    given time series of precipitation data. [hansel_2015]_
+    """Calculate the Modified Rainfall Anomaly Index (MRAI)
+    for a given time series of precipitation data.
 
     Parameters
     ----------
