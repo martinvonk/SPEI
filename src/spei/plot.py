@@ -271,7 +271,7 @@ def heatmap(
     ax: plt.Axes | None = None,
 ) -> plt.Axes:
     """
-    Plots multiple standardized indices on a heatmap from [mourik_2024]_
+    Plots multiple standardized indices on a heatmap.
 
     Parameters
     ----------
@@ -296,9 +296,8 @@ def heatmap(
 
     References
     ----------
-    .. [mourik_2024] van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger,
-    W., Wanders, N.: Regional drivers and characteristics of multi-year
-    droughts. 2024
+    van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., Wanders, N.: Regional
+    drivers and characteristics of multi-year droughts. 2024
     """
 
     if ax is None:
@@ -452,13 +451,12 @@ def deficit_knmi(
 
 
 class Crameri:
-    """Colormaps for matplotlib, useful for drought, based on [crameri_2020].
+    """Colormaps for matplotlib, useful for drought, based on Crameri et al. (2020).
 
     References
     ----------
-    .. [crameri_2020] Crameri, F., G.E. Shephard, and P.J. Heron (2020):
-    The misuse of colour in science communication, Nature Communications,
-    11, 5444. doi.org/10.1038/s41467-020-19160-7
+    Crameri, F., G.E. Shephard, and P.J. Heron: The misuse of colour in science
+    communication, Nature Communications, 11, 5444. 2020.
     """
 
     _available_cmaps = ("roma", "roma_r", "vik", "vik_r", "lajolla", "lajolla_r")
