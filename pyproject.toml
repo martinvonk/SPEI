@@ -30,7 +30,7 @@ repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
 notebook = ["ipykernel", "pastas"]
-documentation = ['sphinx>=7', 'myst-parser', 'nbsphinx']
+documentation = ['sphinx>=8.2', 'myst-parser', 'nbsphinx']
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
@@ -92,20 +92,15 @@ commands = [
 description = "build documentation"
 extras = ["documentation"]
 commands = [
-        [
-                "sphinx-apidoc",
-                "-f",
-                "-o",
-                "docs/_api",
-                "src/spei",
-        ],
-        [
-                "sphinx-build",
-                "-M",
-                "html",
-                "docs",
-                "docs/_build",
-        ],
+        # [
+        #         "sphinx-apidoc",
+        #         "-f",
+        #         "-e",
+        #         "-o",
+        #         "docs/_api",
+        #         "src/spei",
+        # ],
+        ["sphinx-build", "-M", "html", "docs", "docs/_build"],
 ]
 
 [tool.tox.env.coverage]
