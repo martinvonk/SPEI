@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>spei.utils module &#8212; SPEI 0.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="spei.si module" href="spei.si.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-spei.utils">
+<span id="spei-utils-module"></span><h1>spei.utils module<a class="headerlink" href="#module-spei.utils" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.daily_window_group_yearly_df">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">daily_window_group_yearly_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spei.utils.daily_window_group_yearly_df" title="Link to this definition">¶</a></dt>
+<dd><p>Fill a period of daily values in grouped by yearly DataFrame to get
+cyclic rolling window.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.get_data_series">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">get_data_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.utils.get_data_series" title="Link to this definition">¶</a></dt>
+<dd><p>Transform grouped dataframe by yearly values back to time series.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.group_yearly_df">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">group_yearly_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spei.utils.group_yearly_df" title="Link to this definition">¶</a></dt>
+<dd><p>Group Series per year in a DataFrame.</p>
+<p>This function groups a time series by year, creating a DataFrame where each
+column corresponds to a year (as int). The index of the DataFrame is set to
+the corresponding dates (in the year 2000).</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>series<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series with a DateTime index.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<p>pd.DataFrame</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.infer_frequency">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">infer_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Index</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatetimeIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#spei.utils.infer_frequency" title="Link to this definition">¶</a></dt>
+<dd><p>Infer frequency</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.validate_index">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">validate_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatetimeIndex</span></span></span><a class="headerlink" href="#spei.utils.validate_index" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.utils.validate_series">
+<span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">validate_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.utils.validate_series" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">SPEI</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Exampless</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">spei</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="spei.html">spei package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">spei</a><ul>
+  <li><a href="spei.html">spei package</a><ul>
+      <li>Previous: <a href="spei.si.html" title="previous chapter">spei.si module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Martin Vonk.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/_api/spei.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

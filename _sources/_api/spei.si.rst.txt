@@ -1,0 +1,7 @@
+spei.si module
+==============
+
+.. automodule:: spei.si
+   :members:
+   :show-inheritance:
+   :undoc-members:

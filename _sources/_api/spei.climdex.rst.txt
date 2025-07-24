@@ -1,0 +1,7 @@
+spei.climdex module
+===================
+
+.. automodule:: spei.climdex
+   :members:
+   :show-inheritance:
+   :undoc-members:

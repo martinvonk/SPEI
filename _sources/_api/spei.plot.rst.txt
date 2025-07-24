@@ -1,0 +1,7 @@
+spei.plot module
+================
+
+.. automodule:: spei.plot
+   :members:
+   :show-inheritance:
+   :undoc-members:

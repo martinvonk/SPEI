@@ -1,0 +1,7 @@
+spei
+====
+
+.. toctree::
+   :maxdepth: 2
+
+   spei

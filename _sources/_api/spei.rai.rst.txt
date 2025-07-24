@@ -1,0 +1,7 @@
+spei.rai module
+===============
+
+.. automodule:: spei.rai
+   :members:
+   :show-inheritance:
+   :undoc-members:

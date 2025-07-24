@@ -1,0 +1,7 @@
+spei.utils module
+=================
+
+.. automodule:: spei.utils
+   :members:
+   :show-inheritance:
+   :undoc-members:

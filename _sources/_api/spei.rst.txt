@@ -1,0 +1,24 @@
+spei package
+============
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   spei.climdex
+   spei.dist
+   spei.knmi
+   spei.plot
+   spei.rai
+   spei.si
+   spei.utils
+
+Module contents
+---------------
+
+.. automodule:: spei
+   :members:
+   :show-inheritance:
+   :undoc-members:

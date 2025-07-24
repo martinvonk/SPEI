@@ -1,0 +1,238 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Standardized Indices\n",
+    "\n",
+    "*Martin Vonk - 2022*\n",
+    "\n",
+    "This notebooks shows an example calculation of the three drought indices:\n",
+    "- SPI: Standardized Precipitation Index\n",
+    "- SPEI: Standardized Precipitation Evaporation Index\n",
+    "- SGI: Standardized Groundwater Index\n",
+    "\n",
+    "## Required packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import pandas as pd\n",
+    "import scipy.stats as scs\n",
+    "\n",
+    "import spei as si  # si for standardized index\n",
+    "\n",
+    "print(si.show_versions())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Load time series\n",
+    "\n",
+    "We use time series of the precipitation and potential (Makkink) evaporation from the Netherlands and obtain them from the python package [Pastas](https://github.com/pastas/pastas)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.read_csv(\"data/DEBILT.csv\", index_col=0, parse_dates=True)\n",
+    "prec = df[\"Prec [m/d] 260_DEBILT\"].multiply(1e3).rename(\"prec\")\n",
+    "evap = df[\"Evap [m/d] 260_DEBILT\"].multiply(1e3).rename(\"evap\")\n",
+    "head = df[\"Head [m] B32C0572_DEBILT\"].rename(\"B32C0572\").dropna()\n",
+    "\n",
+    "fig, ax = plt.subplots(3, 1, figsize=(12, 8), sharex=True)\n",
+    "prec.plot(ax=ax[0], legend=True, grid=True)\n",
+    "evap.plot(ax=ax[1], color=\"C1\", legend=True, grid=True)\n",
+    "head.plot(ax=ax[2], color=\"k\", legend=True, grid=True);"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Calculate SPI\n",
+    "\n",
+    "The standardized precipitation index (SPI) is calculated using the gamma distribution from the [scipy stats library](https://docs.scipy.org/doc/scipy/reference/stats.html). In fact any continuous distribution of this library can be chosen. However there are sensible choices for the SPI such as gamma, lognorm (lognormal), fisk (log-logistic) or pearson3 distribution. The precipitation time series is summed over a 90D rolling interval, which corresponds to SPI3. \n",
+    "\n",
+    "For the literature we refer to: LLoyd-Hughes, B. and Saunders, M.A.: [A drought climatology for Europe](https://doi.org/10.1002/joc.846), 2002."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f = 90  # days\n",
+    "series = prec.rolling(f, min_periods=f).sum().dropna()\n",
+    "series"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "spi3_gamma = si.spi(series, dist=scs.gamma, fit_freq=\"ME\")\n",
+    "spi3_gamma"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Lets try that with the pearson3 distribution:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "spi3_pearson = si.spi(series, dist=scs.pearson3, fit_freq=\"ME\")\n",
+    "spi3_pearson"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tmin, tmax = pd.to_datetime([\"1994\", \"1998\"])\n",
+    "plt.figure(figsize=(8, 4))\n",
+    "spi3_gamma.plot(label=\"gamma\")\n",
+    "spi3_pearson.plot(label=\"pearson3\", linestyle=\"--\")\n",
+    "plt.xlim(tmin, tmax)\n",
+    "plt.legend()\n",
+    "plt.ylabel(\"Z-score\")\n",
+    "plt.grid()\n",
+    "plt.title(\"SPI for two distributions\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As can be seen from the figure the distributions do not give significantly different output. This might not be the case for other time series of the precipitation. Example notebook 2 (example2_distribution.ipynb) provides more insight in how to choose the right distribution."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Calculate SPEI\n",
+    "\n",
+    "The standardized precipitation evaporation index (SPEI) is calculated by first substracting the evaporation from the precipitation time series. By default the fisk distribution is used to calculate the SPEI, however for other regularly used distributions are lognorm, pearson3 and genextreme. The code internally can also calculate the timescale (30D; SPEI1 in this case)\n",
+    "\n",
+    "For the literature we refer to: Vicente-Serrano S.M., Beguería S., López-Moreno J.I.: [A Multi-scalar drought index sensitive to global warming: The Standardized Precipitation Evapotranspiration Index](https://doi.org/10.1175/2009JCLI2909.1), 2010."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pe = (prec - evap).dropna()  # calculate precipitation excess\n",
+    "spei1 = si.spei(pe, timescale=30, fit_freq=\"ME\")\n",
+    "spei1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Calculate SGI\n",
+    "\n",
+    "The standardized groundwater index (SGI) is calculated using the method as described by [Bloomfield, J. P. and Marchant, B. P.: Analysis of groundwater drought building on the standardised precipitation index approach](https://doi.org/10.5194/hess-17-4769-2013), 2013. The way the SGI is calculated is the same as in the groundwater time series analysis package Pastas. A nice example notebook on computing the SGI with Pastas time series models can be found [here](https://pastas.readthedocs.io/en/latest/examples/011_sgi_example.ipynb.html).\n",
+    "\n",
+    "For the head time series no distribution has to be selected by default. Since the time series has a 14 day frequency it is not resampled."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sgi = si.sgi(head, fit_freq=\"ME\")\n",
+    "sgi.plot(ylabel=\"Z-score\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize indices\n",
+    "\n",
+    "The indices can be interpreted as such:\n",
+    "\n",
+    "| **Z-score**           | **Category**         | **Probability (%)** |\n",
+    "|-----------------------|----------------------|---------------------|\n",
+    "| ≥ 2.00                | Extremely wet        | 2.3                 |\n",
+    "| 1.50 ≤ Z < 2.00       | Severely wet         | 4.4                 |\n",
+    "| 1.00 ≤ Z < 1.50       | Moderately wet       | 9.2                 |\n",
+    "| 0.00 ≤ Z < 1.00       | Mildly wet           | 34.1                |\n",
+    "| -1.00 < Z < 0.00      | Mild drought         | 34.1                |\n",
+    "| -1.50 < Z ≤ -1.00     | Moderate drought     | 9.2                 |\n",
+    "| -2.00 < Z ≤ -1.50     | Severe drought       | 4.4                 |\n",
+    "| ≤ -2.00               | Extreme drought      | 2.3                 |\n",
+    "\n",
+    "The time series for the standardized indices are plotted using a build in method:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f, ax = plt.subplots(3, 1, figsize=(12, 8), sharex=True)\n",
+    "\n",
+    "# choose a colormap to your liking:\n",
+    "si.plot.si(spi3_pearson, ax=ax[0], cmap=\"vik_r\")\n",
+    "si.plot.si(spei1, ax=ax[1], cmap=\"roma\")\n",
+    "si.plot.si(sgi, ax=ax[2], cmap=\"seismic_r\")\n",
+    "ax[0].set_xlim(pd.to_datetime([\"1994\", \"1998\"]))\n",
+    "[x.grid() for x in ax]\n",
+    "[ax[i].set_ylabel(n, fontsize=14) for i, n in enumerate([\"SPI3\", \"SPEI1\", \"SGI\"])];"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "SPEI",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.3"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

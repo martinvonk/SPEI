@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>spei.knmi module &#8212; SPEI 0.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="spei.plot module" href="spei.plot.html" />
+    <link rel="prev" title="spei.dist module" href="spei.dist.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-spei.knmi">
+<span id="spei-knmi-module"></span><h1>spei.knmi module<a class="headerlink" href="#module-spei.knmi" title="Link to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.cumsum">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">cumsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_below_zero</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.cumsum" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the cumulative sum of a deficit series.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the deficit values.</p>
+</dd>
+<dt>allow_below_zero<span class="classifier">bool, optional</span></dt><dd><p>If True, the cumulative sum is calculated as-is, allowing negative values.
+If False, the cumulative sum is constrained to be non-negative, resetting
+to zero whenever the sum would drop below zero. Default is True.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.Series</dt><dd><p>A pandas Series containing the cumulative sum of the deficit values,
+optionally constrained to be non-negative.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.deficit_apr1">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">deficit_apr1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.deficit_apr1" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum change in cumulative deficit within a specified date range.</p>
+<p>This function computes the cumulative deficit for the given deficit series
+between April 1st and September 30th of the year 2000. It then calculates
+the maximum change in the cumulative deficit over this period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>deficit</strong> (<em>pd.Series</em>) – A pandas Series representing the deficit values. The index is expected
+to be datetime-like.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas Series containing the maximum change in cumulative deficit
+over the specified period, labeled as “DIapr1”.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.deficit_gdd">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">deficit_gdd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">440.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.deficit_gdd" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum change in cumulative deficit starting from the
+first day when the temperature sum (growing degree days; GDD)
+exceeds a specified threshold.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the daily deficit values.</p>
+</dd>
+<dt>temp<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the daily temperature values.</p>
+</dd>
+<dt>threshold<span class="classifier">float, optional</span></dt><dd><p>The temperature sum GDD threshold to determine the starting date for the calculation.
+Defaults to 440.0.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.Series</dt><dd><p>A pandas Series containing the maximum change in cumulative deficit,
+labeled as “DIgdd”.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.deficit_max">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">deficit_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.deficit_max" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum cumulative deficit within a specified period.</p>
+<p>This function computes the maximum cumulative deficit for a given
+deficit time series, starting from April 1st to September 30th.
+The cumulative deficit is calculated using the <cite>get_cumulative_deficit</cite>
+function, ensuring that values below zero are not allowed.</p>
+<section id="id3">
+<h2>Parameters:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the deficit values over time.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.Series</dt><dd><p>A pandas Series containing the maximum cumulative deficit
+within the specified period, labeled as “Dmax”.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.deficit_oct1">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">deficit_oct1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.deficit_oct1" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the cumulative deficit on October 1st.</p>
+<p>This function computes the cumulative deficit for a given time series
+of deficits, considering only the period between April 1st and
+September 30th. The cumulative deficit is reset to zero if it goes
+below zero during this period.</p>
+<section id="id5">
+<h2>Parameters:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the deficit time series. The index
+should be datetime-like, and the values should represent the
+deficit amounts.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h2>Returns:<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.Series</dt><dd><p>A pandas Series containing the cumulative deficit values on
+October 1st. The index of the returned Series corresponds to
+the columns of the cumulative deficit DataFrame, and the name
+of the Series is “Doct1”.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.deficit_wet">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">deficit_wet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.deficit_wet" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the maximum change in cumulative deficit for a specified period.</p>
+<p>This function computes the maximum change in  cumulative deficit from
+January 1st to September 30th of a given year. The cumulative deficit
+is calculated using the <cite>get_cumulative_deficit</cite> function, allowing
+values below zero.</p>
+<section id="id7">
+<h2>Parameters:<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the deficit values over time.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Returns:<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.Series</dt><dd><p>A pandas Series containing the maximum change in cumulative deficit
+for the specified period, labeled as “DIwet”.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.get_cumulative_deficit">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">get_cumulative_deficit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deficit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startdate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Timestamp</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enddate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Timestamp</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_below_zero</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spei.knmi.get_cumulative_deficit" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the cumulative deficit for a given time period.</p>
+<p>This function computes the cumulative deficit for each column in a
+grouped yearly DataFrame, starting from <cite>startdate</cite> to <cite>enddate</cite>.
+The cumulative sum can optionally allow values below zero.</p>
+<section id="id9">
+<h2>Parameters:<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>deficit<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series representing the deficit time series.</p>
+</dd>
+<dt>startdate<span class="classifier">pd.Timestamp | pd.Series</span></dt><dd><p>The start date(s) for the cumulative deficit calculation. If a
+single timestamp is provided, it is applied to all columns. If
+a Series is provided, it should align with the columns of the
+grouped DataFrame.</p>
+</dd>
+<dt>enddate<span class="classifier">pd.Timestamp | pd.Series</span></dt><dd><p>The end date(s) for the cumulative deficit calculation. Similar
+to <cite>startdate</cite>, it can be a single timestamp or a Series aligned
+with the columns.</p>
+</dd>
+<dt>allow_below_zero<span class="classifier">bool, optional</span></dt><dd><p>If True, allows the cumulative sum to include values below zero.
+Defaults to True.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h2>Returns:<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame containing the cumulative deficit for each column
+over the specified time period. The index represents the date
+range, and the columns correspond to the year.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="spei.knmi.get_yearly_temp_date">
+<span class="sig-prename descclassname"><span class="pre">spei.knmi.</span></span><span class="sig-name descname"><span class="pre">get_yearly_temp_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.knmi.get_yearly_temp_date" title="Link to this definition">¶</a></dt>
+<dd><p>Get the first date in each year where the cumulative temperature exceeds a given threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>pd.Series</em>) – A pandas Series representing the temperature time series, indexed by date.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The temperature threshold to identify the first date above it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas Series containing the first date in each year where the cumulative
+temperature exceeds the threshold. The index corresponds to the years.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">SPEI</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Exampless</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">spei</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="spei.html">spei package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">spei</a><ul>
+  <li><a href="spei.html">spei package</a><ul>
+      <li>Previous: <a href="spei.dist.html" title="previous chapter">spei.dist module</a></li>
+      <li>Next: <a href="spei.plot.html" title="next chapter">spei.plot module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Martin Vonk.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/_api/spei.knmi.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

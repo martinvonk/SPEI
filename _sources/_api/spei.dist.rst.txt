@@ -1,0 +1,7 @@
+spei.dist module
+================
+
+.. automodule:: spei.dist
+   :members:
+   :show-inheritance:
+   :undoc-members:

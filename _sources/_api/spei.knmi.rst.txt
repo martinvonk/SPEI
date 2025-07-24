@@ -1,0 +1,7 @@
+spei.knmi module
+================
+
+.. automodule:: spei.knmi
+   :members:
+   :show-inheritance:
+   :undoc-members:
