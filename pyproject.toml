@@ -12,13 +12,13 @@ license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: 3.11',
-        'Programming Language :: Python :: 3.12',
-        'Programming Language :: Python :: 3.13',
-        'Topic :: Scientific/Engineering :: Hydrology',
-        'Intended Audience :: Science/Research',
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Topic :: Scientific/Engineering :: Hydrology",
+        "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Typing :: Typed",
@@ -30,7 +30,7 @@ repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
 notebook = ["ipykernel", "pastas", "rpy2"]
-documentation = ['sphinx>=8.2', 'myst-parser', 'nbsphinx']
+documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx", "pandoc"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
@@ -44,7 +44,7 @@ version = { attr = "spei._version.__version__" }
 mypy_path = "src"
 
 [[tool.mypy.overrides]]
-module = ['matplotlib.*', 'scipy.stats.*']
+module = ["matplotlib.*", "scipy.stats.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
