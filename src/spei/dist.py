@@ -154,7 +154,7 @@ class Dist:
 
         References
         -------
-        Onnen, H.: Intro to ProbabilityDistributions and Distribution
+        Onnen, H.: Intro to Probability Distributions and Distribution
         Fitting with Pythons  SciPy, 2021.
         """
         args = (
