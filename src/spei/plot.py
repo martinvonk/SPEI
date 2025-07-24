@@ -64,7 +64,7 @@ def si(
         colormap = cmap
 
     if "ybound" in kwargs:
-        DeprecationWarning(
+        raise DeprecationWarning(
             "The 'ybound' argument is deprecated and will be ignored. To set y-axis "
             "limits, use the 'set_ylim()' method on the returned Axes instance."
         )
