@@ -1,4 +1,4 @@
-# Exampless
+# Examples
 
 Below you can find examples of how SPEI can be used. These Jupyter Notbooks can also be run via [examples directory on GitHub](https://github.com/martinvonk/SPEI/tree/master/docs/examples).
 
