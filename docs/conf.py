@@ -23,7 +23,7 @@ extensions = [
     "myst_parser",  # For Markdown support
     "nbsphinx",  # For Jupyter Notebooks support
     "sphinx.ext.autodoc",  # For automatic documentation generation from docstrings
-    "sphinx.ext.apidoc", # For automatic API documentation generation
+    "sphinx.ext.apidoc",  # For automatic API documentation generation
     "sphinx.ext.napoleon",  # For Google and NumPy style docstrings
 ]
 
@@ -36,7 +36,7 @@ apidoc_modules = [
     {
         "path": "../src/spei",
         "destination": "_api",
-        "separate_modules" : True,
+        "separate_modules": True,
         "max_depth": 2,
     }
 ]
