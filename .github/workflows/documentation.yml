@@ -32,16 +32,14 @@ jobs:
         with:
           r-version: '4.3'
 
-      - name: Set up pandoc
-        uses: docker://pandoc/latex:2.9
-
-      - name: Setup tox environment
+      - name: Set up tox environment
         run: |
           python -m pip install --upgrade pip
           pip install tox
           tox -e docu --notest
 
       - name: Build documentation
+        uses: docker://pandoc/latex:2.9
         run: tox -e docu --skip-pkg-install
 
       - name: Push HTML output
