@@ -3,7 +3,7 @@ name: Build and Deploy Docs
 on:
   pull_request:
     branches:
-      - dev # change to main later
+      - docu # change to main later
 
 permissions:
   contents: write
