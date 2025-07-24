@@ -42,7 +42,7 @@ jobs:
           tox -e docu --notest
 
       - name: Build documentation
-        uses: tox -e docu --skip-pkg-install
+        run: tox -e docu --skip-pkg-install
 
       - name: Push HTML output
         uses: peaceiris/actions-gh-pages@v4
