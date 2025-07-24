@@ -29,7 +29,7 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-notebook = ["ipykernel", "pastas", "rpy2"]
+notebook = ["ipykernel", "pastas", "rpy2", "standard-precip"]
 documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx", "pandoc"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
