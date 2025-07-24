@@ -88,7 +88,7 @@ commands = [
         ],
 ]
 
-[tool.tox.env.docs]
+[tool.tox.env.docu]
 description = "build documentation"
 extras = ["documentation", "notebook"]
 commands = [["sphinx-build", "-M", "html", "docs", "docs/_build"]]
