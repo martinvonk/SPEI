@@ -93,12 +93,12 @@ def group_yearly_df(series: Series) -> DataFrame:
     the corresponding dates (in the year 2000).
 
     Parameters:
-    ----------
+    -----------
     series : pd.Series
         A pandas Series with a DateTime index.
 
     Returns:
-    -------
+    --------
     pd.DataFrame
     """
     strfstr: str = "%m-%d %H:%M:%S"
