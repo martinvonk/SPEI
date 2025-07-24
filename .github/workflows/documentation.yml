@@ -41,10 +41,10 @@ jobs:
       # - name: Set up Pandoc
       #   uses: docker://pandoc/core:3.5
       - name: Build documentation
-        with:
-          pre-build-command: >-
-            apt-get update && apt-get install -y pandoc
-        run: tox -e docu --skip-pkg-install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          tox -e docu --skip-pkg-install
 
       - name: Push HTML output
         uses: peaceiris/actions-gh-pages@v4
