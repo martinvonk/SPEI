@@ -1,9 +1,9 @@
 name: Build and Deploy Docs
 
 on:
-  pull_request:
+  push:
     branches:
-      - docu # change to main later
+      - dev
 
 permissions:
   contents: write
