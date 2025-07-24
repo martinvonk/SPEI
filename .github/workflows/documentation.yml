@@ -38,10 +38,13 @@ jobs:
           pip install tox
           tox -e docu --notest
 
+      # - name: Set up Pandoc
+      #   uses: docker://pandoc/core:3.5
       - name: Build documentation
-        uses: docker://pandoc/core:3.5
         with:
-          args: tox -e docu --skip-pkg-install
+          pre-build-command: >-
+            apt-get update && apt-get install -y pandoc
+        run: tox -e docu --skip-pkg-install
 
       - name: Push HTML output
         uses: peaceiris/actions-gh-pages@v4
