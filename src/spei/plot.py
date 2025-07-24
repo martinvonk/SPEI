@@ -324,7 +324,7 @@ def heatmap(
     elif freq in ("ME", "YE", "D"):
         if freq == "D":
             logging.info(
-                "With freq='D', it is assumed that the value is recored"
+                "With freq='D', it is assumed that the value is recorded"
                 "at the end of the index value."
             )
         dt = sisdf.index[-1] - sisdf.index[-2]
