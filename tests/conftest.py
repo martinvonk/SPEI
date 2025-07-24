@@ -47,7 +47,7 @@ def si(prec: Series) -> Series:
 
 @pytest.fixture
 def deficit(prec: Series, evap: Series) -> Series:
-    deficit = deficit = (
+    deficit = (
         (evap - prec)
         .loc[Timestamp("1965-01-01") : Timestamp("2020-12-31")]
         .rename("deficit")
