@@ -5,7 +5,7 @@
             "id": "87fd561f",
             "metadata": {},
             "source": [
-                "# KNMI Drought Indices\n",
+                "# KNMI Drougt Indices\n",
                 "\n",
                 "J.P.M. Witte, G.A.P.H. van den Eertwegh and P.J.J.F. Torfs (2025) - [Absolute Meteorological Drought Indices Validated Against Irrigation Amounts](https://doi.org/10.3390/w17071056)."
             ]
