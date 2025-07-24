@@ -31,7 +31,7 @@ exclude_patterns = [
     "_build",  # Exclude the build directory
     "**.ipynb_checkpoints",  # ignores  WARNING: Pygments lexer name 'ipython3' is not known
 ]
-
+nbsphinx_allow_errors = True  # Allow errors in notebooks
 apidoc_modules = [
     {
         "path": "../src/spei",
