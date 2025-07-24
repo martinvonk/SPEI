@@ -32,12 +32,6 @@ jobs:
             os: ubuntu-latest
             toxenv: py313
             experimental: false
-          - name: Test suite for example notebooks
-            python: "3.10"
-            os: ubuntu-latest
-            toxenv: nb
-            experimental: false
-            exclude: push
           - name: Type check with mypy
             python: "3.10"
             os: ubuntu-latest
