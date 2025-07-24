@@ -37,8 +37,7 @@ jobs:
             os: ubuntu-latest
             toxenv: nb
             experimental: false
-            exclude:
-              on: push
+            exclude: push
           - name: Type check with mypy
             python: "3.10"
             os: ubuntu-latest
@@ -48,10 +47,12 @@ jobs:
             python: "3.10"
             os: ubuntu-latest
             toxenv: ruff
+            experimental: false
           - name: Codacy Coverage Report
             python: "3.10"
             os: ubuntu-latest
             toxenv: coverage
+            experimental: false
 
     name: ${{ matrix.name }}
     env:
