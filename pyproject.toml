@@ -29,7 +29,7 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-notebook = ["ipykernel", "pastas"]
+notebook = ["ipykernel", "pastas", "rpy2"]
 documentation = ['sphinx>=8.2', 'myst-parser', 'nbsphinx']
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
@@ -90,18 +90,8 @@ commands = [
 
 [tool.tox.env.docs]
 description = "build documentation"
-extras = ["documentation"]
-commands = [
-        # [
-        #         "sphinx-apidoc",
-        #         "-f",
-        #         "-e",
-        #         "-o",
-        #         "docs/_api",
-        #         "src/spei",
-        # ],
-        ["sphinx-build", "-M", "html", "docs", "docs/_build"],
-]
+extras = ["documentation", "notebook"]
+commands = [["sphinx-build", "-M", "html", "docs", "docs/_build"]]
 
 [tool.tox.env.coverage]
 description = "get coverage report xml"
