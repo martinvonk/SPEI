@@ -37,6 +37,9 @@ jobs:
         with:
           r-version: '4.3'
 
+      - name: Install pandoc
+        uses: docker://pandoc/latex:2.9
+
       - name: Build Sphinx docs
         run: |
           tox -e docu
