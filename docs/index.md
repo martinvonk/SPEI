@@ -7,7 +7,7 @@ This website provides full documentation, example notebooks, and a detailed API 
 The project is open-source and hosted on [GitHub]((https://github.com/martinvonk/SPEI)), where you can find more information about the available drought indices and ongoing development. The package is published on [PyPi](https://pypi.org/project/spei/) from which it can be installed using `pip install spei`.
 
 If you happen to use this package, please cite:
-Vonk, M. A. (YEAR). SPEI: A simple Python package to calculate and visualize drought indices (vX.X.X). Zenodo. [doi.org/10.5281/zenodo.10816741](https://doi.org/10.5281/zenodo.10816741).
+Vonk, M. A. (XXXX). SPEI: A simple Python package to calculate and visualize drought indices (vX.X.X). Zenodo. [doi.org/10.5281/zenodo.10816740](https://doi.org/10.5281/zenodo.10816740).
 
 ```{toctree}
 :maxdepth: 2
