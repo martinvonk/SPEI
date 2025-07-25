@@ -85,5 +85,5 @@ def test_infer_frequency_non_datetime_index():
 
 def test_infer_frequency_invalid_index():
     index = Index(["a", "b", "c"])
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError), pytest.warns(UserWarning):
         infer_frequency(index)

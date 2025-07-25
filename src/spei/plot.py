@@ -1,3 +1,4 @@
+import logging
 from calendar import month_abbr
 from itertools import cycle
 
@@ -6,7 +7,15 @@ import matplotlib.pyplot as plt
 from matplotlib.axes._secondary_axes import SecondaryAxis
 from matplotlib.dates import date2num
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
-from pandas import DataFrame, DatetimeIndex, Series, Timestamp
+from pandas import (
+    DataFrame,
+    DatetimeIndex,
+    Series,
+    Timedelta,
+    Timestamp,
+    concat,
+    infer_freq,
+)
 from scipy.stats import gaussian_kde
 
 from .utils import get_data_series, group_yearly_df, validate_index
@@ -55,11 +64,12 @@ def si(
         colormap = cmap
 
     if "ybound" in kwargs:
-        DeprecationWarning(
-            "The 'ybound' argument is deprecated, adjust the 'ylim' of Axes afterwards the instead"
+        raise DeprecationWarning(
+            "The 'ybound' argument is deprecated and will be ignored. To set y-axis "
+            "limits, use the 'set_ylim()' method on the returned Axes instance."
         )
 
-    ymin, ymax = -3.0, 3.0
+    ymin, ymax = -3.0, 3.0  # default y-axis limits, also used for colormap norm
 
     if background:
         ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
@@ -261,7 +271,7 @@ def heatmap(
     ax: plt.Axes | None = None,
 ) -> plt.Axes:
     """
-    Plots multiple standardized indices on a heatmap from [mourik_2024]_
+    Plots multiple standardized indices on a heatmap.
 
     Parameters
     ----------
@@ -286,9 +296,8 @@ def heatmap(
 
     References
     ----------
-    .. [mourik_2024] van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger,
-    W., Wanders, N.: Regional drivers and characteristics of multi-year
-    droughts. 2024
+    van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., Wanders, N.: Regional
+    drivers and characteristics of multi-year droughts. 2024
     """
 
     if ax is None:
@@ -305,16 +314,34 @@ def heatmap(
         colormap = cmap
 
     norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
-    for i, s in enumerate(sis):
-        _ = ax.pcolormesh(
-            [s.index, s.index],
-            [i, i + 1],
-            [s.values[:-1]],
-            norm=norm,
-            cmap=colormap,
-            shading="flat",
-        )
 
+    sisdf = concat(sis, axis=1)
+    freq = infer_freq(DatetimeIndex(sisdf.index))
+    # Efficiently extend the index for pcolormesh based on frequency
+    if freq in ("MS", "YS"):
+        dt = sisdf.index[1] - sisdf.index[0]
+        index = sisdf.index.insert(0, sisdf.index[0] - dt)
+    elif freq in ("ME", "YE", "D"):
+        if freq == "D":
+            logging.info(
+                "With freq='D', it is assumed that the value is recorded"
+                "at the end of the index value."
+            )
+        dt = sisdf.index[-1] - sisdf.index[-2]
+        index = sisdf.index.append(DatetimeIndex([sisdf.index[-1] + dt]))
+    else:
+        raise ValueError(
+            f"Unsupported frequency '{freq}' for the index of the Series. "
+            "Expected 'MS', 'ME', 'YS', 'YE', or 'D'."
+        )
+    _ = ax.pcolormesh(
+        index,
+        arange(0.0, len(sis) + 1.0, 1.0),
+        sisdf.values.T,
+        cmap=colormap,
+        norm=norm,
+        shading="flat",
+    )
     ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
     ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
     yticklabels = (
@@ -341,11 +368,15 @@ def heatmap(
             cax.yaxis.set_ticks_position("left")
             cax.yaxis.set_label_position("left")
             _add_category_labels(cax)
+            for tick in cax.yaxis.get_minor_ticks():  # don't show minor ytick marker
+                tick.tick1line.set_visible(False)
 
     return ax
 
 
-def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
+def deficit_knmi(
+    df: DataFrame, ax: plt.Axes | None = None, window: int = 0
+) -> plt.Axes:
     """
     Plots the precipitation deficit for various scenarios using the given DataFrame.
 
@@ -361,6 +392,11 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
         - Rows represent time (e.g., days or months within a year).
         - Columns represent years (e.g., 1976, 2018, etc.).
         - Values represent cumulative precipitation deficit (in millimeters).
+    ax : matplotlib.axes._axes.Axes, optional
+        An Axes object to plot on. If None, a new figure and axes are created.
+    window : int, optional
+        If True, applies a rolling mean over a n-day window to the median and
+        95th percentile. This is also done by the KNMI but not documented.
 
     Returns:
     --------
@@ -377,8 +413,18 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.5), layout="tight")
-    ax.plot(df.quantile(0.95, axis=1), label="5% driest years", color="lime")
-    ax.plot(df.median(axis=1), label="median", color="blue")
+    quant = (
+        df.quantile(0.95, axis=1).rolling(Timedelta(days=window)).mean()
+        if window
+        else df.quantile(0.95, axis=1)
+    )
+    ax.plot(quant, label="5% driest years", color="lime")
+    median = (
+        df.median(axis=1).rolling(Timedelta(days=window)).mean()
+        if window
+        else df.median(axis=1)
+    )
+    ax.plot(median, label="median", color="blue")
     ax.plot(df.loc[:, 1976], label="record year 1976", color="red")
     ax.plot(df.loc[:, 2018], label="year 2018", color="grey")
     ax.plot(
@@ -405,13 +451,12 @@ def deficit_knmi(df: DataFrame, ax: plt.Axes | None = None) -> plt.Axes:
 
 
 class Crameri:
-    """Colormaps for matplotlib, useful for drought, based on [crameri_2020].
+    """Colormaps for matplotlib, useful for drought, based on Crameri et al. (2020).
 
     References
     ----------
-    .. [crameri_2020] Crameri, F., G.E. Shephard, and P.J. Heron (2020):
-    The misuse of colour in science communication, Nature Communications,
-    11, 5444. doi.org/10.1038/s41467-020-19160-7
+    Crameri, F., G.E. Shephard, and P.J. Heron: The misuse of colour in science
+    communication, Nature Communications, 11, 5444. 2020.
     """
 
     _available_cmaps = ("roma", "roma_r", "vik", "vik_r", "lajolla", "lajolla_r")

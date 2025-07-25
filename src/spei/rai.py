@@ -7,7 +7,7 @@ from .utils import get_data_series, group_yearly_df, validate_series
 def rai(series: pd.Series) -> pd.Series:
     """
     Calculate the Rainfall Anomaly Index (RAI) for a given time
-    series of precipitation data. [vanrooy_1965]_
+    series of precipitation data.
 
     Parameters
     ----------
@@ -21,8 +21,7 @@ def rai(series: pd.Series) -> pd.Series:
 
     References
     ----------
-    .. [vanrooy_1965] van Rooy, M.P. (1965). A Rainfall Anomaly
-       Index Independent of Time and Space. Notos.
+    van Rooy, M.P. A Rainfall Anomaly Index Independent of Time and Space. Notos. 1965.
     """
     series = validate_series(series)
     pm = series.mean()
@@ -36,8 +35,8 @@ def rai(series: pd.Series) -> pd.Series:
 
 
 def mrai(series: pd.Series, sf: float = 1.7) -> pd.Series:
-    """Calculate the Modified Rainfall Anomaly Index (MRAI) for a
-    given time series of precipitation data. [hansel_2015]_
+    """Calculate the Modified Rainfall Anomaly Index (MRAI)
+    for a given time series of precipitation data.
 
     Parameters
     ----------
@@ -53,11 +52,10 @@ def mrai(series: pd.Series, sf: float = 1.7) -> pd.Series:
 
     References
     ----------
-    .. [hansel_2015] Hänsel, S., Schucknecht, A. and Matschullat J. (2015).
-       The Modified Rainfall Anomaly Index (mRAI) — is this an alternative
-       to the Standardised Precipitation Index (SPI) in evaluating future
-       extreme precipitation characteristics? Theoretical and Applied
-       Climatology. doi.org/10.1007/s00704-015-1389-y.
+    Hänsel, S., Schucknecht, A. and Matschullat J. The Modified Rainfall
+    Anomaly Index (mRAI) — is this an alternative to the Standardised
+    Precipitation Index (SPI) in evaluating future extreme precipitation
+    characteristics? Theoretical and Applied Climatology. 2015.
     """
     series = validate_series(series)
     mrai = pd.Series(np.nan, index=series.index, dtype=float)
