@@ -19,12 +19,12 @@ def test_sgi(head: Series) -> None:
     sgi(head, fit_freq="MS")
 
 
-def test_sffi_timescale(prec: Series) -> None:
+def test_ssfi_timescale(prec: Series) -> None:
     ssfi(prec, timescale=30)
 
 
 def test_ssmi(prec: Series) -> None:
-    ssmi(prec, fit_freq="MS")
+    ssmi(prec, dist=norm, fit_freq="MS")
 
 
 def test_window(prec: Series, evap: Series) -> None:

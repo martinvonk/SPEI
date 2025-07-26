@@ -22,9 +22,8 @@ def sgi(
     timescale: int = 0,
     fit_freq: str | None = None,
 ) -> Series:
-    """Method to compute the Standardized Groundwater Index [sgi_2013]_. Same
-    method as in Pastas. Uses the normal scores transform to calculate the
-    cumulative density function.
+    """Method to compute the Standardized Groundwater Index. Uses
+    the normal scores transform to calculate the cumulative density function.
 
     Parameters
     ----------
@@ -42,9 +41,9 @@ def sgi(
 
     References
     ----------
-    .. [sgi_2013] Bloomfield, J. P. and Marchant, B. P.: Analysis of
-       groundwater drought building on the standardised precipitation index
-       approach. Hydrol. Earth Syst. Sci., 17, 4769–4787, 2013.
+    Bloomfield, J. P. and Marchant, B. P.: Analysis of
+    groundwater drought building on the standardised precipitation index
+    approach. Hydrol. Earth Syst. Sci., 17, 4769-4787, 2013.
     """
 
     mock_dist = norm
@@ -69,7 +68,7 @@ def spi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Index [spi_2002]_.
+    """Method to compute the Standardized Precipitation Index.
 
     Parameters
     ----------
@@ -108,9 +107,8 @@ def spi(
 
     References
     ----------
-    .. [spi_2002] LLoyd-Hughes, B. and Saunders, M.A.: A drought
-       climatology for Europe. International Journal of Climatology,
-       22, 1571-1592, 2002.
+    LLoyd-Hughes, B. and Saunders, M.A.: A drought climatology for Europe.
+    International Journal of Climatology, 22, 1571-1592, 2002.
     """
 
     spi = SI(
@@ -135,8 +133,7 @@ def spei(
     fit_window: int = 0,
     prob_zero: bool = False,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Evaporation Index
-    [spei_2010]_.
+    """Method to compute the Standardized Precipitation Evaporation Index.
 
     Parameters
     ----------
@@ -173,10 +170,10 @@ def spei(
 
     References
     ----------
-    .. [spei_2010] Vicente-Serrano S.M., Beguería S., López-Moreno J.I.:
-       A Multi-scalar drought index sensitive to global warming: The
-       Standardized Precipitation Evapotranspiration Index.
-       Journal of Climate, 23, 1696-1718, 2010.
+    Vicente-Serrano S.M., Beguería S., López-Moreno J.I.:
+    A Multi-scalar drought index sensitive to global warming:
+    The Standardized Precipitation Evapotranspiration Index.
+    Journal of Climate, 23, 1696-1718, 2010.
     """
 
     spei = SI(
@@ -201,7 +198,7 @@ def ssfi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized StreamFlow Index [ssfi_2012]_.
+    """Method to compute the Standardized StreamFlow Index.
 
     Parameters
     ----------
@@ -239,10 +236,9 @@ def ssfi(
 
     References
     ----------
-    .. [ssfi_2012] Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería,
-    J. Lorenzo-Lacruz, C. Azorin-Molina, and E. Morán-Tejeda (2012). Accurate
-    Computation of a Streamflow Drought Index. Journal of Hydrologic
-    Engineering 17 (2): 318-332.
+    Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería, J. Lorenzo-Lacruz,
+    C. Azorin-Molina, and E. Morán-Tejeda. Accurate Computation of a Streamflow
+    Drought Index. Journal of Hydrologic Engineering 17 (2): 318-332. 2012.
     """
     ssfi = SI(
         series=series,
@@ -266,7 +262,7 @@ def ssmi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Soil Moisture Index [ssmi_2016]_.
+    """Method to compute the Standardized Soil Moisture Index.
 
     Parameters
     ----------
@@ -303,10 +299,9 @@ def ssmi(
 
     References
     ----------
-    .. [ssmi_2016] Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An
-       empirical standardized soil moisture index for agricultural drought assessment
-       from remotely sensed data. International Journal of Applied Earth Observation
-       and Geoinformation, 48, 2016.
+    Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An empirical standardized
+    soil moisture index for agricultural drought assessment from remotely sensed data.
+    International Journal of Applied Earth Observation and Geoinformation, 48, 2016.
     """
 
     ssmi = SI(
@@ -471,7 +466,7 @@ class SI:
                     prob_zero=self.prob_zero,
                     data_window=None,
                 )
-                self._dist_dict[date] = fd
+                self._dist_dict[date] = fd  # type: ignore
 
     def cdf(self) -> Series:
         """Compute the cumulative density function"""

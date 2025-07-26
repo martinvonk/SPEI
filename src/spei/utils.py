@@ -2,6 +2,7 @@ import logging
 from calendar import isleap
 
 from numpy import array, nan
+from packaging.version import parse as parse_version
 from pandas import (
     DataFrame,
     DatetimeIndex,
@@ -13,7 +14,8 @@ from pandas import (
     infer_freq,
     to_datetime,
 )
-from pandas import __version__ as pd_version
+
+pd_version = parse_version(__import__("pandas").__version__)
 
 
 def validate_series(series: Series) -> Series:
@@ -72,7 +74,7 @@ def infer_frequency(index: Index | DatetimeIndex) -> str:
         logging.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
-        inf_freq = "MS" if pd_version >= "2.2.0" else "M"
+        inf_freq = "MS" if pd_version >= parse_version("2.2.0") else "M"
     else:
         logging.info(f"Inferred frequency '{inf_freq}' from index")
 
@@ -84,12 +86,24 @@ def infer_frequency(index: Index | DatetimeIndex) -> str:
 
 
 def group_yearly_df(series: Series) -> DataFrame:
-    """Group series in a DataFrame with date (in the year 2000) as index and
-    year as columns.
+    """Group Series per year in a DataFrame.
+
+    This function groups a time series by year, creating a DataFrame where each
+    column corresponds to a year (as int). The index of the DataFrame is set to
+    the corresponding dates (in the year 2000).
+
+    Parameters:
+    -----------
+    series : pd.Series
+        A pandas Series with a DateTime index.
+
+    Returns:
+    --------
+    pd.DataFrame
     """
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
-    freq = "YE" if pd_version >= "2.2.0" else "Y"
+    freq = "YE" if pd_version >= parse_version("2.2.0") else "Y"
     for year_timestamp, gry in series.groupby(Grouper(freq=freq)):
         index = validate_index(gry.index)
         gry.index = to_datetime(

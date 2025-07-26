@@ -12,13 +12,13 @@ license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.10',
-        'Programming Language :: Python :: 3.11',
-        'Programming Language :: Python :: 3.12',
-        'Programming Language :: Python :: 3.13',
-        'Topic :: Scientific/Engineering :: Hydrology',
-        'Intended Audience :: Science/Research',
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Topic :: Scientific/Engineering :: Hydrology",
+        "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Typing :: Typed",
@@ -29,11 +29,13 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
+notebook = ["ipykernel", "pastas", "rpy2", "standard-precip"]
+documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
-dev = ["spei[ruffing,typing,pytesting,coveraging]"]
+dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -42,7 +44,7 @@ version = { attr = "spei._version.__version__" }
 mypy_path = "src"
 
 [[tool.mypy.overrides]]
-module = ['matplotlib.*', 'scipy.stats.*']
+module = ["matplotlib.*", "scipy.stats.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -55,44 +57,43 @@ show-fixes = true
 fix = true
 
 [tool.tox]
-legacy_tox_ini = """
-    [tox]
-    requires = tox>=4
-    env_list = ruff, type, py310, py311, py312, py313
+requires = ["tox>=4"]
+env_list = ["py310", "py311", "py312", "py313", "type", "ruff"]
 
-    [testenv]
-    description = run unit tests
-    extras = pytesting
-    commands =
-            pytest tests
+[tool.tox.env_run_base]
+description = "run unit tests"
+extras = ["pytesting"]
+commands = [["pytest", "tests"]]
 
-    [testenv:type]
-    description = run type checks
-    basepython = python3.10
-    extras = typing
-    commands =
-            mypy src
+[tool.tox.env.type]
+description = "run type checks"
+extras = ["typing"]
+commands = [["mypy", "src"]]
 
-    [testenv:ruff]
-    description = run ruff checks
-    basepython = python3.10
-    extras = ruffing
-    commands =
-            ruff check --extend-select I --preview
-            ruff format --check
+[tool.tox.env.ruff]
+description = "run ruff checks"
+extras = ["ruffing"]
+commands = [
+        [
+                "ruff",
+                "check",
+                "--extend-select",
+                "I",
+                "--preview",
+        ],
+        [
+                "ruff",
+                "format",
+                "--check",
+        ],
+]
 
-    [testenv:ruff_fix]
-    description = run ruff locally and fix issues
-    extras = ruffing
-    commands =
-            ruff check --extend-select I --fix
-            ruff format
+[tool.tox.env.docu]
+description = "build documentation"
+extras = ["documentation", "notebook"]
+commands = [["sphinx-build", "-M", "html", "docs", "docs/_build"]]
 
-    [testenv:coverage]
-    description = get coverage report xml
-    basepython = 3.10
-    extras = coveraging,pytesting
-    commands =
-            coverage run -m pytest tests
-            coverage xml
-"""
+[tool.tox.env.coverage]
+description = "get coverage report xml"
+extras = ["coveraging", "pytesting"]
+commands = [["coverage", "run", "-m", "pytest", "tests"], ["coverage", "xml"]]

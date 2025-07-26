@@ -95,10 +95,12 @@ def get_cumulative_deficit(
     group_df = group_yearly_df(series=deficit)
     if isinstance(startdate, pd.Timestamp):
         if startdate.year != 2000:
+            # year is replaced since group_yearly_df returns a df with 2000 as a base year
             startdate = startdate.replace(year=2000)
         startdate = pd.Series(startdate, index=group_df.columns)
     if isinstance(enddate, pd.Timestamp):
         if enddate.year != 2000:
+            # year is replaced since group_yearly_df returns a df with 2000 as a base year
             enddate = enddate.replace(year=2000)
         enddate = pd.Series(enddate, index=group_df.columns)
 
@@ -166,12 +168,12 @@ def deficit_max(deficit: pd.Series) -> pd.Series:
     function, ensuring that values below zero are not allowed.
 
     Parameters:
-    ----------
+    -----------
     deficit : pd.Series
         A pandas Series representing the deficit values over time.
 
     Returns:
-    -------
+    --------
     pd.Series
         A pandas Series containing the maximum cumulative deficit
         within the specified period, labeled as "Dmax".

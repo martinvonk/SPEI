@@ -2,7 +2,9 @@
 *.egg-info
 
 /dist
-/doc/references
+/docs/references
+/docs/_build
+/docs/_api
 /paper/literature
 /paper/data
 

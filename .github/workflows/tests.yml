@@ -28,10 +28,10 @@ jobs:
             toxenv: py312
             experimental: false
           - name: Test suite with py313-ubuntu
-            python: "3.13-dev"
+            python: "3.13"
             os: ubuntu-latest
             toxenv: py313
-            experimental: true
+            experimental: false
           - name: Type check with mypy
             python: "3.10"
             os: ubuntu-latest
@@ -70,13 +70,11 @@ jobs:
           python-version: ${{ matrix.python }}
           check-latest: true
 
-      - name: Install dependencies
+      - name: Set up tox environment
         run: |
           python -m pip install --upgrade pip
           pip install tox
-
-      - name: Setup tox environment
-        run: tox -e ${{ matrix.toxenv }} --notest
+          tox -e ${{ matrix.toxenv }} --notest
 
       - name: Test
         run: tox -e ${{ matrix.toxenv }} --skip-pkg-install

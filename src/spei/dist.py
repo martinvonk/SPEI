@@ -32,9 +32,6 @@ class Dist:
         calculated by the occurence.
     data_window : Optional[Series], default=None
         Subset of data for fitting more data (if provided).
-
-    Attributes
-    ----------
     loc : float
         Location of the distribution
     scale : float
@@ -43,13 +40,6 @@ class Dist:
         Attribute storing additional distribution parameters (if applicable).
     p0 : float
         The probability of zero values in the data. Only calculated if prob_zero=True.
-
-    Methods
-    -------
-    __post_init__(self) -> None
-        Initializes the Dist class and fits the distribution.
-    fit_dist(data: Series, dist: ContinuousDist) -> Tuple
-        Fits a Scipy continuous distribution to the data.
 
     Notes
     -----
@@ -145,7 +135,7 @@ class Dist:
         Kolmogorov-Smirnov test for goodness of fit. The
         null hypothesis is that the data and distributions
         are identical, the alternative is that they are
-        not identical. [scipy_2021]_
+        not identical.
 
         Parameters
         ----------
@@ -164,9 +154,8 @@ class Dist:
 
         References
         -------
-        .. [scipy_2021] Onnen, H.: Intro to Probability
-        Distributions and Distribution Fitting with Pythons
-        SciPy, 2021.
+        Onnen, H.: Intro to Probability Distributions and Distribution
+        Fitting with Pythons  SciPy, 2021.
         """
         args = (
             (self.pars, self.loc, self.scale)
