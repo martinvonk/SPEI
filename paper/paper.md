@@ -55,7 +55,7 @@ Literature offers general guidance for what distribution to use for each standar
 Each distribution has a `fit` method for maximum likelihood estimation on the data.
 
 #### Example
-As an example, the Standardized Precipitation Evaporation Index is computed using a dataset with daily precipitation and potential evaporation from the Royal Dutch Meteorological Institute (KNMI), shown in \autoref{fig:meteo_surplus}a.
+As an example, the Standardized Precipitation Evaporation Index is computed using a dataset with daily precipitation and potential evaporation from the Royal Netherlands Meteorological Institute (KNMI), shown in \autoref{fig:meteo_surplus}a.
 The SPEI uses the precipitation surplus (precipitation minus potential evaporation), which is aggregated monthly for this example and shown in \autoref{fig:meteo_surplus}b.
 
 ![Example meteorological time series \label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
