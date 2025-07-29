@@ -20,8 +20,8 @@ bibliography: paper.bib
 ---
 
 # Summary
-SPEI is a Python package for calculating drought indices from time series.
-Popular Python packages such as Pandas [@pandas_paper_2010], SciPy [@scipy_paper_2020], and Matplotlib [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization respectively.
+`SPEI` is a Python package for calculating drought indices from time series.
+Popular Python packages such as `Pandas` [@pandas_paper_2010], `SciPy` [@scipy_paper_2020], and `Matplotlib` [@matplotlib_paper_2007] are used for handling the time series, statistics, and visualization respectively.
 This makes the calculation and visualization of drought indices straightforward and flexible.
 
 # Statement of need
@@ -33,10 +33,10 @@ Each index quantifies a drought's severity, location, timing, and duration, help
 
 # Standardized drought indices
 The most common drought indices are standardized indices, which fit a time series to a probability distribution and convert it into a Z-score of the standardized normal distribution.
-For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the SPEI package.
-Hydrological droughts are often measured using the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010].
+For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002; @wmo_spi_2012] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the `SPEI` package.
+Hydrological droughts are often measured using the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2012].
 For agricultural droughts, the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used.
-All of these standardized indices are explicitly supported by the SPEI package, though other standardized drought index can also be computed using the same methodology.
+All of these standardized indices are explicitly supported by the `SPEI` package, though any other standardized drought index can also be computed using the same methodology.
 
 ## Computation
 Standardized indices are commonly calculated from a time series of at least 30 years [@mckee_spi_1993].
@@ -45,17 +45,17 @@ Alternatively, non-parametric methods like normal-scores transforms or kernel de
 The probability of each value is then converted to a Z-score using the inverse normal distribution, yielding a standardized index with a mean of zero and standard deviation of one.
 
 [^1]: A month is not an unambiguous time unit, varying between 28 and 31 days, which adds complexity to computations.
-The package handles this internally using Pandas to ensure consistent time aggregation.
+The package handles this internally using `Pandas` to ensure consistent time aggregation.
 
 ### Implementation
-The SPEI package is built on Pandas [@pandas_paper_2010; @pandas_software_2020], which in turn relies heavily on NumPy [@numpy_article_2020].
+The `SPEI` package is built on `Pandas` [@pandas_paper_2010; @pandas_software_2020], which in turn relies heavily on `NumPy` [@numpy_article_2020].
 It uses `pandas.Series` with a `DatetimeIndex`, enabling powerful time series methods such as `resample` and `rolling`.
-Probability density functions are provided via SciPy's `stats` module [@scipy_paper_2020].
-Literature offers general guidance for what distribution to use for each standardized index; e.g., a gamma distribution for SPI [@thom_gamma_1996] and a fisk (log-logistic) distribution for SPEI. However, with the SciPy package, users are free to experiment with any of the 200+ univariate continuous distributions available.
+Probability density functions are provided via the `SciPy` `stats` module [@scipy_paper_2020].
+Literature offers general guidance for what distribution to use for each standardized index; e.g., a gamma distribution for SPI [@thom_gamma_1996] and a fisk (log-logistic) distribution for SPEI [@vicenteserrano_spei_2010]. However, with the `SciPy` package, users are free to experiment with any of the 200+ univariate continuous distributions available.
 Each distribution has a `fit` method for maximum likelihood estimation on the data.
 
 #### Example
-As an example, the Standardized Precipitation Evaporation Index is computed using a dataset with daily precipitation and potential evaporation from the Royal Dutch Meteorological Institute (KNMI), shown in \autoref{fig:meteo_surplus}a.
+As an example, the Standardized Precipitation Evaporation Index is computed using a dataset with daily precipitation and potential evaporation from the Royal Netherlands Meteorological Institute (KNMI), shown in \autoref{fig:meteo_surplus}a.
 The SPEI uses the precipitation surplus (precipitation minus potential evaporation), which is aggregated monthly for this example and shown in \autoref{fig:meteo_surplus}b.
 
 ![Example meteorological time series \label{fig:meteo_surplus}](figures/monthly_precipitation_surplus.png)
@@ -97,7 +97,7 @@ The black dashed line traces this procedure for a 31 mm surplus from March 1994,
 
 Application of this procedure for all data points and months results in the standardized index, SPEI-1, as shown in \autoref{fig:spei1}.
 The background filling and categories [based on @mckee_spi_1993] in \autoref{fig:spei1} allow for the interpretation of drought (and wet) periods.
-The SPEI package has additional options to allow for other time scales, time series frequencies (e.g., daily), and fit window options to ensure valid distribution fit.
+The `SPEI` package has additional options to allow for other time scales, time series frequencies (e.g., daily), and fit window options to ensure valid distribution fit.
 
 ![Resulting SPEI-1 from the monthly precipitation surplus \label{fig:spei1}](figures/spei1.png)
 
@@ -118,14 +118,14 @@ The SPEI heatmap (\autoref{fig:spei_heatmap}) illustrates this across six time s
 
 # Other drought indices in the SPEI package
 
-Several other drought indices from the literature are also supported by the SPEI package, briefly outlined below.
+Several other drought indices from the literature are also supported by the `SPEI` package, briefly outlined below.
 
 ## Rainfall anomaly index
 The Rainfall Anomaly Index (RAI) is a relative drought index that quantifies deviations from historical precipitation without fitting a distribution [@vanrooy_rai_1965].
 The package also includes the Modified RAI (mRAI), which adds a scaling factor for local conditions. [@hansel_mrai_2016].
 
 ## Climdex
-Climdex is an online platform providing indices for heat, cold, precipitation, and drought changes over time [@alexander_climdex_2025], with several of its precipitation indices available in the SPEI package.
+Climdex is an online platform providing indices for heat, cold, precipitation, and drought changes over time [@alexander_climdex_2025], with several of its precipitation indices available in the `SPEI` package.
 
 ## Precipitation deficit
 The KNMI defines drought during the growing season using the precipitation deficit (potential evaporation minus precipitation).

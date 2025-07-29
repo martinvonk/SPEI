@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - joss
+      # - dev
 
 jobs:
   paper:
