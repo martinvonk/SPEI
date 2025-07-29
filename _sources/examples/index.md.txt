@@ -13,4 +13,5 @@ example05_multiyear_drought
 example06_treshold
 example07_knmi
 example08_rai
+example09_joss_paper
 ```
