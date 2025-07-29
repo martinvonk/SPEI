@@ -19,10 +19,10 @@
 SPEI is a simple Python package to calculate drought indices for hydrological time series. This package uses popular Python packages such as Pandas and Scipy to make it easy and versatile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average, and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data. Different popular drought indices are supported such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index), and SGI (Standardized Groundwater Index).
 
 If you use this software for either the visualization and/or analysis, please cite this package via our article in the [Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.08454):
-Vonk, M. A. (2025). SPEI: A Python package for calculating and visualizing drought indices. Journal of Open Source Software, 10(111), 8454. [doi.org/10.21105/joss.08454](https://doi.org/10.21105/joss.08454).
+> Vonk, M. A. (2025). SPEI: A Python package for calculating and visualizing drought indices. Journal of Open Source Software, 10(111), 8454. [doi.org/10.21105/joss.08454](https://doi.org/10.21105/joss.08454).
 
-Or cite a specific version via the Zenodo archive:
-Vonk, M. A. (XXXX). SPEI: A simple Python package to calculate and visualize drought indices (vX.X.X). Zenodo. [doi.org/10.5281/zenodo.10816740](https://doi.org/10.5281/zenodo.10816740).
+Or cite a specific version in the Zenodo archive:
+> Vonk, M. A. (XXXX). SPEI: A simple Python package to calculate and visualize drought indices (vX.X.X). Zenodo. [doi.org/10.5281/zenodo.10816740](https://doi.org/10.5281/zenodo.10816740).
 
 ## Available Drought Indices
 
@@ -61,7 +61,7 @@ This list of scientific literature is helpful as a reference to understand the c
 7. Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An empirical standardized soil moisture index for agricultural drought assessment from remotely sensed data. DOI: 10.1016/j.jag.2015.06.011s
 
 ### Publications
-These are scientific publications that use and cite this Python package via [Zenodo](https://doi.org/10.5281/zenodo.10816741):
+These are scientific publications that use and cite this Python package:
 
 van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., & Wanders, N. (2025). Regional drivers and characteristics of multi-year droughts. Weather and Climate Extremes, 48, 100748. https://doi.org/10.1016/j.wace.2025.100748
 
