@@ -33,10 +33,10 @@ Each index quantifies a drought's severity, location, timing, and duration, help
 
 # Standardized drought indices
 The most common drought indices are standardized indices, which fit a time series to a probability distribution and convert it into a Z-score of the standardized normal distribution.
-For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the `SPEI` package.
-Hydrological droughts are often measured using the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2010].
+For meteorological droughts, widely used indices include the Standardized Precipitation Index (SPI) [@mckee_spi_1993; @lloydhughes_spi_2002; @wmo_spi_2012] and the Standardized Precipitation Evaporation Index (SPEI) [@vicenteserrano_spei_2010]; the latter index is also the name of the `SPEI` package.
+Hydrological droughts are often measured using the Standardized Groundwater Index (SGI) [@bloomfield_sgi_2013] and the Standardized Streamflow Index (SSFI or SSI) [@vicenteserrano_ssfi_2012].
 For agricultural droughts, the Standardized Soil Moisture Index (SSMI) [@sheffield_ssmi_2004] can be used.
-All of these standardized indices are explicitly supported by the `SPEI` package, though other standardized drought index can also be computed using the same methodology.
+All of these standardized indices are explicitly supported by the `SPEI` package, though any other standardized drought index can also be computed using the same methodology.
 
 ## Computation
 Standardized indices are commonly calculated from a time series of at least 30 years [@mckee_spi_1993].
@@ -51,7 +51,7 @@ The package handles this internally using `Pandas` to ensure consistent time agg
 The `SPEI` package is built on `Pandas` [@pandas_paper_2010; @pandas_software_2020], which in turn relies heavily on `NumPy` [@numpy_article_2020].
 It uses `pandas.Series` with a `DatetimeIndex`, enabling powerful time series methods such as `resample` and `rolling`.
 Probability density functions are provided via the `SciPy` `stats` module [@scipy_paper_2020].
-Literature offers general guidance for what distribution to use for each standardized index; e.g., a gamma distribution for SPI [@thom_gamma_1996] and a fisk (log-logistic) distribution for SPEI. However, with the `SciPy` package, users are free to experiment with any of the 200+ univariate continuous distributions available.
+Literature offers general guidance for what distribution to use for each standardized index; e.g., a gamma distribution for SPI [@thom_gamma_1996] and a fisk (log-logistic) distribution for SPEI [@vicenteserrano_spei_2010]. However, with the `SciPy` package, users are free to experiment with any of the 200+ univariate continuous distributions available.
 Each distribution has a `fit` method for maximum likelihood estimation on the data.
 
 #### Example
