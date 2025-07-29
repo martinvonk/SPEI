@@ -1,0 +1,28 @@
+cff-version: "1.2.0"
+authors:
+  - family-names: Vonk
+    given-names: Martin A.
+    orcid: "https://orcid.org/0009-0007-3528-2991"
+doi: 10.5281/zenodo.16441123
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+    - family-names: Vonk
+      given-names: Martin A.
+      orcid: "https://orcid.org/0009-0007-3528-2991"
+  date-published: 2025-07-29
+  doi: 10.21105/joss.08454
+  issn: 2475-9066
+  issue: 111
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 8454
+  title: "SPEI: A Python package for calculating and visualizing drought
+    indices"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.08454"
+  volume: 10
+title: "SPEI: A Python package for calculating and visualizing drought
+  indices"
