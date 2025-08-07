@@ -1,0 +1,17 @@
+name: Question
+description: Form for a question or clarification
+labels: ["question"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the question you have.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: Describe the question
+      description: A concise description of what you're would like to know.
+    validations:
+      required: false
