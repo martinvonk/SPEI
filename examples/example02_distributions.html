@@ -79,8 +79,8 @@ python: 3.11.13
 spei: 0.8.0
 numpy: 2.2.6
 scipy: 1.16.1
-matplotlib: 3.10.5
-pandas: 2.3.1
+matplotlib: 3.10.6
+pandas: 2.3.2
 </pre></div></div>
 </div>
 </section>
@@ -625,6 +625,63 @@ resolution. Though experimental, this fit window feature has shown to improve th
 across 30 years, resulting in a limited sample size and consequently a noisier empirical distribution with a less stable fit. Subplot b also uses a daily fitting frequency but applies a 31-day fitting window (<code class="docutils literal notranslate"><span class="pre">fit_window=31</span></code>) centered on April 15th. This expands the sample to include 31 days of data, significantly increasing the total number of observations and yielding a much smoother and more robust distribution fit. In contrast, Subplot c shows a monthly fitting approach (<code class="docutils literal notranslate"><span class="pre">fit_freq=&quot;MS&quot;</span></code>)
 with no fit window, where all April data from each year is used. This produces a stable fit, but because each month is treated separately, sharp transitions can occur at month boundaries, which may introduce artificial discontinuities into the resulting index. This is shown in the red line of subplot e, which is smoother overall but exhibits abrupt changes at the start of each month (e.g., April 1st and November 1st), due to transitions between monthly distributions. These settings allow users
 to tailor the standardization process to their data and desired level of temporal precision. Subplot d shows the specific fisk distributions from each parameter set, shown in the text boxes of subplots a,b and c. The changes to the fitted parameter values are obvious, but the fitted distrubtions look similar as seen in subplot d. The result for the z-score is minimal on april 15th but larger for different dates as seen in subplot e.</p>
+</section>
+<section id="Comparing-fit-methods">
+<h2>Comparing fit methods<a class="headerlink" href="#Comparing-fit-methods" title="Link to this heading">¶</a></h2>
+<p>There are two methods available in the SPEI package to fit the data to the continious distribution: maximum likelihood estimation (MLE) and method of moments (MM). Both methods are supported by default in the SciPy <code class="docutils literal notranslate"><span class="pre">rv_continuous.fit</span></code> method. They can be called in the SI class using the fit_method keyword argument. The figure below shows the different results for the two fit methods.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spei_mle</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">SI</span><span class="p">(</span><span class="n">surplusm</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">pearson3</span><span class="p">,</span> <span class="n">fit_method</span><span class="o">=</span><span class="s2">&quot;MLE&quot;</span><span class="p">)</span>
+<span class="n">spei_mle</span><span class="o">.</span><span class="n">fit_distribution</span><span class="p">()</span>
+
+<span class="n">spei_mm</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">SI</span><span class="p">(</span><span class="n">surplusm</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="n">pearson3</span><span class="p">,</span> <span class="n">fit_method</span><span class="o">=</span><span class="s2">&quot;MM&quot;</span><span class="p">)</span>
+<span class="n">spei_mm</span><span class="o">.</span><span class="n">fit_distribution</span><span class="p">()</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">axl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+    <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">),</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span>
+<span class="p">)</span>
+<span class="n">axsr</span> <span class="o">=</span> <span class="n">axl</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">distf</span><span class="p">),</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">distp</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="n">spei_mm</span><span class="o">.</span><span class="n">_dist_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">spei_mle</span><span class="o">.</span><span class="n">_dist_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">cdf_mm</span> <span class="o">=</span> <span class="n">distf</span><span class="o">.</span><span class="n">cdf</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+    <span class="n">cdf_mle</span> <span class="o">=</span> <span class="n">distp</span><span class="o">.</span><span class="n">cdf</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">distf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cdf_mm</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+    <span class="n">e_cdf</span> <span class="o">=</span> <span class="n">sps</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">cdf</span>
+    <span class="n">plot_ecdf</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axsr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">ecdf</span><span class="o">=</span><span class="n">e_cdf</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C3&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;ECDF&quot;</span><span class="p">)</span>
+    <span class="n">axsr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">cdf_mm</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C0&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;MM </span><span class="si">{</span><span class="n">distf</span><span class="o">.</span><span class="n">ks_test</span><span class="p">()</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">axsr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">cdf_mle</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;MLE </span><span class="si">{</span><span class="n">distp</span><span class="o">.</span><span class="n">ks_test</span><span class="p">()</span><span class="si">:</span><span class="s2">0.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">axsr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">axsr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">month_name</span><span class="p">[</span><span class="n">date</span><span class="o">.</span><span class="n">month</span><span class="p">],</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Cumulative</span><span class="se">\n</span><span class="s2">probability [-]&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axl</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]]</span>
+<span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Surplus [mm/d]&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/examples_example02_distributions_25_0.png" src="../_images/examples_example02_distributions_25_0.png" />
+</div>
+</div>
 </section>
 </section>
 
