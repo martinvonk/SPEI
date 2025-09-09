@@ -18,6 +18,8 @@ class Dist:
     prob_zero: bool = field(default=False, init=True, repr=False)
     p0: float = field(default=0.0, init=False, repr=False)
     data_window: Series | None = field(default=None, init=True, repr=False)
+    fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
+
     """
     Represents a distribution associated with data.
 
@@ -40,6 +42,9 @@ class Dist:
         Attribute storing additional distribution parameters (if applicable).
     p0 : float
         The probability of zero values in the data. Only calculated if prob_zero=True.
+    fit_method : Literal["MLE", "MM"], default="MLE"
+        The method used for fitting the distribution. The default is "MLE"
+        (Maximum Likelihood Estimate); "MM" (Method of Moments) is also available.
 
     Notes
     -----
@@ -53,7 +58,9 @@ class Dist:
         Post initializes the Dist class by fitting the distribution.
         """
         data_fit = self.data_window if self.data_window is not None else self.data
-        pars, loc, scale = self.fit_dist(data=data_fit, dist=self.dist)
+        pars, loc, scale = self.fit_dist(
+            data=data_fit, dist=self.dist, fit_method=self.fit_method
+        )
         self.loc = loc
         self.scale = scale
         self.pars = pars
@@ -63,7 +70,7 @@ class Dist:
 
     @staticmethod
     def fit_dist(
-        data: Series, dist: ContinuousDist
+        data: Series, dist: ContinuousDist, fit_method: Literal["MLE", "MM"] = "MLE"
     ) -> tuple[list[float] | None, float, float]:
         """
         Fits a Scipy continuous distribution to the data.
@@ -74,13 +81,21 @@ class Dist:
             The input data for fitting.
         dist : ContinuousDist
             The continuous distribution to be fitted.
+        fit_method : Literal["MLE", "MM"], optional
+            The method used for fitting the distribution. The
+            default is “MLE” (Maximum Likelihood Estimate);
+            “MM” (Method of Moments) is also available.
 
         Returns
         -------
         Tuple
             Tuple containing distribution parameters (pars, loc, scale).
         """
-        fit_tuple = dist.fit(data, scale=std(data))
+        fit_tuple = dist.fit(
+            data,
+            scale=std(data),  # initial guess
+            method=fit_method,
+        )
         if len(fit_tuple) == 2:
             loc, scale = fit_tuple
             pars = None
