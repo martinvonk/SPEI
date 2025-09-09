@@ -113,7 +113,7 @@ class Dist:
             pdf = self.dist.pdf(data_pdf.values, loc=self.loc, scale=self.scale)
 
         if self.prob_zero:
-            pdf = self.p0 + (1 - self.p0) * pdf
+            pdf = (1 - self.p0) * pdf
             pdf[self.data == 0.0] = self.p0
 
         return Series(pdf, index=data_pdf.index, dtype=float)
