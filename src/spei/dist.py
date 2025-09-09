@@ -10,18 +10,7 @@ from ._typing import ContinuousDist
 
 @dataclass
 class Dist:
-    data: Series = field(init=True, repr=False)
-    dist: ContinuousDist
-    loc: float = field(init=False, repr=True)
-    scale: float = field(init=False, repr=True)
-    pars: list[float] | None = field(init=False, repr=False)
-    prob_zero: bool = field(default=False, init=True, repr=False)
-    p0: float = field(default=0.0, init=False, repr=False)
-    data_window: Series | None = field(default=None, init=True, repr=False)
-    fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
-
-    """
-    Represents a distribution associated with data.
+    """Represents a distribution associated with data.
 
     Parameters
     ----------
@@ -52,6 +41,16 @@ class Dist:
     distribution parameters. If the fitted distribution requires additional
     parameters beyond `loc` and `scale`, they are stored in the `pars` attribute.
     """
+
+    data: Series = field(init=True, repr=False)
+    dist: ContinuousDist
+    loc: float = field(init=False, repr=True)
+    scale: float = field(init=False, repr=True)
+    pars: list[float] | None = field(init=False, repr=False)
+    prob_zero: bool = field(default=False, init=True, repr=False)
+    p0: float = field(default=0.0, init=False, repr=False)
+    data_window: Series | None = field(default=None, init=True, repr=False)
+    fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
 
     def __post_init__(self):
         """
