@@ -38,17 +38,17 @@ jobs:
             toxenv: py314
             experimental: false
           - name: Type check with mypy
-            python: "3.10"
+            python: "3.13"
             os: ubuntu-latest
             toxenv: type
             experimental: false
           - name: Formatting and linting with ruff
-            python: "3.10"
+            python: "3.13"
             os: ubuntu-latest
             toxenv: ruff
             experimental: false
           - name: Codacy Coverage Report
-            python: "3.10"
+            python: "3.13"
             os: ubuntu-latest
             toxenv: coverage
             experimental: false
