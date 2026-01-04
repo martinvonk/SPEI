@@ -68,21 +68,17 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">spei</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">si</span>  <span class="c1"># si for standardized index</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">si</span><span class="o">.</span><span class="n">show_versions</span><span class="p">())</span>
+<span class="n">si</span><span class="o">.</span><span class="n">show_versions</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-python: 3.11.14
-spei: 0.8.1
-numpy: 2.3.5
-scipy: 1.16.3
-matplotlib: 3.10.8
-pandas: 2.3.3
+&#39;python: 3.11.14\nspei: 0.8.1\nnumpy: 2.3.5\nscipy: 1.16.3\nmatplotlib: 3.10.8\npandas: 2.3.3&#39;
 </pre></div></div>
 </div>
 </section>
@@ -630,7 +626,7 @@ to tailor the standardization process to their data and desired level of tempora
 </section>
 <section id="Comparing-fit-methods">
 <h2>Comparing fit methods<a class="headerlink" href="#Comparing-fit-methods" title="Link to this heading">¶</a></h2>
-<p>There are two methods available in the SPEI package to fit the data to the continious distribution: maximum likelihood estimation (MLE) and method of moments (MM). Both methods are supported by default in the SciPy <code class="docutils literal notranslate"><span class="pre">rv_continuous.fit</span></code> method. They can be called in the SI class using the fit_method keyword argument. The figure below shows the different results for the two fit methods.</p>
+<p>There are two methods available in the SPEI package to fit the data to the continuous distribution: maximum likelihood estimation (MLE) and method of moments (MM). Both methods are supported by default in the SciPy <code class="docutils literal notranslate"><span class="pre">rv_continuous.fit</span></code> method. They can be called in the SI class using the fit_method keyword argument. The figure below shows the different results for the two fit methods.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
