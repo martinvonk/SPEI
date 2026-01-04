@@ -136,3 +136,13 @@ def test_ppf_nsf(prec: Series) -> None:
     assert len(ppf) == len(si.series), (
         "PPF result length does not match input series length"
     )
+
+
+def test_si_predict(prec: Series) -> None:
+    si = SI(prec, dist=norm, timescale=30, fit_freq="MS")
+    si.fit_distribution()
+    pred = si.predict(prec)
+    assert isinstance(pred, Series), "Predict result should be a Pandas Series"
+    assert len(pred) == len(prec), (
+        "Predict result length does not match input series length"
+    )
