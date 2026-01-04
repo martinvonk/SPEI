@@ -72,7 +72,7 @@ def si(
     ymin, ymax = -3.0, 3.0  # default y-axis limits, also used for colormap norm
 
     if background:
-        ax.plot(si.index, si.values.astype(float), linewidth=0.8, color="k")
+        ax.plot(si.index, si.values, linewidth=0.8, color="k")
         ax.axhline(0, linestyle="--", linewidth=0.5, color="k")
 
         droughts = si.to_numpy(dtype=float, copy=True)
@@ -138,8 +138,8 @@ def threshold(
     if kwargs is None:
         kwargs = {}
 
-    series_values = series.values.astype(float)
-    threshold_values = threshold.values.astype(float)
+    series_values = series.values
+    threshold_values = threshold.values
 
     line_color = kwargs.pop("color", "k")
     label = kwargs.pop("label", series.name)
