@@ -32,6 +32,11 @@ jobs:
             os: ubuntu-latest
             toxenv: py313
             experimental: false
+          - name: Test suite with py314-ubuntu
+            python: "3.14"
+            os: ubuntu-latest
+            toxenv: py314
+            experimental: false
           - name: Type check with mypy
             python: "3.10"
             os: ubuntu-latest
