@@ -79,4 +79,4 @@ Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025)
 
 Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Assessing climate change and whiplash events in national parks. National Weather Center Research Experiences for Undergraduates Program.
 
-Saponaro, V., Dalmonech, D., Vangi, E. et al. Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. J. For. Res. 37, 16 (2026). https://doi.org/10.1007/s11676-025-01942-8
+Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8
