@@ -39,6 +39,7 @@ jobs:
           tox -e docu --skip-pkg-install
 
       - name: Publish HTML output on gh-pages branch
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -46,6 +47,7 @@ jobs:
           enable_jekyll: false
 
   deploy:
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     permissions:
