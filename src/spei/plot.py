@@ -87,7 +87,7 @@ def si(
     else:
         datetime = DatetimeIndex(si.index).to_pydatetime()
         x = date2num(datetime)
-        y = si.values.astype(float)
+        y = si.to_numpy(dtype=float)
         points = array([x, y]).T.reshape(-1, 1, 2)
         segments = concatenate([points[:-1], points[1:]], axis=1)
         lc = mpl.collections.LineCollection(
