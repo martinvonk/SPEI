@@ -545,8 +545,8 @@ class SI:
                 cdf_i = cdf.loc[data.index]
                 ppf.loc[data.index] = interp(
                     x=q,
-                    xp=cdf_i.values,
-                    fp=data.values,
+                    xp=cdf_i.to_numpy(dtype=float),
+                    fp=data.to_numpy(dtype=float),
                 )
         else:
             for k in self._dist_dict:
