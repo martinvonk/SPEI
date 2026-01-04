@@ -63,10 +63,20 @@ This list of scientific literature is helpful as a reference to understand the c
 ### Publications
 These are scientific publications that use and cite this Python package:
 
+Adla, S., Šaponjić, A., Tyagi, A., Nagi, A., Pastore, P., & Pande, S. (2024). Steering agricultural interventions towards sustained irrigation adoption by farmers: socio-psychological analysis of irrigation practices in Maharashtra, India. Hydrological Sciences Journal, 69(12), 1586–1603. https://doi.org/10.1080/02626667.2024.2376709
+
 van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., & Wanders, N. (2025). Regional drivers and characteristics of multi-year droughts. Weather and Climate Extremes, 48, 100748. https://doi.org/10.1016/j.wace.2025.100748
 
 Segura-Barrero, R., Lauvaux, T., Lian, J., Ciais, P., Badia, A., Ventura, S., Bazzi, H., Abbessi, E., Fu, Z., Xiao, J., Li, X., & Villalba, G. (2025). Heat and Drought Events Alter Biogenic Capacity to Balance CO2 Budget in South-Western Europe. Global biogeochemical cycles, 39(1), e2024GB008163. https://doi.org/10.1029/2024GB008163
 
-Adla, S., Šaponjić, A., Tyagi, A., Nagi, A., Pastore, P., & Pande, S. (2024). Steering agricultural interventions towards sustained irrigation adoption by farmers: socio-psychological analysis of irrigation practices in Maharashtra, India. Hydrological Sciences Journal, 69(12), 1586–1603. https://doi.org/10.1080/02626667.2024.2376709
-
 Panigrahi, S., Vidyarthi, V.K. (2025). Assessing the Suitability of SPI and SPEI in Steppe Hot and Arid Climatic Zones in India. In: Sefelnasr, A., Sherif, M., Singh, V.P. (eds) Water Resources Management and Sustainability. Water Science and Technology Library, vol 114. Springer, Cham. https://doi.org/10.1007/978-3-031-80520-2_12
+
+Ashcroft L, Ritman M, Bridgman H, Thornton K, Di Gravio G, Oates W, Belfield R, Belfield E. (2025). A climatology of meteorological droughts in New England, Australia, 1880–2022. Journal of Southern Hemisphere Earth Systems Science 75, ES25013. https://doi.org/10.1071/ES25013
+
+Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). “ Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective.” International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
+
+Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, EGUsphere [preprint], https://doi.org/10.5194/egusphere-2025-4526,
+
+Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Assessing climate change and whiplash events in national parks. National Weather Center Research Experiences for Undergraduates Program.
+
+Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8

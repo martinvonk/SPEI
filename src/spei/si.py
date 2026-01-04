@@ -53,6 +53,7 @@ def sgi(
         timescale=timescale,
         fit_freq=fit_freq,
         fit_window=0,
+        fit_method="MLE",
         prob_zero=False,
         normal_scores_transform=True,
         agg_func="mean",
@@ -117,6 +118,7 @@ def spi(
         timescale=timescale,
         fit_freq=fit_freq,
         fit_window=fit_window,
+        fit_method="MLE",
         prob_zero=prob_zero,
         normal_scores_transform=False,
         agg_func="sum",
@@ -182,6 +184,7 @@ def spei(
         timescale=timescale,
         fit_freq=fit_freq,
         fit_window=fit_window,
+        fit_method="MLE",
         prob_zero=prob_zero,
         normal_scores_transform=False,
         agg_func="sum",
@@ -246,6 +249,7 @@ def ssfi(
         timescale=timescale,
         fit_freq=fit_freq,
         fit_window=fit_window,
+        fit_method="MLE",
         prob_zero=prob_zero,
         normal_scores_transform=False,
         agg_func="mean",
@@ -310,6 +314,7 @@ def ssmi(
         timescale=timescale,
         fit_freq=fit_freq,
         fit_window=fit_window,
+        fit_method="MLE",
         prob_zero=prob_zero,
         normal_scores_transform=False,
         agg_func="mean",
@@ -344,6 +349,9 @@ class SI:
         larger than zero data data within the window is used to fit the
         distribution for the series. fit_window must be a odd number larger
         than 3 when used.
+    fit_method : Literal["MLE", "MM"], default="MLE"
+        The method used for fitting the distribution. The default is "MLE"
+        (Maximum Likelihood Estimate); "MM" (Method of Moments) is also available.
     prob_zero : bool, default=False
         Flag indicating whether the probability of zero values in the series is
         calculated by the occurence.
@@ -368,6 +376,7 @@ class SI:
     timescale: int = 0
     fit_freq: str | None = field(default=None)
     fit_window: int = field(default=0)
+    fit_method: Literal["MLE", "MM"] = field(default="MLE", repr=False)
     prob_zero: bool = field(default=False)
     normal_scores_transform: bool = field(default=False)
     agg_func: Literal["sum", "mean"] = "sum"
@@ -452,6 +461,7 @@ class SI:
                     dist=self.dist,
                     prob_zero=self.prob_zero,
                     data_window=data_window,
+                    fit_method=self.fit_method,
                 )
                 self._dist_dict[date] = fd
         else:
@@ -465,6 +475,7 @@ class SI:
                     dist=self.dist,
                     prob_zero=self.prob_zero,
                     data_window=None,
+                    fit_method=self.fit_method,
                 )
                 self._dist_dict[date] = fd  # type: ignore
 
@@ -534,8 +545,8 @@ class SI:
                 cdf_i = cdf.loc[data.index]
                 ppf.loc[data.index] = interp(
                     x=q,
-                    xp=cdf_i.values.astype(float),
-                    fp=data.values.astype(float),
+                    xp=cdf_i.to_numpy(dtype=float),
+                    fp=data.to_numpy(dtype=float),
                 )
         else:
             for k in self._dist_dict:
