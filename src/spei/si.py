@@ -577,3 +577,46 @@ class SI:
                 return dist
 
         raise KeyError("Date not found in distributions")
+
+    def predict(self, series: Series) -> Series:
+        """
+        Method to predict the standardized index for a future period
+        based on the fitted distribution.
+
+        Parameters
+        ----------
+        series : pd.Series
+            The input time series data for the prediction period.
+
+        Returns
+        -------
+        Series
+        """
+        if self.normal_scores_transform:
+            raise NotImplementedError(
+                "Prediction not supported when using normal-scores-transform."
+            )
+        si_pred = SI(
+            series,
+            dist=self.dist,
+            timescale=self.timescale,
+            fit_freq=self.fit_freq,
+            fit_window=self.fit_window,
+            fit_method=self.fit_method,
+            prob_zero=self.prob_zero,
+            normal_scores_transform=self.normal_scores_transform,
+            agg_func=self.agg_func,
+        )
+        si_pred.fit_distribution()  # TODO: avoid refitting
+        for date, dist in self._dist_dict.items():
+            if date not in si_pred._dist_dict:
+                logging.warning(
+                    f"Date {date} not found in prediction distribution. Skipping."
+                )
+                continue
+            si_pred._dist_dict[date].loc = dist.loc
+            si_pred._dist_dict[date].scale = dist.scale
+            si_pred._dist_dict[date].pars = dist.pars
+            si_pred._dist_dict[date].p0 = dist.p0
+
+        return si_pred.norm_ppf()
