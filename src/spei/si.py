@@ -603,7 +603,7 @@ class SI:
             normal_scores_transform=self.normal_scores_transform,
             agg_func=self.agg_func,
         )
-        si_pred.fit_distribution()
+        si_pred.fit_distribution()  # TODO: avoid refitting
         for date, dist in self._dist_dict.items():
             si_pred._dist_dict[date].loc = dist.loc
             si_pred._dist_dict[date].scale = dist.scale
