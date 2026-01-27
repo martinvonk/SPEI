@@ -145,7 +145,7 @@ def test_si_predict(prec: Series) -> None:
     si.fit_distribution()
     pred = si.predict(prec)
     assert isinstance(pred, Series), "Predict result should be a Pandas Series"
-    assert len(pred) == (len(prec) - timescale - 1), (
+    assert len(pred) == (len(prec) - timescale + 1), (
         "Predict result length does not match input series length"
     )
 
