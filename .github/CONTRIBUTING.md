@@ -15,8 +15,6 @@ When opening an new issue, please include:
 - The version of the package and Python you’re using
 - If relevant, a minimal reproducible example
 
-Before creating a new issue, check whether it has already been reported.
-
 ### Submitting a Pull Request
 
 To submit a pull request:

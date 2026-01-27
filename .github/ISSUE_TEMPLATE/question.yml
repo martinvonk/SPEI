@@ -12,6 +12,6 @@ body:
   - type: textarea
     attributes:
       label: Describe the question
-      description: A concise description of what you're would like to know.
+      description: A concise description of what you would like to know.
     validations:
       required: false
