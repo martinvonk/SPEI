@@ -3,7 +3,7 @@ from platform import python_version
 
 from packaging.requirements import Requirement
 
-__version__ = "0.8.1"
+__version__ = "0.8.2"
 
 
 def get_versions() -> dict[str, str]:
