@@ -608,12 +608,21 @@ class SI:
             agg_func=self.agg_func,
         )
         si_pred.fit_distribution()  # TODO: avoid refitting
+
+        # Ensure that prediction distributions match the fitted distributions exactly,
+        # so no parameters remain fitted on the prediction data.
+        fitted_dates = set(self._dist_dict.keys())
+        pred_dates = set(si_pred._dist_dict.keys())
+        missing_in_pred = fitted_dates - pred_dates
+        unexpected_in_pred = pred_dates - fitted_dates
+        if missing_in_pred or unexpected_in_pred:
+            raise ValueError(
+                "Mismatch between fitted and prediction distribution dates. "
+                f"Missing in prediction: {sorted(missing_in_pred)}; "
+                f"unexpected in prediction: {sorted(unexpected_in_pred)}."
+            )
+
         for date, dist in self._dist_dict.items():
-            if date not in si_pred._dist_dict:
-                logging.warning(
-                    f"Date {date} not found in prediction distribution. Skipping."
-                )
-                continue
             si_pred._dist_dict[date].loc = dist.loc
             si_pred._dist_dict[date].scale = dist.scale
             si_pred._dist_dict[date].pars = dist.pars
