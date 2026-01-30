@@ -1,3 +1,4 @@
+import pytest
 from pandas import DataFrame, Series, Timestamp
 from scipy.stats import norm
 
@@ -135,4 +136,46 @@ def test_ppf_nsf(prec: Series) -> None:
     assert isinstance(ppf, Series), "PPF result should be a Pandas Series"
     assert len(ppf) == len(si.series), (
         "PPF result length does not match input series length"
+    )
+
+
+def test_si_predict(prec: Series) -> None:
+    timescale = 30
+    si = SI(prec, dist=norm, timescale=timescale, fit_freq="MS")
+    si.fit_distribution()
+    pred = si.predict(prec)
+    assert isinstance(pred, Series), "Predict result should be a Pandas Series"
+    assert len(pred) == (len(prec) - timescale + 1), (
+        "Predict result length does not match input series length"
+    )
+
+
+def test_si_predict_with_normal_scores_transform(prec: Series) -> None:
+    """Test that prediction with normal_scores_transform raises NotImplementedError."""
+    timescale = 30
+    si = SI(
+        prec,
+        dist=norm,
+        timescale=timescale,
+        fit_freq="MS",
+        normal_scores_transform=True,
+    )
+    with pytest.raises(NotImplementedError) as excinfo:
+        si.predict(prec)
+
+    assert (
+        str(excinfo.value)
+        == "Prediction not supported when using normal-scores-transform."
+    )
+
+
+def test_si_predict_with_unmatched_index(prec: Series) -> None:
+    """Test that prediction with unmatched index raises ValueError."""
+    si = SI(prec, dist=norm, fit_freq="MS")
+    si.fit_distribution()
+    new_series = prec.resample("YS").sum()
+    with pytest.raises(ValueError) as excinfo:
+        si.predict(new_series)
+    assert "Mismatch between fitted and prediction distribution dates." in str(
+        excinfo.value
     )

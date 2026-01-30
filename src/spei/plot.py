@@ -89,9 +89,9 @@ def si(
         x = date2num(datetime)
         y = si.to_numpy(dtype=float)
         points = array([x, y]).T.reshape(-1, 1, 2)
-        segments = concatenate([points[:-1], points[1:]], axis=1)
+        segments = concatenate([points[:-1], points[1:]], axis=1).tolist()
         lc = mpl.collections.LineCollection(
-            segments, cmap=colormap, norm=plt.Normalize(ymin, ymax)
+            segments, cmap=colormap, norm=mpl.colors.Normalize(ymin, ymax)
         )
         lc.set_array(y)
         lc.set_linewidth(1.2)

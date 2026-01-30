@@ -577,3 +577,55 @@ class SI:
                 return dist
 
         raise KeyError("Date not found in distributions")
+
+    def predict(self, series: Series) -> Series:
+        """
+        Method to predict the standardized index for a future period
+        based on the fitted distribution.
+
+        Parameters
+        ----------
+        series : pd.Series
+            The input time series data for the prediction period.
+
+        Returns
+        -------
+        Series
+        """
+        if self.normal_scores_transform:
+            raise NotImplementedError(
+                "Prediction not supported when using normal-scores-transform."
+            )
+        si_pred = SI(
+            series,
+            dist=self.dist,
+            timescale=self.timescale,
+            fit_freq=self.fit_freq,
+            fit_window=self.fit_window,
+            fit_method=self.fit_method,
+            prob_zero=self.prob_zero,
+            normal_scores_transform=self.normal_scores_transform,
+            agg_func=self.agg_func,
+        )
+        si_pred.fit_distribution()  # TODO: avoid refitting
+
+        # Ensure that prediction distributions match the fitted distributions exactly,
+        # so no parameters remain fitted on the prediction data.
+        fitted_dates = set(self._dist_dict.keys())
+        pred_dates = set(si_pred._dist_dict.keys())
+        missing_in_pred = fitted_dates - pred_dates
+        unexpected_in_pred = pred_dates - fitted_dates
+        if missing_in_pred or unexpected_in_pred:
+            raise ValueError(
+                "Mismatch between fitted and prediction distribution dates. "
+                f"Missing in prediction: {sorted(missing_in_pred)}; "
+                f"unexpected in prediction: {sorted(unexpected_in_pred)}."
+            )
+
+        for date, dist in self._dist_dict.items():
+            si_pred._dist_dict[date].loc = dist.loc
+            si_pred._dist_dict[date].scale = dist.scale
+            si_pred._dist_dict[date].pars = dist.pars
+            si_pred._dist_dict[date].p0 = dist.p0
+
+        return si_pred.norm_ppf()
