@@ -162,7 +162,8 @@ def test_si_predict_with_normal_scores_transform(prec: Series) -> None:
     )
     with pytest.raises(NotImplementedError) as excinfo:
         si.predict(prec)
-        assert (
-            str(excinfo.value)
-            == "Prediction not supported when using normal-scores-transform."
-        )
+
+    assert (
+        str(excinfo.value)
+        == "Prediction not supported when using normal-scores-transform."
+    )
