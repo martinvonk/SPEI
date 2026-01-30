@@ -10,7 +10,7 @@ description = "A simple Python package to calculate drought indices for time ser
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
-dependencies = ["numpy", "scipy", "matplotlib", "pandas<3.0.0"]
+dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.10",
@@ -30,7 +30,7 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-notebook = ["ipykernel", "pastas", "rpy2", "standard-precip"]
+notebook = ["ipykernel", "pastas", "rpy2", "standard-precip", "pandas<3.0"]
 documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs"]

@@ -38,7 +38,7 @@ def validate_series(series: Series) -> Series:
 
     index = validate_index(series.index)
 
-    return series.reindex(index, copy=True)
+    return series.copy().reindex(index)
 
 
 def validate_index(index: Index) -> DatetimeIndex:
@@ -111,7 +111,7 @@ def group_yearly_df(series: Series) -> DataFrame:
         )
         year = getattr(year_timestamp, "year")  # type: str
         grs[year] = gry
-    return concat(grs, axis=1)
+    return concat(grs, axis=1, sort=True)
 
 
 def get_data_series(group_df: DataFrame) -> Series:
