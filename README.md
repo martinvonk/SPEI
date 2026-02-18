@@ -73,10 +73,12 @@ Panigrahi, S., Vidyarthi, V.K. (2025). Assessing the Suitability of SPI and SPEI
 
 Ashcroft L, Ritman M, Bridgman H, Thornton K, Di Gravio G, Oates W, Belfield R, Belfield E. (2025). A climatology of meteorological droughts in New England, Australia, 1880–2022. Journal of Southern Hemisphere Earth Systems Science 75, ES25013. https://doi.org/10.1071/ES25013
 
-Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). “ Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective.” International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
+Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective. International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
 
 Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, EGUsphere [preprint], https://doi.org/10.5194/egusphere-2025-4526,
 
 Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Assessing climate change and whiplash events in national parks. National Weather Center Research Experiences for Undergraduates Program.
 
 Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8
+
+Worden, S., R. Fu, A. A. Bloom, et al. (2026). Congo Basin Carbon Cycle Responses to Global Change. Global Change Biology 32, no. 1: e70688. https://doi.org/10.1111/gcb.70688.
