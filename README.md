@@ -75,10 +75,14 @@ Ashcroft L, Ritman M, Bridgman H, Thornton K, Di Gravio G, Oates W, Belfield R, 
 
 Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective. International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
 
-Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, EGUsphere [preprint], https://doi.org/10.5194/egusphere-2025-4526,
+Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, EGUsphere [preprint]. https://doi.org/10.5194/egusphere-2025-4526
 
 Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Assessing climate change and whiplash events in national parks. National Weather Center Research Experiences for Undergraduates Program.
 
+Knoll, S., Duthweiler, S., Rötzer, T., Pauleit, S., & Helmreich, B. (2025). Recycled demolition waste in engineered substrate promotes long-term urban tree growth and ecosystem services in a temperate city. Sustainable Cities and Society, 131, Article 106670. https://doi.org/10.1016/j.scs.2025.106670
+
 Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8
 
-Worden, S., R. Fu, A. A. Bloom, et al. (2026). Congo Basin Carbon Cycle Responses to Global Change. Global Change Biology 32, no. 1: e70688. https://doi.org/10.1111/gcb.70688.
+Worden, S., Fu, R., Bloom, A. A., Bauters, M., Verbeeck, H., Fatoyinbo, T., Hubau, W., Koutika, L.-S., Kengdo, S. K., Maes, S. L., Medjibe, V., Russo, N. J., Saatchi, S., Sagang, L. B., Smith, T. B., Sonwa, D. J., Boeckx, P., & Ordway, E. M. (2026). Congo Basin carbon cycle responses to global change. Global Change Biology, 32(1), Article e70688. https://doi.org/10.1111/gcb.70688
+
+Bjerre, E., Jessen, S., Schneider, R., Villholth, K. G., Dippenaar, M. A., Enemark, T., Meyer, R., Hallowes, J., Sonnenborg, T. O., Kanyerere, T., & Jensen, K. H. (2026). Groundwater responses to decadal rainfall variability in semi-arid South Africa. Journal of Hydrology, 669(Part A), Article 135022. https://doi.org/10.1016/j.jhydrol.2026.135022
