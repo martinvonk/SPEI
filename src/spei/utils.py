@@ -109,7 +109,7 @@ def group_yearly_df(series: Series) -> DataFrame:
         gry.index = to_datetime(
             "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
         )
-        year = getattr(year_timestamp, "year")  # type: str
+        year = getattr(year_timestamp, "year")
         grs[year] = gry
     return concat(grs, axis=1, sort=True)
 

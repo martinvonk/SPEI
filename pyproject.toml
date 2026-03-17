@@ -9,11 +9,10 @@ authors = [{ name = "Martin Vonk", email = "vonk.mart@gmail.com" }]
 description = "A simple Python package to calculate drought indices for time series such as the SPI, SPEI and SGI."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = ["numpy", "scipy", "matplotlib", "pandas"]
 classifiers = [
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
@@ -33,10 +32,10 @@ repository = "https://github.com/martinvonk/spei"
 notebook = ["ipykernel", "pastas", "rpy2", "standard-precip", "pandas<3.0"]
 documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
-typing = ["mypy", "pandas-stubs"]
+typing = ["mypy", "pandas-stubs", "ty"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
-dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox"]
+dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox-uv"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -58,8 +57,8 @@ show-fixes = true
 fix = true
 
 [tool.tox]
-requires = ["tox>=4"]
-env_list = ["py310", "py311", "py312", "py313", "py314", "type", "ruff"]
+requires = ["tox-uv>=1.0"]
+env_list = ["py311", "py312", "py313", "py314", "type", "typety", "ruff"]
 
 [tool.tox.env_run_base]
 description = "run unit tests"
@@ -71,6 +70,11 @@ description = "run type checks"
 extras = ["typing"]
 commands = [["mypy", "src"]]
 
+[tool.tox.env.typety]
+description = "run type checks with ty"
+extras = ["typing"]
+commands = [["ty", "check", "src"]]
+
 [tool.tox.env.ruff]
 description = "run ruff checks"
 extras = ["ruffing"]
@@ -80,7 +84,6 @@ commands = [
                 "check",
                 "--extend-select",
                 "I",
-                "--preview",
         ],
         [
                 "ruff",

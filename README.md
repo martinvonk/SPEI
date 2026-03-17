@@ -12,8 +12,9 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square&color=green)](https://github.com/martinvonk/SPEI/actions/workflows/tests.yml)
 [![CodacyCoverage](https://img.shields.io/codacy/coverage/908b566912314666b84e1add22ea7d66?style=flat-square&color=green)](https://app.codacy.com/gh/martinvonk/SPEI/)
 [![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square&color=darkgreen)](https://app.codacy.com/gh/martinvonk/SPEI/)
-[![Typed: MyPy](https://img.shields.io/badge/type_checker-mypy-darkgreen?style=flat-square)](https://mypy-lang.org/)
 [![Formatter and Linter: ruff](https://img.shields.io/badge/linter-ruff-darkgreen?style=flat-square)](https://github.com/charliermarsh/ruff)
+[![Typed: mypy](https://img.shields.io/badge/typed-mypy-darkgreen?style=flat-square)](https://mypy-lang.org/)
+[![Typed: ty](https://img.shields.io/badge/typed-ty-darkgreen?style=flat-square)](https://docs.astral.sh/ty/)
 
 
 SPEI is a simple Python package to calculate drought indices for hydrological time series. This package uses popular Python packages such as Pandas and Scipy to make it easy and versatile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average, and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data. Different popular drought indices are supported such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index), and SGI (Standardized Groundwater Index).

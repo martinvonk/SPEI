@@ -2,10 +2,15 @@ import logging
 from calendar import month_abbr
 from itertools import cycle
 
-import matplotlib as mpl
+import matplotlib.collections as mpl_collections
+import matplotlib.colorbar as mpl_colorbar
+import matplotlib.colors as mpl_colors
+import matplotlib.dates as mpl_dates
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mpl_ticker
+from matplotlib.axes import Axes
 from matplotlib.axes._secondary_axes import SecondaryAxis
-from matplotlib.dates import date2num
+from matplotlib.cm import ScalarMappable
 from numpy import arange, array, concatenate, linspace, meshgrid, reshape
 from pandas import (
     DataFrame,
@@ -25,11 +30,11 @@ def si(
     si: Series,
     add_category: bool = True,
     figsize: tuple[float, float] = (6.5, 4.0),
-    cmap: str | mpl.colors.Colormap = "seismic_r",
+    cmap: str | mpl_colors.Colormap = "seismic_r",
     background: bool = True,
-    ax: plt.Axes | None = None,
+    ax: Axes | None = None,
     **kwargs,
-) -> plt.Axes:
+) -> Axes:
     """Plot the standardized index values as a time series.
 
     Parameters
@@ -86,18 +91,18 @@ def si(
         ax.fill_between(x=si.index, y1=nodroughts, y2=ymax, color="w", interpolate=True)
     else:
         datetime = DatetimeIndex(si.index).to_pydatetime()
-        x = date2num(datetime)
+        x = mpl_dates.date2num(datetime)
         y = si.to_numpy(dtype=float)
         points = array([x, y]).T.reshape(-1, 1, 2)
         segments = concatenate([points[:-1], points[1:]], axis=1).tolist()
-        lc = mpl.collections.LineCollection(
-            segments, cmap=colormap, norm=mpl.colors.Normalize(ymin, ymax)
+        lc = mpl_collections.LineCollection(
+            segments, cmap=colormap, norm=mpl_colors.Normalize(ymin, ymax)
         )
         lc.set_array(y)
         lc.set_linewidth(1.2)
         _ = ax.add_collection(lc)
 
-    ax.yaxis.set_major_locator(mpl.ticker.MultipleLocator(1))
+    ax.yaxis.set_major_locator(mpl_ticker.MultipleLocator(1))
     ax.set_ylim(ymin, ymax)
 
     if add_category:
@@ -111,9 +116,9 @@ def threshold(
     threshold: Series,
     figsize: tuple[float, float] = (6.5, 4.0),
     fill_color: str = "red",
-    ax: plt.Axes | None = None,
+    ax: Axes | None = None,
     **kwargs,
-) -> plt.Axes:
+) -> Axes:
     """Plot the time series with a threshold line and fill the area below the threshold.
 
     Parameters
@@ -169,9 +174,9 @@ def threshold(
     return ax
 
 
-def _add_category_labels(ax: plt.Axes) -> SecondaryAxis:
+def _add_category_labels(ax: Axes) -> SecondaryAxis:
     """Add category based on the standardized index values to the right y-axis."""
-    ax.yaxis.set_minor_locator(mpl.ticker.MultipleLocator(0.5))
+    ax.yaxis.set_minor_locator(mpl_ticker.MultipleLocator(0.5))
     sax = ax.secondary_yaxis("right")
     sax.set_yticks([-2.5, -1.75, -1.25, -0.5, 0.5, 1.25, 1.75, 2.5], minor=True)
     sax.set_yticks([-3.0, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 3.0], minor=False)
@@ -199,9 +204,9 @@ def monthly_density(
     si: Series,
     years: list[int],
     months: list[int],
-    cmap: str | mpl.colors.Colormap = "tab20c",
-    ax: plt.Axes | None = None,
-) -> plt.Axes:
+    cmap: str | mpl_colors.Colormap = "tab20c",
+    ax: Axes | None = None,
+) -> Axes:
     """Plot the monthly kernel-density estimate for a specific year.
 
     Parameters
@@ -268,8 +273,8 @@ def heatmap(
     vmin: float = -3.0,
     vmax: float = -1.0,
     yticklabels: list[str] | None = None,
-    ax: plt.Axes | None = None,
-) -> plt.Axes:
+    ax: Axes | None = None,
+) -> Axes:
     """
     Plots multiple standardized indices on a heatmap.
 
@@ -313,7 +318,7 @@ def heatmap(
     else:
         colormap = cmap
 
-    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    norm = mpl_colors.Normalize(vmin=vmin, vmax=vmax)
 
     sisdf = concat(sis, axis=1)
     freq = infer_freq(DatetimeIndex(sisdf.index))
@@ -355,8 +360,8 @@ def heatmap(
 
     if fig is not None:
         # add colorbar
-        scm = mpl.cm.ScalarMappable(norm=norm, cmap=colormap)
-        cax, cbar_kw = mpl.colorbar.make_axes(
+        scm = ScalarMappable(norm=norm, cmap=colormap)
+        cax, cbar_kw = mpl_colorbar.make_axes(
             ax,
             fraction=0.05,
             pad=0.05 if add_category else 0.01,
@@ -374,9 +379,7 @@ def heatmap(
     return ax
 
 
-def deficit_knmi(
-    df: DataFrame, ax: plt.Axes | None = None, window: int = 0
-) -> plt.Axes:
+def deficit_knmi(df: DataFrame, ax: Axes | None = None, window: int = 0) -> Axes:
     """
     Plots the precipitation deficit for various scenarios using the given DataFrame.
 
@@ -437,13 +440,13 @@ def deficit_knmi(
     if year_today in df.columns:
         ax.plot(df.loc[:, year_today], label=f"year {year_today}", color="k")
     ax.grid(visible=True, axis="y")
-    ax.yaxis.set_major_locator(locator=mpl.ticker.MultipleLocator(100.0))
+    ax.yaxis.set_major_locator(locator=mpl_ticker.MultipleLocator(100.0))
     ax.set_ylabel("Precipitation deficit (mm)")
-    ax.xaxis.set_major_locator(locator=mpl.dates.MonthLocator())
-    ax.xaxis.set_major_formatter(formatter=mpl.dates.DateFormatter("%b"))
+    ax.xaxis.set_major_locator(locator=mpl_dates.MonthLocator())
+    ax.xaxis.set_major_formatter(formatter=mpl_dates.DateFormatter("%b"))
     ax.set_xlim(
-        left=mpl.dates.date2num(Timestamp("2000-04-01")),
-        right=mpl.dates.date2num(Timestamp("2000-10-01")),
+        left=mpl_dates.date2num(Timestamp("2000-04-01")),
+        right=mpl_dates.date2num(Timestamp("2000-10-01")),
     )
     ax.legend(loc="upper left")
     ax.set_ylim(bottom=0.0)
@@ -469,7 +472,7 @@ class Crameri:
         )
         self.cmap = self._get_cmap()
 
-    def _get_cmap(self) -> mpl.colors.Colormap:
+    def _get_cmap(self) -> mpl_colors.Colormap:
         if "roma" in self.name:
             return self.roma()
         elif "vik" in self.name:
@@ -484,8 +487,8 @@ class Crameri:
         colors: list[list[float]],
         name: str,
         _r: bool = False,
-    ) -> mpl.colors.Colormap:
-        cmap = mpl.colors.LinearSegmentedColormap.from_list(
+    ) -> mpl_colors.Colormap:
+        cmap = mpl_colors.LinearSegmentedColormap.from_list(
             name=name,
             colors=list(reversed(colors)) if _r else colors,
             N=len(colors),
@@ -494,7 +497,7 @@ class Crameri:
 
     def vik(
         self,
-    ) -> mpl.colors.Colormap:
+    ) -> mpl_colors.Colormap:
         colors = [
             [0.001328, 0.069836, 0.379529],
             [0.002366, 0.076475, 0.383518],
@@ -755,7 +758,7 @@ class Crameri:
         ]
         return Crameri.cmap_from_list(colors, self.name, _r=self._r)
 
-    def roma(self) -> mpl.colors.Colormap:
+    def roma(self) -> mpl_colors.Colormap:
         colors = [
             [0.492325, 0.090787, 7.6e-05],
             [0.49673, 0.102802, 0.003675],
@@ -1016,7 +1019,7 @@ class Crameri:
         ]
         return Crameri.cmap_from_list(colors, self.name, _r=self._r)
 
-    def lajolla(self) -> mpl.colors.Colormap:
+    def lajolla(self) -> mpl_colors.Colormap:
         colors = [
             [0.098791, 0.099669, 8.8e-05],
             [0.102398, 0.100814, 0.002016],

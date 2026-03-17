@@ -12,11 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Test suite with py310-ubuntu
-            python: "3.10"
-            os: ubuntu-latest
-            toxenv: py310
-            experimental: false
           - name: Test suite with py311-ubuntu
             python: "3.11"
             os: ubuntu-latest
@@ -37,10 +32,15 @@ jobs:
             os: ubuntu-latest
             toxenv: py314
             experimental: false
-          - name: Type check with mypy
+          - name: Type checking with mypy
             python: "3.13"
             os: ubuntu-latest
             toxenv: type
+            experimental: false
+          - name: Type checking with ty
+            python: "3.13"
+            os: ubuntu-latest
+            toxenv: typety
             experimental: false
           - name: Formatting and linting with ruff
             python: "3.13"
@@ -69,20 +69,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+      - name: Set up uv with Python ${{ matrix.python }}
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python }}
-          check-latest: true
+          enable-cache: true
 
-      - name: Set up tox environment
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install tox
-          tox -e ${{ matrix.toxenv }} --notest
+          uv venv
+          uv pip install tox-uv
+
+      - name: Setup tox environment
+        run: uv run tox -e ${{ matrix.toxenv }} --notest
 
       - name: Test
-        run: tox -e ${{ matrix.toxenv }} --skip-pkg-install
+        run: uv run tox -e ${{ matrix.toxenv }} --skip-pkg-install
 
       - name: Run codacy-coverage-reporter
         if: ${{ matrix.toxenv == 'coverage' && github.repository == 'martinvonk/spei' && success() }}
