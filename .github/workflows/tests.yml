@@ -69,20 +69,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+      - name: Set up uv with Python ${{ matrix.python }}
+        uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python }}
-          check-latest: true
+          enable-cache: true
 
-      - name: Set up tox environment
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install tox
-          tox -e ${{ matrix.toxenv }} --notest
+          uv venv
+          uv pip install tox-uv
+
+      - name: Setup tox environment
+        run: uv run tox -e ${{ matrix.toxenv }} --notest
 
       - name: Test
-        run: tox -e ${{ matrix.toxenv }} --skip-pkg-install
+        run: uv run tox -e ${{ matrix.toxenv }} --skip-pkg-install
 
       - name: Run codacy-coverage-reporter
         if: ${{ matrix.toxenv == 'coverage' && github.repository == 'martinvonk/spei' && success() }}
