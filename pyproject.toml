@@ -33,7 +33,7 @@ repository = "https://github.com/martinvonk/spei"
 notebook = ["ipykernel", "pastas", "rpy2", "standard-precip", "pandas<3.0"]
 documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
-typing = ["mypy", "pandas-stubs"]
+typing = ["mypy", "pandas-stubs", "ty"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
 dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox-uv"]
@@ -59,7 +59,16 @@ fix = true
 
 [tool.tox]
 requires = ["tox-uv>=1.0"]
-env_list = ["py310", "py311", "py312", "py313", "py314", "type", "ruff"]
+env_list = [
+        "py310",
+        "py311",
+        "py312",
+        "py313",
+        "py314",
+        "type",
+        "typety",
+        "ruff",
+]
 
 [tool.tox.env_run_base]
 description = "run unit tests"
@@ -70,6 +79,11 @@ commands = [["pytest", "tests"]]
 description = "run type checks"
 extras = ["typing"]
 commands = [["mypy", "src"]]
+
+[tool.tox.env.typety]
+description = "run type checks with ty"
+extras = ["typing"]
+commands = [["ty", "check", "src"]]
 
 [tool.tox.env.ruff]
 description = "run ruff checks"

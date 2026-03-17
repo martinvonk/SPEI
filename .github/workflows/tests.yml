@@ -42,6 +42,11 @@ jobs:
             os: ubuntu-latest
             toxenv: type
             experimental: false
+          - name: Type check with ty
+            python: "3.13"
+            os: ubuntu-latest
+            toxenv: typety
+            experimental: false
           - name: Formatting and linting with ruff
             python: "3.13"
             os: ubuntu-latest
