@@ -381,7 +381,7 @@ class SI:
     normal_scores_transform: bool = field(default=False)
     agg_func: Literal["sum", "mean"] = "sum"
     _grouped_year: DataFrame = field(init=False, repr=False, compare=False)
-    _dist_dict: dict[int, Dist] = field(
+    _dist_dict: dict[Timestamp, Dist] = field(
         default_factory=dict, init=False, repr=False, compare=False
     )
 
