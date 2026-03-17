@@ -84,7 +84,6 @@ commands = [
                 "check",
                 "--extend-select",
                 "I",
-                "--preview",
         ],
         [
                 "ruff",
