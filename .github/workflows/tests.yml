@@ -32,12 +32,12 @@ jobs:
             os: ubuntu-latest
             toxenv: py314
             experimental: false
-          - name: Type check with mypy
+          - name: Type checking with mypy
             python: "3.13"
             os: ubuntu-latest
             toxenv: type
             experimental: false
-          - name: Type check with ty
+          - name: Type checking with ty
             python: "3.13"
             os: ubuntu-latest
             toxenv: typety
