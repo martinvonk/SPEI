@@ -367,7 +367,7 @@ class SI:
     _grouped_year : DataFrame
         Dataframe with all data grouped in a one-year (2000) DataFrame with the
         original years as columns
-    _dist_dict : Dict[int, Dist]
+    _dist_dict : Dict[Timestamp, Dist]
         Dictionary of distributions used to fit the data.
     """
 
