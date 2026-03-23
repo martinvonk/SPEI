@@ -82,6 +82,8 @@ Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Asse
 
 Knoll, S., Duthweiler, S., Rötzer, T., Pauleit, S., & Helmreich, B. (2025). Recycled demolition waste in engineered substrate promotes long-term urban tree growth and ecosystem services in a temperate city. Sustainable Cities and Society, 131, Article 106670. https://doi.org/10.1016/j.scs.2025.106670
 
+Compaoré, C., Somda, W., Kébré, M. B. and Koalaga, Z. (2025). Spatial Analysis of Historical and Near-Future Droughts using the SPI and SPEI Indices in the Competence Area of the Nakanbé Water Agency in Burkina Faso (1981–2050). IEEE Multi-conference on Natural and Engineering Sciences for Sahel's Sustainable Development (MNE3SD), Bobo-Dioulasso, Burkina Faso, pp. 1-10, https://doi.org/10.1109/MNE3SD67637.2025.11323240
+
 Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8
 
 Worden, S., Fu, R., Bloom, A. A., Bauters, M., Verbeeck, H., Fatoyinbo, T., Hubau, W., Koutika, L.-S., Kengdo, S. K., Maes, S. L., Medjibe, V., Russo, N. J., Saatchi, S., Sagang, L. B., Smith, T. B., Sonwa, D. J., Boeckx, P., & Ordway, E. M. (2026). Congo Basin carbon cycle responses to global change. Global Change Biology, 32(1), Article e70688. https://doi.org/10.1111/gcb.70688
