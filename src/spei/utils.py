@@ -1,5 +1,6 @@
 import logging
 from calendar import isleap
+from typing import cast
 
 from numpy import array, nan
 from packaging.version import parse as parse_version
@@ -10,12 +11,15 @@ from pandas import (
     Index,
     Series,
     Timedelta,
+    Timestamp,
     concat,
     infer_freq,
     to_datetime,
 )
 
 pd_version = parse_version(__import__("pandas").__version__)
+
+logger = logging.getLogger(__name__)
 
 
 def validate_series(series: Series) -> Series:
@@ -24,7 +28,7 @@ def validate_series(series: Series) -> Series:
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
             if len(series.columns) == 1:
-                logging.warning(
+                logger.warning(
                     "Please convert series of type pandas.DataFrame to a"
                     "pandas.Series using DataFrame.squeeze(). Now done automatically."
                 )
@@ -45,7 +49,7 @@ def validate_index(index: Index) -> DatetimeIndex:
     index = index.copy()
 
     if not isinstance(index, DatetimeIndex):
-        logging.info(
+        logger.info(
             f"Expected the index to be a DatetimeIndex. Automatically converted "
             f"{type(index)} using pd.to_datetime(Index)"
         )
@@ -57,7 +61,7 @@ def validate_index(index: Index) -> DatetimeIndex:
             " using `series = "
             "series.loc[~series.index.duplicated(keep='first/last')]`"
         )
-        logging.error(msg)
+        logger.error(msg)
         raise ValueError(msg)
 
     return index
@@ -71,15 +75,15 @@ def infer_frequency(index: Index | DatetimeIndex) -> str:
     inf_freq = infer_freq(index)
 
     if inf_freq is None:
-        logging.info(
+        logger.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
         inf_freq = "MS" if pd_version >= parse_version("2.2.0") else "M"
     else:
-        logging.info(f"Inferred frequency '{inf_freq}' from index")
+        logger.info(f"Inferred frequency '{inf_freq}' from index")
 
     if "W-" in inf_freq:
-        logging.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
+        logger.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
         inf_freq = "W"
 
     return inf_freq
@@ -109,7 +113,7 @@ def group_yearly_df(series: Series) -> DataFrame:
         gry.index = to_datetime(
             "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
         )
-        year = year_timestamp.year
+        year: int = cast(Timestamp, year_timestamp).year
         grs[year] = gry
     return concat(grs, axis=1, sort=True)
 

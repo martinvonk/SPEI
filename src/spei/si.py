@@ -16,6 +16,8 @@ from .utils import (
     validate_series,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def sgi(
     series: Series,
@@ -407,12 +409,12 @@ class SI:
 
         if self.fit_window > 0:
             if self.fit_window < 3:
-                logging.error(
+                logger.error(
                     "Window should be larger than 2. Setting the window value to 3."
                 )
                 self.fit_window = 3  # make sure window is at least three
             elif self.fit_window % 2 == 0:
-                logging.error(
+                logger.error(
                     "Window should be odd. Setting the window value to"
                     f"{self.fit_window + 1}"
                 )
@@ -424,7 +426,7 @@ class SI:
         """
 
         if self.normal_scores_transform:
-            logging.info("Using normal-scores-transform. No distribution is fitted.")
+            logger.info("Using normal-scores-transform. No distribution is fitted.")
 
         elif self.fit_window > 0:
             if self.fit_freq not in (
@@ -438,7 +440,7 @@ class SI:
                     f"'{self.fit_freq}', if a fit_window is provided."
                 )
 
-            logging.info("Using rolling window method")
+            logger.info("Using rolling window method")
             window = self.fit_window
             period = int(ceil(window / 2))
             if self.fit_freq in ("W", "w"):
@@ -465,7 +467,7 @@ class SI:
                 )
                 self._dist_dict[date] = fd
         else:
-            logging.info("Using groupby fit by frequency method")
+            logger.info("Using groupby fit by frequency method")
             for date, grval in self._grouped_year.groupby(
                 Grouper(freq=str(self.fit_freq))
             ):
@@ -511,7 +513,7 @@ class SI:
         -------
         Series
         """
-        logging.info("Using the normal scores transform")
+        logger.info("Using the normal scores transform")
         cdf = Series(nan, index=self.series.index, dtype=float)
         for _, grval in self._grouped_year.groupby(Grouper(freq=str(self.fit_freq))):
             data = get_data_series(grval).sort_values()

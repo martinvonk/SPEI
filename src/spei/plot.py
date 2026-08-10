@@ -25,6 +25,8 @@ from scipy.stats import gaussian_kde
 
 from .utils import get_data_series, group_yearly_df, validate_index
 
+logger = logging.getLogger(__name__)
+
 
 def si(
     si: Series,
@@ -328,7 +330,7 @@ def heatmap(
         index = sisdf.index.insert(0, sisdf.index[0] - dt)
     elif freq in ("ME", "YE", "D"):
         if freq == "D":
-            logging.info(
+            logger.info(
                 "With freq='D', it is assumed that the value is recorded"
                 "at the end of the index value."
             )
@@ -349,8 +351,8 @@ def heatmap(
     )
     ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
     ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
-    yticklabels = [s.name for s in sis] if yticklabels is None else yticklabels
-    ax.set_yticklabels(yticklabels)
+    y_ticklabels = [str(s.name) for s in sis] if yticklabels is None else yticklabels
+    ax.set_yticklabels(y_ticklabels)
     for tick in ax.yaxis.get_major_ticks():  # don't show major ytick marker
         tick.tick1line.set_visible(False)
 
