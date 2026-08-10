@@ -1,3 +1,5 @@
+"""Rainfall Anomaly Index (RAI) and Modified Rainfall Anomaly Index (MRAI) module for computing RAI and MRAI values from precipitation data."""
+
 import numpy as np
 import pandas as pd
 
@@ -5,8 +7,7 @@ from .utils import get_data_series, group_yearly_df, validate_series
 
 
 def rai(series: pd.Series) -> pd.Series:
-    """Calculate the Rainfall Anomaly Index (RAI) for a given time
-    series of precipitation data.
+    """Compute the Rainfall Anomaly Index (RAI).
 
     Parameters
     ----------
@@ -35,8 +36,7 @@ def rai(series: pd.Series) -> pd.Series:
 
 
 def mrai(series: pd.Series, sf: float = 1.7) -> pd.Series:
-    """Calculate the Modified Rainfall Anomaly Index (MRAI)
-    for a given time series of precipitation data.
+    """Compute the Modified Rainfall Anomaly Index (MRAI).
 
     Parameters
     ----------

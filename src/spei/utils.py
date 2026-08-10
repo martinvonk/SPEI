@@ -1,3 +1,5 @@
+"""Some utility functions for the SPEI package."""
+
 import logging
 from calendar import isleap
 from typing import cast
@@ -23,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 def validate_series(series: Series) -> Series:
+    """Validate series to see if it is a Series and has a DatetimeIndex."""
     series = series.copy()
 
     if not isinstance(series, Series):
@@ -46,6 +49,7 @@ def validate_series(series: Series) -> Series:
 
 
 def validate_index(index: Index) -> DatetimeIndex:
+    """Validate index to see if it is a DatetimeIndex and has no duplicates."""
     index = index.copy()
 
     if not isinstance(index, DatetimeIndex):
@@ -68,7 +72,7 @@ def validate_index(index: Index) -> DatetimeIndex:
 
 
 def infer_frequency(index: Index | DatetimeIndex) -> str:
-    """Infer frequency"""
+    """Infer frequency of DatetimeIndex."""
     index = validate_index(index)
 
     inf_freq = infer_freq(index)
@@ -140,9 +144,7 @@ def get_data_series(group_df: DataFrame) -> Series:
 
 
 def daily_window_group_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
-    """Fill a period of daily values in grouped by yearly DataFrame to get
-    cyclic rolling window.
-    """
+    """Fill a period of daily values in grouped by yearly DataFrame to get cyclic rolling window."""
     dfval_window_index_start = [
         dfval.index[0] + Timedelta(value=-i, unit="D")
         for i in reversed(range(1, period + 1))

@@ -1,3 +1,5 @@
+"""Module for fitting distributions to data and performing statistical tests."""
+
 from dataclasses import dataclass, field
 from functools import partial
 from typing import Literal
@@ -55,8 +57,7 @@ class Dist:
     fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
 
     def __post_init__(self):
-        """Post initializes the Dist class by fitting the distribution.
-        """
+        """Post initializes the Dist class by fitting the distribution."""
         data_fit = self.data_window if self.data_window is not None else self.data
         pars, loc, scale = self.fit_dist(
             data=data_fit, dist=self.dist, fit_method=self.fit_method
@@ -104,7 +105,7 @@ class Dist:
         return pars, loc, scale
 
     def cdf(self) -> Series:
-        """Compute cumulative density function of a Scipy Continuous Distribution"""
+        """Compute cumulative density function of a Scipy Continuous Distribution."""
         if self.pars is not None:
             cdf = self.dist.cdf(
                 self.data.values, *self.pars, loc=self.loc, scale=self.scale
@@ -119,6 +120,7 @@ class Dist:
         return Series(cdf, index=self.data.index, dtype=float)
 
     def pdf(self) -> Series:
+        """Compute probability density function of a Scipy Continuous Distribution."""
         data_pdf = self.data.sort_values()
         if self.pars is not None:
             pdf = self.dist.pdf(
@@ -134,7 +136,7 @@ class Dist:
         return Series(pdf, index=data_pdf.index, dtype=float)
 
     def ppf(self, q: float) -> Series:
-        """Compute percent point function (inverse of cdf) at q"""
+        """Compute the percent point function (inverse of cdf) at q."""
         if self.pars is not None:
             ppf = self.dist.ppf(q, *self.pars, loc=self.loc, scale=self.scale)
         else:
@@ -146,11 +148,11 @@ class Dist:
         self,
         method: Literal["auto", "exact", "approx", "asymp"] = "auto",
     ) -> float:
-        """Fit a distribution and perform the two-sided
-        Kolmogorov-Smirnov test for goodness of fit. The
-        null hypothesis is that the data and distributions
-        are identical, the alternative is that they are
-        not identical.
+        """Fit a distribution and perform the two-sided Kolmogorov-Smirnov test.
+
+        The two-sided test is usefull to asses the  goodness of fit of a distribution.
+        The null hypothesis is that the data and distributions are identical, the
+        alternative is that they are not identical.
 
         Parameters
         ----------

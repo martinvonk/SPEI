@@ -56,7 +56,9 @@ show-fixes = true
 fix = true
 
 [tool.ruff.lint]
-extend-select = ["I"]
+extend-select = ["I", "D"]
+per-file-ignores = { "tests/**" = ["D"] }
+ignore = ["D213", "D203"]
 
 [tool.tox]
 requires = ["tox-uv>=1.0"]

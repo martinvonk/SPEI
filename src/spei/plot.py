@@ -1,3 +1,5 @@
+"""Plotting functions for standardized indices and related drought visualizations."""
+
 import logging
 from calendar import month_abbr
 from itertools import cycle
@@ -53,6 +55,8 @@ def si(
         Color the background if True, else color the line
     ax : matplotlib.Axes, optional
         Axes handle, by default None which create a new axes
+    **kwargs : dict
+        Additional keyword arguments passed to the plot function for the series line.
 
     Returns
     -------
@@ -130,10 +134,14 @@ def threshold(
         Time series of the meteorological of hydrological data
     threshold : pandas.Series
         Series of the threshold, must have the same index as series
-    color : str, optional
+    figsize : tuple[float], optional
+        Figure size, by default (6.5, 4)
+    fill_color : str, optional
         Color for the fill area, by default 'red'
     ax : matplotlib.Axes, optional
         Axes handle, by default None which create a new axes
+    **kwargs : dict
+        Additional keyword arguments passed to the plot function for the series line.
 
     Returns
     -------
@@ -217,7 +225,7 @@ def monthly_density(
     ----------
     si : pandas.Series
         Series of the standardized index
-    year : list, optional
+    years : list, optional
         List of years as int
     months : list, optional
         List of months as int, by default all months
@@ -279,7 +287,7 @@ def heatmap(
     yticklabels: list[str] | None = None,
     ax: Axes | None = None,
 ) -> Axes:
-    """Plots multiple standardized indices on a heatmap.
+    """Plot multiple standardized indices on a heatmap.
 
     Parameters
     ----------
@@ -382,7 +390,7 @@ def heatmap(
 
 
 def deficit_knmi(df: DataFrame, ax: Axes | None = None, window: int = 0) -> Axes:
-    """Plots the precipitation deficit for various scenarios using the given DataFrame.
+    """Plot the precipitation deficit for various scenarios using the given DataFrame.
 
     The function generates a plot that visualizes the precipitation deficit over time
     for different statistical measures and specific years. It includes the 5% driest years,
@@ -468,6 +476,7 @@ class Crameri:
     _available_cmaps = ("roma", "roma_r", "vik", "vik_r", "lajolla", "lajolla_r")
 
     def __init__(self, name: str) -> None:
+        """Initialize the Crameri colormap with the given name."""
         self.name = name
         self._r = "_r" in name
         assert self.name in self._available_cmaps, (
@@ -491,6 +500,7 @@ class Crameri:
         name: str,
         _r: bool = False,
     ) -> mpl_colors.Colormap:
+        """Create a colormap from a list of colors."""
         cmap = mpl_colors.LinearSegmentedColormap.from_list(
             name=name,
             colors=list(reversed(colors)) if _r else colors,
@@ -501,6 +511,7 @@ class Crameri:
     def vik(
         self,
     ) -> mpl_colors.Colormap:
+        """Vik colormap."""
         colors = [
             [0.001328, 0.069836, 0.379529],
             [0.002366, 0.076475, 0.383518],
@@ -762,6 +773,7 @@ class Crameri:
         return Crameri.cmap_from_list(colors, self.name, _r=self._r)
 
     def roma(self) -> mpl_colors.Colormap:
+        """Roma colormap."""
         colors = [
             [0.492325, 0.090787, 7.6e-05],
             [0.49673, 0.102802, 0.003675],
@@ -1023,6 +1035,7 @@ class Crameri:
         return Crameri.cmap_from_list(colors, self.name, _r=self._r)
 
     def lajolla(self) -> mpl_colors.Colormap:
+        """Lajolla colormap."""
         colors = [
             [0.098791, 0.099669, 8.8e-05],
             [0.102398, 0.100814, 0.002016],

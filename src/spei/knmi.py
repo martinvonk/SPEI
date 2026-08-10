@@ -1,3 +1,5 @@
+"""Functions for calculating cumulative deficits and related metrics based on temperature and deficit time series."""
+
 import numpy as np
 import pandas as pd
 
@@ -226,9 +228,10 @@ def deficit_apr1(deficit: pd.Series) -> pd.Series:
 def deficit_gdd(
     deficit: pd.Series, temp: pd.Series, threshold: float = 440.0
 ) -> pd.Series:
-    """Calculate the maximum change in cumulative deficit starting from the
-    first day when the temperature sum (growing degree days; GDD)
-    exceeds a specified threshold.
+    """Compute the maximum change in cumulative deficit.
+
+    Starts from the first day when the temperature sum
+    (growing degree days; GDD) exceeds a specified threshold.
 
     Parameters
     ----------

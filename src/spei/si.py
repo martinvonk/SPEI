@@ -1,3 +1,5 @@
+"""Standardized Index (SI) module for computing various standardized indices such as SPI, SPEI, SGI, SSMI, and SSFI."""
+
 import logging
 from dataclasses import dataclass, field
 from typing import Literal
@@ -24,14 +26,20 @@ def sgi(
     timescale: int = 0,
     fit_freq: str | None = None,
 ) -> Series:
-    """Method to compute the Standardized Groundwater Index. Uses
-    the normal scores transform to calculate the cumulative density function.
+    """Compute the Standardized Groundwater Index.
+
+    Uses the normal scores transform to calculate the cumulative density function.
 
     Parameters
     ----------
     series: pandas.Series
         Pandas time series of the groundwater levels. Time series index
         should be a pandas DatetimeIndex.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
     fit_freq : str, optional, default=None
         Frequency for fitting the distribution. Default is None in which case
         the frequency of the series is inferred. If this fails a monthly
@@ -71,7 +79,7 @@ def spi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Index.
+    """Compute the Standardized Precipitation Index.
 
     Parameters
     ----------
@@ -137,7 +145,7 @@ def spei(
     fit_window: int = 0,
     prob_zero: bool = False,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Evaporation Index.
+    """Compute the Standardized Precipitation Evaporation Index.
 
     Parameters
     ----------
@@ -203,7 +211,7 @@ def ssfi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized StreamFlow Index.
+    """Compute the Standardized StreamFlow Index.
 
     Parameters
     ----------
@@ -269,7 +277,7 @@ def ssmi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Soil Moisture Index.
+    """Compute the Standardized Soil Moisture Index.
 
     Parameters
     ----------
@@ -389,8 +397,9 @@ class SI:
     )
 
     def __post_init__(self) -> None:
-        """Post initializes the SI class and performs necessary data
-        preprocessing and validation.
+        """Post-initialization of the SI class.
+
+        Performs necessary data preprocessing and validation.
         """
         self.series = validate_series(self.series)
 
@@ -421,8 +430,7 @@ class SI:
                 self.fit_window += 1  # make sure window is odd
 
     def fit_distribution(self) -> None:
-        """Fit distribution on the time series per fit_frequency and/or fit_window
-        """
+        """Fit distribution on the time series per fit_frequency and/or fit_window."""
         if self.normal_scores_transform:
             logger.info("Using normal-scores-transform. No distribution is fitted.")
 
@@ -480,7 +488,7 @@ class SI:
                 self._dist_dict[date] = fd  # type: ignore
 
     def cdf(self) -> Series:
-        """Compute the cumulative density function"""
+        """Compute the cumulative density function."""
         if self.normal_scores_transform:
             cdf = self.cdf_nsf()
         else:
@@ -492,7 +500,7 @@ class SI:
         return cdf
 
     def pdf(self) -> Series:
-        """Compute the probability density function"""
+        """Compute the probability density function."""
         if self.normal_scores_transform:
             pdf = self.cdf().diff()
         else:
@@ -503,8 +511,7 @@ class SI:
         return pdf
 
     def cdf_nsf(self) -> Series:
-        """Compute the cumulative density function using the Normal Scores
-        Transform
+        """Compute the cumulative density function using the Normal Scores Transform.
 
         Returns
         -------
@@ -520,9 +527,9 @@ class SI:
         return cdf
 
     def ppf(self, q: float) -> Series:
-        """Method to calculate the percentile point function
-        (inverse of cdf — percentiles) of a fitted
-        distribution.
+        """Calculate the percentile point function of a fitted distribution.
+
+        ppf is the inverse of cdf — percentiles.
 
         Parameters
         ----------
@@ -555,8 +562,9 @@ class SI:
         return ppf
 
     def norm_ppf(self) -> Series:
-        """Method to calculate propability point function of normal distribution
-        based on a cumulative density function of a fitted distribution
+        """Calculate propability point function of normal distribution.
+
+        The ppf is based on a cumulative density function of a fitted distribution.
 
         Returns
         -------
@@ -570,6 +578,7 @@ class SI:
         return ppf
 
     def get_dist(self, date: Timestamp) -> Dist:
+        """Get the fitted distribution for a specific date."""
         for k in self._dist_dict:
             dist = self._dist_dict[k]
             if date in dist.data.index:
@@ -578,8 +587,7 @@ class SI:
         raise KeyError("Date not found in distributions")
 
     def predict(self, series: Series) -> Series:
-        """Method to predict the standardized index for a future period
-        based on the fitted distribution.
+        """Predict the standardized index for a future period based on the fitted distribution.
 
         Parameters
         ----------
