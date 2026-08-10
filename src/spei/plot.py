@@ -349,9 +349,7 @@ def heatmap(
     )
     ax.set_yticks(arange(0.5, len(sis) + 0.5, 1.0), minor=False)
     ax.set_yticks(arange(0.0, len(sis) + 1.5, 1.0), minor=True)
-    yticklabels = (
-        [getattr(s, "name") for s in sis] if yticklabels is None else yticklabels
-    )
+    yticklabels = [s.name for s in sis] if yticklabels is None else yticklabels
     ax.set_yticklabels(yticklabels)
     for tick in ax.yaxis.get_major_ticks():  # don't show major ytick marker
         tick.tick1line.set_visible(False)
@@ -466,7 +464,7 @@ class Crameri:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self._r = False if "_r" not in name else True
+        self._r = "_r" in name
         assert self.name in self._available_cmaps, (
             f"Invalid colormap name: {self.name}. Available colormaps: {self._available_cmaps}"
         )

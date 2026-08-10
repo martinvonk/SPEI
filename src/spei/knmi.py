@@ -50,7 +50,7 @@ def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
     else:
         if deficit.to_numpy(float)[0] < 0.0:
             deficit.iat[0] = 0.0
-        sumlm = np.frompyfunc(lambda a, b: 0.0 if a + b < 0.0 else a + b, nin=2, nout=1)
+        sumlm = np.frompyfunc(lambda a, b: max(a + b, 0.0), nin=2, nout=1)
         return pd.Series(
             sumlm.accumulate(deficit.to_numpy(dtype=float)), deficit.index, dtype=float
         )
