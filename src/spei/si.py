@@ -527,7 +527,7 @@ class SI:
         return cdf
 
     def ppf(self, q: float) -> Series:
-        """Calculate the percentile point function of a fitted distribution.
+        """Compute the percentile point function of a fitted distribution.
 
         ppf is the inverse of cdf — percentiles.
 
@@ -562,7 +562,7 @@ class SI:
         return ppf
 
     def norm_ppf(self) -> Series:
-        """Calculate propability point function of normal distribution.
+        """Compute propability point function of normal distribution.
 
         The ppf is based on a cumulative density function of a fitted distribution.
 

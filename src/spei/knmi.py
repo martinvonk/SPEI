@@ -29,7 +29,7 @@ def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
 
 
 def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
-    """Calculate the cumulative sum of a deficit series.
+    """Compute the cumulative sum of a deficit series.
 
     Parameters
     ----------
@@ -65,7 +65,7 @@ def get_cumulative_deficit(
     enddate: pd.Timestamp | pd.Series,
     allow_below_zero: bool = True,
 ) -> pd.DataFrame:
-    """Calculate the cumulative deficit for a given time period.
+    """Compute the cumulative deficit for a given time period.
 
     This function computes the cumulative deficit for each column in a
     grouped yearly DataFrame, starting from `startdate` to `enddate`.
@@ -123,7 +123,7 @@ def get_cumulative_deficit(
 
 
 def deficit_oct1(deficit: pd.Series) -> pd.Series:
-    """Calculate the cumulative deficit on October 1st.
+    """Compute the cumulative deficit on October 1st.
 
     This function computes the cumulative deficit for a given time series
     of deficits, considering only the period between April 1st and
@@ -164,7 +164,7 @@ def deficit_oct1(deficit: pd.Series) -> pd.Series:
 
 
 def deficit_max(deficit: pd.Series) -> pd.Series:
-    """Calculate the maximum cumulative deficit within a specified period.
+    """Compute the maximum cumulative deficit within a specified period.
 
     This function computes the maximum cumulative deficit for a given
     deficit time series, starting from April 1st to September 30th.
@@ -195,10 +195,10 @@ def deficit_max(deficit: pd.Series) -> pd.Series:
 
 
 def deficit_apr1(deficit: pd.Series) -> pd.Series:
-    """Calculate the maximum change in cumulative deficit within a specified date range.
+    """Compute the maximum change in cumulative deficit within a specified date range.
 
     This function computes the cumulative deficit for the given deficit series
-    between April 1st and September 30th of the year 2000. It then calculates
+    between April 1st and September 30th. It then calculates
     the maximum change in the cumulative deficit over this period.
 
     Parameters
@@ -263,7 +263,7 @@ def deficit_gdd(
 
 
 def deficit_wet(deficit: pd.Series) -> pd.Series:
-    """Calculate the maximum change in cumulative deficit for a specified period.
+    """Compute the maximum change in cumulative deficit for a specified period.
 
     This function computes the maximum change in  cumulative deficit from
     January 1st to September 30th of a given year. The cumulative deficit
