@@ -7,7 +7,6 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
@@ -86,9 +85,11 @@ jobs:
           uv pip install tox-uv
 
       - name: Setup tox environment
+        continue-on-error: ${{ matrix.experimental }}
         run: uv run tox -e ${{ matrix.toxenv }} --notest
 
       - name: Test
+        continue-on-error: ${{ matrix.experimental }}
         run: uv run tox -e ${{ matrix.toxenv }} --skip-pkg-install
 
       - name: Run codacy-coverage-reporter
