@@ -46,8 +46,8 @@ def sgi(
     Bloomfield, J. P. and Marchant, B. P.: Analysis of
     groundwater drought building on the standardised precipitation index
     approach. Hydrol. Earth Syst. Sci., 17, 4769-4787, 2013.
-    """
 
+    """
     mock_dist = norm
     sgi = SI(
         series=series,
@@ -112,8 +112,8 @@ def spi(
     ----------
     LLoyd-Hughes, B. and Saunders, M.A.: A drought climatology for Europe.
     International Journal of Climatology, 22, 1571-1592, 2002.
-    """
 
+    """
     spi = SI(
         series=series,
         dist=dist,
@@ -178,8 +178,8 @@ def spei(
     A Multi-scalar drought index sensitive to global warming:
     The Standardized Precipitation Evapotranspiration Index.
     Journal of Climate, 23, 1696-1718, 2010.
-    """
 
+    """
     spei = SI(
         series=series,
         dist=dist,
@@ -244,6 +244,7 @@ def ssfi(
     Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería, J. Lorenzo-Lacruz,
     C. Azorin-Molina, and E. Morán-Tejeda. Accurate Computation of a Streamflow
     Drought Index. Journal of Hydrologic Engineering 17 (2): 318-332. 2012.
+
     """
     ssfi = SI(
         series=series,
@@ -308,8 +309,8 @@ def ssmi(
     Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An empirical standardized
     soil moisture index for agricultural drought assessment from remotely sensed data.
     International Journal of Applied Earth Observation and Geoinformation, 48, 2016.
-    """
 
+    """
     ssmi = SI(
         series=series,
         dist=dist,
@@ -327,8 +328,7 @@ def ssmi(
 
 @dataclass
 class SI:
-    """
-    Standardized Index Class.
+    """Standardized Index Class.
 
     Parameters
     ----------
@@ -371,6 +371,7 @@ class SI:
         original years as columns
     _dist_dict : Dict[Timestamp, Dist]
         Dictionary of distributions used to fit the data.
+
     """
 
     series: Series = field(repr=False)
@@ -388,8 +389,7 @@ class SI:
     )
 
     def __post_init__(self) -> None:
-        """
-        Post initializes the SI class and performs necessary data
+        """Post initializes the SI class and performs necessary data
         preprocessing and validation.
         """
         self.series = validate_series(self.series)
@@ -421,10 +421,8 @@ class SI:
                 self.fit_window += 1  # make sure window is odd
 
     def fit_distribution(self) -> None:
+        """Fit distribution on the time series per fit_frequency and/or fit_window
         """
-        Fit distribution on the time series per fit_frequency and/or fit_window
-        """
-
         if self.normal_scores_transform:
             logger.info("Using normal-scores-transform. No distribution is fitted.")
 
@@ -505,13 +503,13 @@ class SI:
         return pdf
 
     def cdf_nsf(self) -> Series:
-        """
-        Compute the cumulative density function using the Normal Scores
+        """Compute the cumulative density function using the Normal Scores
         Transform
 
         Returns
         -------
         Series
+
         """
         logger.info("Using the normal scores transform")
         cdf = Series(nan, index=self.series.index, dtype=float)
@@ -522,8 +520,7 @@ class SI:
         return cdf
 
     def ppf(self, q: float) -> Series:
-        """
-        Method to calculate the percentile point function
+        """Method to calculate the percentile point function
         (inverse of cdf — percentiles) of a fitted
         distribution.
 
@@ -536,6 +533,7 @@ class SI:
         Returns
         -------
         Series
+
         """
         ppf = Series(nan, index=self.series.index, dtype=float)
         if self.normal_scores_transform:
@@ -557,15 +555,14 @@ class SI:
         return ppf
 
     def norm_ppf(self) -> Series:
-        """
-        Method to calculate propability point function of normal distribution
+        """Method to calculate propability point function of normal distribution
         based on a cumulative density function of a fitted distribution
 
         Returns
         -------
         Series
-        """
 
+        """
         cdf = self.cdf()
         ppf = Series(
             norm.ppf(cdf.values, loc=0, scale=1), index=self.series.index, dtype=float
@@ -581,8 +578,7 @@ class SI:
         raise KeyError("Date not found in distributions")
 
     def predict(self, series: Series) -> Series:
-        """
-        Method to predict the standardized index for a future period
+        """Method to predict the standardized index for a future period
         based on the fitted distribution.
 
         Parameters
@@ -593,6 +589,7 @@ class SI:
         Returns
         -------
         Series
+
         """
         if self.normal_scores_transform:
             raise NotImplementedError(

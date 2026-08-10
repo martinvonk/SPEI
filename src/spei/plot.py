@@ -58,6 +58,7 @@ def si(
     -------
     matplotlib.Axes
         Axes handle
+
     """
     if ax is None:
         _, ax = plt.subplots(figsize=figsize)
@@ -138,6 +139,7 @@ def threshold(
     -------
     matplotlib.Axes
         Axes handle
+
     """
     if ax is None:
         _, ax = plt.subplots(figsize=figsize)
@@ -228,8 +230,8 @@ def monthly_density(
     -------
     matplotlib.Axes
         Axes handle
-    """
 
+    """
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.0))
 
@@ -277,8 +279,7 @@ def heatmap(
     yticklabels: list[str] | None = None,
     ax: Axes | None = None,
 ) -> Axes:
-    """
-    Plots multiple standardized indices on a heatmap.
+    """Plots multiple standardized indices on a heatmap.
 
     Parameters
     ----------
@@ -296,6 +297,7 @@ def heatmap(
         Custom labels for the y-axis ticks. If None, the names of the Series objects are used. Default is None.
     ax : matplotlib Axes, optional
         A matplotlib Axes object to plot on. If None, a new figure and axes are created. Default is None.
+
     Returns
     -------
     Matplotlib Axes
@@ -305,8 +307,8 @@ def heatmap(
     ----------
     van Mourik, J., Ruijsch, D., van der Wiel, K., Hazeleger, W., Wanders, N.: Regional
     drivers and characteristics of multi-year droughts. 2024
-    """
 
+    """
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.0))
 
@@ -380,16 +382,15 @@ def heatmap(
 
 
 def deficit_knmi(df: DataFrame, ax: Axes | None = None, window: int = 0) -> Axes:
-    """
-    Plots the precipitation deficit for various scenarios using the given DataFrame.
+    """Plots the precipitation deficit for various scenarios using the given DataFrame.
 
     The function generates a plot that visualizes the precipitation deficit over time
     for different statistical measures and specific years. It includes the 5% driest years,
     the median, specific record years (1976 and 2018), the maximum deficit, and optionally
     the current year if present in the DataFrame.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     df : pandas.DataFrame
         A DataFrame where:
         - Rows represent time (e.g., days or months within a year).
@@ -401,18 +402,19 @@ def deficit_knmi(df: DataFrame, ax: Axes | None = None, window: int = 0) -> Axes
         If True, applies a rolling mean over a n-day window to the median and
         95th percentile. This is also done by the KNMI but not documented.
 
-    Returns:
-    --------
+    Returns
+    -------
     matplotlib.axes._axes.Axes
         The Axes object of the generated plot.
 
-    Notes:
-    ------
+    Notes
+    -----
     - The x-axis represents the time of year, formatted as months (April to October).
     - The y-axis represents the precipitation deficit in millimeters.
     - The plot includes a grid on the y-axis for better readability.
     - If the current year is present in the DataFrame, it is highlighted in black.
     - The maximum deficit is annotated with the range of years in the dataset.
+
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(6.5, 4.5), layout="tight")
@@ -460,6 +462,7 @@ class Crameri:
     ----------
     Crameri, F., G.E. Shephard, and P.J. Heron: The misuse of colour in science
     communication, Nature Communications, 11, 5444. 2020.
+
     """
 
     _available_cmaps = ("roma", "roma_r", "vik", "vik_r", "lajolla", "lajolla_r")

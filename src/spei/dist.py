@@ -41,6 +41,7 @@ class Dist:
     The `fit_dist` method uses the `dist.fit` function from Scipy to estimate
     distribution parameters. If the fitted distribution requires additional
     parameters beyond `loc` and `scale`, they are stored in the `pars` attribute.
+
     """
 
     data: Series = field(init=True, repr=False)
@@ -54,8 +55,7 @@ class Dist:
     fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
 
     def __post_init__(self):
-        """
-        Post initializes the Dist class by fitting the distribution.
+        """Post initializes the Dist class by fitting the distribution.
         """
         data_fit = self.data_window if self.data_window is not None else self.data
         pars, loc, scale = self.fit_dist(
@@ -72,8 +72,7 @@ class Dist:
     def fit_dist(
         data: Series, dist: ContinuousDist, fit_method: Literal["MLE", "MM"] = "MLE"
     ) -> tuple[list[float] | None, float, float]:
-        """
-        Fits a Scipy continuous distribution to the data.
+        """Fits a Scipy continuous distribution to the data.
 
         Parameters
         ----------
@@ -90,6 +89,7 @@ class Dist:
         -------
         Tuple
             Tuple containing distribution parameters (pars, loc, scale).
+
         """
         fit_tuple = dist.fit(
             data,
@@ -168,9 +168,10 @@ class Dist:
             p-value
 
         References
-        -------
+        ----------
         Onnen, H.: Intro to Probability Distributions and Distribution
         Fitting with Pythons  SciPy, 2021.
+
         """
         # Create a callable CDF with parameters bound
         # In scipy >= 1.18.0, passing distribution name as string with args

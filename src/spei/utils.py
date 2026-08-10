@@ -69,7 +69,6 @@ def validate_index(index: Index) -> DatetimeIndex:
 
 def infer_frequency(index: Index | DatetimeIndex) -> str:
     """Infer frequency"""
-
     index = validate_index(index)
 
     inf_freq = infer_freq(index)
@@ -96,14 +95,15 @@ def group_yearly_df(series: Series) -> DataFrame:
     column corresponds to a year (as int). The index of the DataFrame is set to
     the corresponding dates (in the year 2000).
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     series : pd.Series
         A pandas Series with a DateTime index.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.DataFrame
+
     """
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}

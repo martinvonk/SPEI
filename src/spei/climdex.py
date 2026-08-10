@@ -55,7 +55,8 @@ def r20mm(series: Series, threshold: float = 20.0, period: str = "1YE") -> Serie
 
 def cdd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
     """Maximum length of dry spell: maximum number of consecutive days with
-    precipitation < 1mm"""
+    precipitation < 1mm
+    """
     series = validate_series(series)
     _ = validate_index(series.index)
 
@@ -66,7 +67,8 @@ def cdd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
 
 def cwd(series: Series, threshold: float = 1.0, period: str = "365D") -> Series:
     """Maximum length of wet spell: maximum number of consecutive days with
-    precipitation ≥ 1mm"""
+    precipitation ≥ 1mm
+    """
     series = validate_series(series)
     _ = validate_index(series.index)
 
