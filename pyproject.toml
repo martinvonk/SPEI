@@ -62,7 +62,7 @@ ignore = ["D213", "D203"]
 
 [tool.tox]
 requires = ["tox-uv>=1.0"]
-env_list = ["py311", "py312", "py313", "py314", "type", "typety", "ruff"]
+env_list = ["py311", "py312", "py313", "py314", "py315", "type", "typety", "ruff"]
 
 [tool.tox.env_run_base]
 description = "run unit tests"
