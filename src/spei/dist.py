@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from functools import partial
 from typing import Literal
 
 from numpy import std
@@ -171,13 +172,17 @@ class Dist:
         Onnen, H.: Intro to Probability Distributions and Distribution
         Fitting with Pythons  SciPy, 2021.
         """
-        args = (
-            (self.pars, self.loc, self.scale)
-            if self.pars is not None
-            else (self.loc, self.scale)
-        )
-        kstest_result = kstest(
-            rvs=self.data, cdf=self.dist.name, args=args, method=method
-        )
+        # Create a callable CDF with parameters bound
+        # In scipy >= 1.18.0, passing distribution name as string with args
+        # no longer works for distributions like norm where loc/scale are
+        # keyword-only arguments in the underlying implementation
+        if self.pars is not None:
+            cdf_func = partial(
+                self.dist.cdf, *self.pars, loc=self.loc, scale=self.scale
+            )
+        else:
+            cdf_func = partial(self.dist.cdf, loc=self.loc, scale=self.scale)
+
+        kstest_result = kstest(rvs=self.data, cdf=cdf_func, method=method)
         # rej_h0 = kstest_result.pvalue < alpha
         return kstest_result.pvalue
