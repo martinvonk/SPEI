@@ -51,9 +51,10 @@ def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
         if deficit.to_numpy(float)[0] < 0.0:
             deficit.iat[0] = 0.0
         sumlm = np.frompyfunc(lambda a, b: max(a + b, 0.0), nin=2, nout=1)
-        return pd.Series(
-            sumlm.accumulate(deficit.to_numpy(dtype=float)), deficit.index, dtype=float
-        )
+        array = deficit.to_numpy(float)
+        out = np.empty_like(array)
+        deficit_cumsum = sumlm.accumulate(array, out=out)
+        return pd.Series(deficit_cumsum, deficit.index, dtype=float)
 
 
 def get_cumulative_deficit(
