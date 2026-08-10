@@ -255,7 +255,7 @@ def deficit_gdd(
         enddate=enddate,
         allow_below_zero=True,
     )
-    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIgdd")
+    return (cumdf.max() - cumdf.min()).rename("DIgdd")
 
 
 def deficit_wet(deficit: pd.Series) -> pd.Series:
@@ -286,4 +286,4 @@ def deficit_wet(deficit: pd.Series) -> pd.Series:
         enddate=enddate,
         allow_below_zero=True,
     )
-    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIwet")
+    return (cumdf.max() - cumdf.min()).rename("DIwet")
