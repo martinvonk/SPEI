@@ -35,7 +35,7 @@ ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs", "ty"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
 coveraging = ["coverage"]
-dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox-uv"]
+dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox-uv", "pre-commit"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -52,9 +52,11 @@ pythonpath = ["src"]
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
-lint.extend-select = ["I"]
 show-fixes = true
 fix = true
+
+[tool.ruff.lint]
+extend-select = ["I"]
 
 [tool.tox]
 requires = ["tox-uv>=1.0"]
