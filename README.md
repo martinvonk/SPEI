@@ -89,3 +89,5 @@ Worden, S., Fu, R., Bloom, A. A., Bauters, M., Verbeeck, H., Fatoyinbo, T., Huba
 Bjerre, E., Jessen, S., Schneider, R., Villholth, K. G., Dippenaar, M. A., Enemark, T., Meyer, R., Hallowes, J., Sonnenborg, T. O., Kanyerere, T., & Jensen, K. H. (2026). Groundwater responses to decadal rainfall variability in semi-arid South Africa. Journal of Hydrology, 669(Part A), Article 135022. https://doi.org/10.1016/j.jhydrol.2026.135022
 
 Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2026). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, Hydrology and Earth System Sciences, 30(9), 2817-2835. https://doi.org/10.5194/10.5194/hess-30-2817-2026
+
+Nagamoto, E., Ombadi, M., Ciulla, F., Willard, J.D., Carroll, R. W. H., Varadharajan, C. (2026). Widespread drought-driven declines in streamflows and water quality in the Upper Colorado River Basin during 1998-2022. Commun Earth Environ 7, 734 (2026). https://doi.org/10.1038/s43247-026-03890-5
