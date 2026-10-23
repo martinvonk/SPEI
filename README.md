@@ -90,4 +90,10 @@ Bjerre, E., Jessen, S., Schneider, R., Villholth, K. G., Dippenaar, M. A., Enema
 
 Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2026). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, Hydrology and Earth System Sciences, 30(9), 2817-2835. https://doi.org/10.5194/10.5194/hess-30-2817-2026
 
-Nagamoto, E., Ombadi, M., Ciulla, F., Willard, J.D., Carroll, R. W. H., Varadharajan, C. (2026). Widespread drought-driven declines in streamflows and water quality in the Upper Colorado River Basin during 1998-2022. Commun Earth Environ 7, 734 (2026). https://doi.org/10.1038/s43247-026-03890-5
+Nagamoto, E., Ombadi, M., Ciulla, F., Willard, J.D., Carroll, R. W. H. and Varadharajan, C. (2026). Widespread drought-driven declines in streamflows and water quality in the Upper Colorado River Basin during 1998-2022. Commun Earth Environ 7, 734 (2026). https://doi.org/10.1038/s43247-026-03890-5
+
+Jakubczyk, T. and Leśny, J. (2026). A Framework for Evaluating Meteorological Drought Indices as Indicators of Low Flows: A Case Study of the Biała Lądecka River Catchment Area. Water 2026, 18(16), 2047. https://doi.org/10.3390/w18162047
+
+Fuentes, I., Osorio, V., Jordan, C. and Vervoort, R. W. (2026). Drought propagation and recovery dynamics across hydroclimatic pathways: Predictors and timescale dependence in Chile. Journal of Hydrology: Regional Studies 67, 103797. https://doi.org/10.1016/j.ejrh.2026.103797
+
+Andrade, F. M., Molowny-Horas, R. and Fernández-Martínez, M. (2026). Silent Alarms? Unveiling Destabilization Risk in Terrestrial Ecosystem Carbon Fluxes. Global Change Biology 32, no. 10: e71100. https://doi.org/10.1111/gcb.71100.
