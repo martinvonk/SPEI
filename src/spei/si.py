@@ -1,3 +1,5 @@
+"""Standardized Index (SI) module for computing various standardized indices such as SPI, SPEI, SGI, SSMI, and SSFI."""
+
 import logging
 from dataclasses import dataclass, field
 from typing import Literal
@@ -16,20 +18,28 @@ from .utils import (
     validate_series,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def sgi(
     series: Series,
     timescale: int = 0,
     fit_freq: str | None = None,
 ) -> Series:
-    """Method to compute the Standardized Groundwater Index. Uses
-    the normal scores transform to calculate the cumulative density function.
+    """Compute the Standardized Groundwater Index.
+
+    Uses the normal scores transform to calculate the cumulative density function.
 
     Parameters
     ----------
     series: pandas.Series
         Pandas time series of the groundwater levels. Time series index
         should be a pandas DatetimeIndex.
+    timescale : int, optional, default=0
+        Size of the moving window over which the series is summed. If zero, no
+        summation is performed over the time series. If the time series
+        frequency is daily, then one would provide timescale=30 for SI1,
+        timescale=90 for SI3, timescale=180 for SI6 etc.
     fit_freq : str, optional, default=None
         Frequency for fitting the distribution. Default is None in which case
         the frequency of the series is inferred. If this fails a monthly
@@ -44,8 +54,8 @@ def sgi(
     Bloomfield, J. P. and Marchant, B. P.: Analysis of
     groundwater drought building on the standardised precipitation index
     approach. Hydrol. Earth Syst. Sci., 17, 4769-4787, 2013.
-    """
 
+    """
     mock_dist = norm
     sgi = SI(
         series=series,
@@ -69,7 +79,7 @@ def spi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Index.
+    """Compute the Standardized Precipitation Index.
 
     Parameters
     ----------
@@ -110,8 +120,8 @@ def spi(
     ----------
     LLoyd-Hughes, B. and Saunders, M.A.: A drought climatology for Europe.
     International Journal of Climatology, 22, 1571-1592, 2002.
-    """
 
+    """
     spi = SI(
         series=series,
         dist=dist,
@@ -135,7 +145,7 @@ def spei(
     fit_window: int = 0,
     prob_zero: bool = False,
 ) -> Series:
-    """Method to compute the Standardized Precipitation Evaporation Index.
+    """Compute the Standardized Precipitation Evaporation Index.
 
     Parameters
     ----------
@@ -176,8 +186,8 @@ def spei(
     A Multi-scalar drought index sensitive to global warming:
     The Standardized Precipitation Evapotranspiration Index.
     Journal of Climate, 23, 1696-1718, 2010.
-    """
 
+    """
     spei = SI(
         series=series,
         dist=dist,
@@ -201,7 +211,7 @@ def ssfi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized StreamFlow Index.
+    """Compute the Standardized StreamFlow Index.
 
     Parameters
     ----------
@@ -242,6 +252,7 @@ def ssfi(
     Vicente-Serrano, S. M., J. I. López-Moreno, S. Beguería, J. Lorenzo-Lacruz,
     C. Azorin-Molina, and E. Morán-Tejeda. Accurate Computation of a Streamflow
     Drought Index. Journal of Hydrologic Engineering 17 (2): 318-332. 2012.
+
     """
     ssfi = SI(
         series=series,
@@ -266,7 +277,7 @@ def ssmi(
     fit_window: int = 0,
     prob_zero: bool = True,
 ) -> Series:
-    """Method to compute the Standardized Soil Moisture Index.
+    """Compute the Standardized Soil Moisture Index.
 
     Parameters
     ----------
@@ -306,8 +317,8 @@ def ssmi(
     Carrão. H., Russo, S., Sepulcre-Canto, G., Barbosa, P.: An empirical standardized
     soil moisture index for agricultural drought assessment from remotely sensed data.
     International Journal of Applied Earth Observation and Geoinformation, 48, 2016.
-    """
 
+    """
     ssmi = SI(
         series=series,
         dist=dist,
@@ -325,8 +336,7 @@ def ssmi(
 
 @dataclass
 class SI:
-    """
-    Standardized Index Class.
+    """Standardized Index Class.
 
     Parameters
     ----------
@@ -367,8 +377,9 @@ class SI:
     _grouped_year : DataFrame
         Dataframe with all data grouped in a one-year (2000) DataFrame with the
         original years as columns
-    _dist_dict : Dict[int, Dist]
+    _dist_dict : Dict[Timestamp, Dist]
         Dictionary of distributions used to fit the data.
+
     """
 
     series: Series = field(repr=False)
@@ -381,14 +392,14 @@ class SI:
     normal_scores_transform: bool = field(default=False)
     agg_func: Literal["sum", "mean"] = "sum"
     _grouped_year: DataFrame = field(init=False, repr=False, compare=False)
-    _dist_dict: dict[int, Dist] = field(
+    _dist_dict: dict[Timestamp, Dist] = field(
         default_factory=dict, init=False, repr=False, compare=False
     )
 
     def __post_init__(self) -> None:
-        """
-        Post initializes the SI class and performs necessary data
-        preprocessing and validation.
+        """Post-initialization of the SI class.
+
+        Performs necessary data preprocessing and validation.
         """
         self.series = validate_series(self.series)
 
@@ -407,24 +418,21 @@ class SI:
 
         if self.fit_window > 0:
             if self.fit_window < 3:
-                logging.error(
+                logger.error(
                     "Window should be larger than 2. Setting the window value to 3."
                 )
                 self.fit_window = 3  # make sure window is at least three
             elif self.fit_window % 2 == 0:
-                logging.error(
+                logger.error(
                     "Window should be odd. Setting the window value to"
                     f"{self.fit_window + 1}"
                 )
                 self.fit_window += 1  # make sure window is odd
 
     def fit_distribution(self) -> None:
-        """
-        Fit distribution on the time series per fit_frequency and/or fit_window
-        """
-
+        """Fit distribution on the time series per fit_frequency and/or fit_window."""
         if self.normal_scores_transform:
-            logging.info("Using normal-scores-transform. No distribution is fitted.")
+            logger.info("Using normal-scores-transform. No distribution is fitted.")
 
         elif self.fit_window > 0:
             if self.fit_freq not in (
@@ -438,7 +446,7 @@ class SI:
                     f"'{self.fit_freq}', if a fit_window is provided."
                 )
 
-            logging.info("Using rolling window method")
+            logger.info("Using rolling window method")
             window = self.fit_window
             period = int(ceil(window / 2))
             if self.fit_freq in ("W", "w"):
@@ -465,7 +473,7 @@ class SI:
                 )
                 self._dist_dict[date] = fd
         else:
-            logging.info("Using groupby fit by frequency method")
+            logger.info("Using groupby fit by frequency method")
             for date, grval in self._grouped_year.groupby(
                 Grouper(freq=str(self.fit_freq))
             ):
@@ -480,7 +488,7 @@ class SI:
                 self._dist_dict[date] = fd  # type: ignore
 
     def cdf(self) -> Series:
-        """Compute the cumulative density function"""
+        """Compute the cumulative density function."""
         if self.normal_scores_transform:
             cdf = self.cdf_nsf()
         else:
@@ -492,7 +500,7 @@ class SI:
         return cdf
 
     def pdf(self) -> Series:
-        """Compute the probability density function"""
+        """Compute the probability density function."""
         if self.normal_scores_transform:
             pdf = self.cdf().diff()
         else:
@@ -503,15 +511,14 @@ class SI:
         return pdf
 
     def cdf_nsf(self) -> Series:
-        """
-        Compute the cumulative density function using the Normal Scores
-        Transform
+        """Compute the cumulative density function using the Normal Scores Transform.
 
         Returns
         -------
         Series
+
         """
-        logging.info("Using the normal scores transform")
+        logger.info("Using the normal scores transform")
         cdf = Series(nan, index=self.series.index, dtype=float)
         for _, grval in self._grouped_year.groupby(Grouper(freq=str(self.fit_freq))):
             data = get_data_series(grval).sort_values()
@@ -520,10 +527,9 @@ class SI:
         return cdf
 
     def ppf(self, q: float) -> Series:
-        """
-        Method to calculate the percentile point function
-        (inverse of cdf — percentiles) of a fitted
-        distribution.
+        """Compute the percentile point function of a fitted distribution.
+
+        ppf is the inverse of cdf — percentiles.
 
         Parameters
         ----------
@@ -534,6 +540,7 @@ class SI:
         Returns
         -------
         Series
+
         """
         ppf = Series(nan, index=self.series.index, dtype=float)
         if self.normal_scores_transform:
@@ -555,15 +562,15 @@ class SI:
         return ppf
 
     def norm_ppf(self) -> Series:
-        """
-        Method to calculate propability point function of normal distribution
-        based on a cumulative density function of a fitted distribution
+        """Compute propability point function of normal distribution.
+
+        The ppf is based on a cumulative density function of a fitted distribution.
 
         Returns
         -------
         Series
-        """
 
+        """
         cdf = self.cdf()
         ppf = Series(
             norm.ppf(cdf.values, loc=0, scale=1), index=self.series.index, dtype=float
@@ -571,6 +578,7 @@ class SI:
         return ppf
 
     def get_dist(self, date: Timestamp) -> Dist:
+        """Get the fitted distribution for a specific date."""
         for k in self._dist_dict:
             dist = self._dist_dict[k]
             if date in dist.data.index:
@@ -579,9 +587,7 @@ class SI:
         raise KeyError("Date not found in distributions")
 
     def predict(self, series: Series) -> Series:
-        """
-        Method to predict the standardized index for a future period
-        based on the fitted distribution.
+        """Predict the standardized index for a future period based on the fitted distribution.
 
         Parameters
         ----------
@@ -591,6 +597,7 @@ class SI:
         Returns
         -------
         Series
+
         """
         if self.normal_scores_transform:
             raise NotImplementedError(

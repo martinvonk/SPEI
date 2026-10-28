@@ -12,8 +12,9 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square&color=green)](https://github.com/martinvonk/SPEI/actions/workflows/tests.yml)
 [![CodacyCoverage](https://img.shields.io/codacy/coverage/908b566912314666b84e1add22ea7d66?style=flat-square&color=green)](https://app.codacy.com/gh/martinvonk/SPEI/)
 [![CodacyGrade](https://img.shields.io/codacy/grade/908b566912314666b84e1add22ea7d66?style=flat-square&color=darkgreen)](https://app.codacy.com/gh/martinvonk/SPEI/)
-[![Typed: MyPy](https://img.shields.io/badge/type_checker-mypy-darkgreen?style=flat-square)](https://mypy-lang.org/)
 [![Formatter and Linter: ruff](https://img.shields.io/badge/linter-ruff-darkgreen?style=flat-square)](https://github.com/charliermarsh/ruff)
+[![Typed: mypy](https://img.shields.io/badge/typed-mypy-darkgreen?style=flat-square)](https://mypy-lang.org/)
+[![Typed: ty](https://img.shields.io/badge/typed-ty-darkgreen?style=flat-square)](https://docs.astral.sh/ty/)
 
 
 SPEI is a simple Python package to calculate drought indices for hydrological time series. This package uses popular Python packages such as Pandas and Scipy to make it easy and versatile for the user to calculate the drought indices. Pandas Series are great for dealing with time series; providing interpolation, rolling average, and other manipulation options. SciPy enables us to use all different kinds of [distributions](https://docs.scipy.org/doc/scipy/reference/stats.html#probability-distributions) to fit the data. Different popular drought indices are supported such as the SPI (Standardized Precipitation Index), SPEI (Standardized Precipitation Evaporation Index), and SGI (Standardized Groundwater Index).
@@ -73,10 +74,26 @@ Panigrahi, S., Vidyarthi, V.K. (2025). Assessing the Suitability of SPI and SPEI
 
 Ashcroft L, Ritman M, Bridgman H, Thornton K, Di Gravio G, Oates W, Belfield R, Belfield E. (2025). A climatology of meteorological droughts in New England, Australia, 1880–2022. Journal of Southern Hemisphere Earth Systems Science 75, ES25013. https://doi.org/10.1071/ES25013
 
-Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). “ Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective.” International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
-
-Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2025). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, EGUsphere [preprint], https://doi.org/10.5194/egusphere-2025-4526,
+Patidar, R., S. M. Pingale, D. Khare, and S. Choudhary (2025). Assessing Spatio-Temporal Meteorological Drought Dynamics Across Indian Agro-Climatic Zones: A Long-Term Perspective. International Journal of Climatology 45, no. 16: e70146. https://doi.org/10.1002/joc.70146
 
 Butterfield, B. A., Furtado, J. C., Salazar, M. L., & Kuster, E. L. (2025). Assessing climate change and whiplash events in national parks. National Weather Center Research Experiences for Undergraduates Program.
 
+Knoll, S., Duthweiler, S., Rötzer, T., Pauleit, S., & Helmreich, B. (2025). Recycled demolition waste in engineered substrate promotes long-term urban tree growth and ecosystem services in a temperate city. Sustainable Cities and Society, 131, Article 106670. https://doi.org/10.1016/j.scs.2025.106670
+
+Compaoré, C., Somda, W., Kébré, M. B. and Koalaga, Z. (2025). Spatial Analysis of Historical and Near-Future Droughts using the SPI and SPEI Indices in the Competence Area of the Nakanbé Water Agency in Burkina Faso (1981–2050). IEEE Multi-conference on Natural and Engineering Sciences for Sahel's Sustainable Development (MNE3SD), Bobo-Dioulasso, Burkina Faso, pp. 1-10, https://doi.org/10.1109/MNE3SD67637.2025.11323240
+
 Saponaro, V., Dalmonech, D., Vangi, E., Puchi, P. F., Rezaie, N., D’Andrea, E., Tomelleri, E., & Collalti, A. (2026). Climate change, more than management, drives short- and long-term changes in iWUE in a sub-Alpine beech forest. Journal of Forestry Research, 37(1), 16. https://doi.org/10.1007/s11676-025-01942-8
+
+Worden, S., Fu, R., Bloom, A. A., Bauters, M., Verbeeck, H., Fatoyinbo, T., Hubau, W., Koutika, L.-S., Kengdo, S. K., Maes, S. L., Medjibe, V., Russo, N. J., Saatchi, S., Sagang, L. B., Smith, T. B., Sonwa, D. J., Boeckx, P., & Ordway, E. M. (2026). Congo Basin carbon cycle responses to global change. Global Change Biology, 32(1), Article e70688. https://doi.org/10.1111/gcb.70688
+
+Bjerre, E., Jessen, S., Schneider, R., Villholth, K. G., Dippenaar, M. A., Enemark, T., Meyer, R., Hallowes, J., Sonnenborg, T. O., Kanyerere, T., & Jensen, K. H. (2026). Groundwater responses to decadal rainfall variability in semi-arid South Africa. Journal of Hydrology, 669(Part A), Article 135022. https://doi.org/10.1016/j.jhydrol.2026.135022
+
+Lekarkar, K., Rakovec, O., Kumar, R., Dondeyne, S., and van Griensven, A. (2026). Soil moisture droughts in Belgium during 2011–2020 were the worst in five decades, Hydrology and Earth System Sciences, 30(9), 2817-2835. https://doi.org/10.5194/10.5194/hess-30-2817-2026
+
+Nagamoto, E., Ombadi, M., Ciulla, F., Willard, J.D., Carroll, R. W. H. and Varadharajan, C. (2026). Widespread drought-driven declines in streamflows and water quality in the Upper Colorado River Basin during 1998-2022. Commun Earth Environ 7, 734 (2026). https://doi.org/10.1038/s43247-026-03890-5
+
+Jakubczyk, T. and Leśny, J. (2026). A Framework for Evaluating Meteorological Drought Indices as Indicators of Low Flows: A Case Study of the Biała Lądecka River Catchment Area. Water 2026, 18(16), 2047. https://doi.org/10.3390/w18162047
+
+Fuentes, I., Osorio, V., Jordan, C. and Vervoort, R. W. (2026). Drought propagation and recovery dynamics across hydroclimatic pathways: Predictors and timescale dependence in Chile. Journal of Hydrology: Regional Studies 67, 103797. https://doi.org/10.1016/j.ejrh.2026.103797
+
+Andrade, F. M., Molowny-Horas, R. and Fernández-Martínez, M. (2026). Silent Alarms? Unveiling Destabilization Risk in Terrestrial Ecosystem Carbon Fluxes. Global Change Biology 32, no. 10: e71100. https://doi.org/10.1111/gcb.71100.

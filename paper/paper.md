@@ -70,21 +70,21 @@ import spei as si
 
 # load daily time series
 meteo: pd.DataFrame = pd.read_csv(
-  "meteo.csv",
-  index_col="datetime",
-  parse_dates=["datetime"],
+    "meteo.csv",
+    index_col="datetime",
+    parse_dates=["datetime"],
 )
 prec: pd.Series = meteo["precipitation"]
 evap: pd.Series = meteo["pot_evaporation"]
 
 # compute monthly precipitation surplus
-surplus: pd.Series = (prec - evap).resample("MS").sum() # MS: month-start
+surplus: pd.Series = (prec - evap).resample("MS").sum()  # MS: month-start
 
 # compute SPEI-1
 spei1: pd.Series = si.spei(
-  series=surplus,
-  dist=sps.fisk,
-  timescale=1, # unit: frequency of the data (months in this case)
+    series=surplus,
+    dist=sps.fisk,
+    timescale=1,  # unit: frequency of the data (months in this case)
 )
 ```
 

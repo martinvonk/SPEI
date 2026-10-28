@@ -1,3 +1,5 @@
+"""Functions for calculating cumulative deficits and related metrics based on temperature and deficit time series."""
+
 import numpy as np
 import pandas as pd
 
@@ -5,8 +7,7 @@ from .utils import group_yearly_df, validate_series
 
 
 def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
-    """
-    Get the first date in each year where the cumulative temperature exceeds a given threshold.
+    """Get the first date in each year where the cumulative temperature exceeds a given threshold.
 
     Parameters
     ----------
@@ -20,6 +21,7 @@ def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
     pd.Series
         A pandas Series containing the first date in each year where the cumulative
         temperature exceeds the threshold. The index corresponds to the years.
+
     """
     temp_group_df = group_yearly_df(series=temp).cumsum(axis=0)
     first_date_above_threshold = temp_group_df.gt(threshold).idxmax()
@@ -27,11 +29,10 @@ def get_yearly_temp_date(temp: pd.Series, threshold: float) -> pd.Series:
 
 
 def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
-    """
-    Calculate the cumulative sum of a deficit series.
+    """Compute the cumulative sum of a deficit series.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the deficit values.
     allow_below_zero : bool, optional
@@ -39,19 +40,23 @@ def cumsum(deficit: pd.Series, allow_below_zero: bool = True) -> pd.Series:
         If False, the cumulative sum is constrained to be non-negative, resetting
         to zero whenever the sum would drop below zero. Default is True.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.Series
         A pandas Series containing the cumulative sum of the deficit values,
         optionally constrained to be non-negative.
+
     """
     if allow_below_zero:
         return deficit.cumsum()
     else:
         if deficit.to_numpy(float)[0] < 0.0:
             deficit.iat[0] = 0.0
-        sumlm = np.frompyfunc(lambda a, b: 0.0 if a + b < 0.0 else a + b, nin=2, nout=1)
-        return pd.Series(sumlm.accumulate(deficit.values), deficit.index, dtype=float)
+        sumlm = np.frompyfunc(lambda a, b: max(a + b, 0.0), nin=2, nout=1)
+        array = deficit.to_numpy(float)
+        out = np.empty_like(array)
+        deficit_cumsum = sumlm.accumulate(array, out=out)
+        return pd.Series(deficit_cumsum, deficit.index, dtype=float)
 
 
 def get_cumulative_deficit(
@@ -60,15 +65,14 @@ def get_cumulative_deficit(
     enddate: pd.Timestamp | pd.Series,
     allow_below_zero: bool = True,
 ) -> pd.DataFrame:
-    """
-    Calculate the cumulative deficit for a given time period.
+    """Compute the cumulative deficit for a given time period.
 
     This function computes the cumulative deficit for each column in a
     grouped yearly DataFrame, starting from `startdate` to `enddate`.
     The cumulative sum can optionally allow values below zero.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the deficit time series.
     startdate : pd.Timestamp | pd.Series
@@ -84,12 +88,13 @@ def get_cumulative_deficit(
         If True, allows the cumulative sum to include values below zero.
         Defaults to True.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.DataFrame
         A DataFrame containing the cumulative deficit for each column
         over the specified time period. The index represents the date
         range, and the columns correspond to the year.
+
     """
     deficit = validate_series(deficit)
     group_df = group_yearly_df(series=deficit)
@@ -117,35 +122,39 @@ def get_cumulative_deficit(
     return cumdf
 
 
-def deficit_oct1(deficit: pd.Series) -> pd.Series:
-    """
-    Calculate the cumulative deficit on October 1st.
+def deficit_oct1(
+    deficit: pd.Series, startdate: pd.Timestamp | str = "2000-04-01"
+) -> pd.Series:
+    """Compute the cumulative deficit on October 1st.
 
     This function computes the cumulative deficit for a given time series
     of deficits, considering only the period between April 1st and
     September 30th. The cumulative deficit is reset to zero if it goes
     below zero during this period.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the deficit time series. The index
         should be datetime-like, and the values should represent the
         deficit amounts.
+    startdate : pd.Timestamp, optional
+        The start date for the cumulative deficit calculation. Defaults
+        to April 1st.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.Series
         A pandas Series containing the cumulative deficit values on
         October 1st. The index of the returned Series corresponds to
         the columns of the cumulative deficit DataFrame, and the name
         of the Series is "Doct1".
+
     """
-    startdate = pd.Timestamp("2000-04-01")
     enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
         deficit=deficit,
-        startdate=startdate,
+        startdate=pd.Timestamp(startdate),
         enddate=enddate,
         allow_below_zero=False,
     )
@@ -158,43 +167,52 @@ def deficit_oct1(deficit: pd.Series) -> pd.Series:
     return doct1
 
 
-def deficit_max(deficit: pd.Series) -> pd.Series:
-    """
-    Calculate the maximum cumulative deficit within a specified period.
+def deficit_max(
+    deficit: pd.Series,
+    startdate: pd.Timestamp | str = "2000-04-01",
+    enddate: pd.Timestamp | str = "2000-09-30",
+) -> pd.Series:
+    """Compute the maximum cumulative deficit within a specified period.
 
     This function computes the maximum cumulative deficit for a given
     deficit time series, starting from April 1st to September 30th.
     The cumulative deficit is calculated using the `get_cumulative_deficit`
     function, ensuring that values below zero are not allowed.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the deficit values over time.
+    startdate : pd.Timestamp, optional
+        The start date for the cumulative deficit calculation. Defaults to
+        April 1st.
+    enddate : pd.Timestamp, optional
+        The end date for the cumulative deficit calculation. Defaults to
+        September 30th.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.Series
         A pandas Series containing the maximum cumulative deficit
         within the specified period, labeled as "Dmax".
+
     """
-    startdate = pd.Timestamp("2000-04-01")
-    enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
         deficit=deficit,
-        startdate=startdate,
-        enddate=enddate,
+        startdate=pd.Timestamp(startdate),
+        enddate=pd.Timestamp(enddate),
         allow_below_zero=False,
     )
     return cumdf.max().rename("Dmax")
 
 
-def deficit_apr1(deficit: pd.Series) -> pd.Series:
-    """
-    Calculate the maximum change in cumulative deficit within a specified date range.
+def deficit_apr1(
+    deficit: pd.Series, enddate: pd.Timestamp | str = "2000-09-30"
+) -> pd.Series:
+    """Compute the maximum change in cumulative deficit within a specified date range.
 
     This function computes the cumulative deficit for the given deficit series
-    between April 1st and September 30th of the year 2000. It then calculates
+    between April 1st and September 30th. It then calculates
     the maximum change in the cumulative deficit over this period.
 
     Parameters
@@ -202,86 +220,97 @@ def deficit_apr1(deficit: pd.Series) -> pd.Series:
     deficit : pd.Series
         A pandas Series representing the deficit values. The index is expected
         to be datetime-like.
+    enddate : pd.Timestamp, optional
+        The end date for the cumulative deficit calculation. Defaults to
+        September 30th.
 
     Returns
     -------
     pd.Series
         A pandas Series containing the maximum change in cumulative deficit
         over the specified period, labeled as "DIapr1".
+
     """
-    startdate = pd.Timestamp("2000-04-01")
-    enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
         deficit=deficit,
-        startdate=startdate,
-        enddate=enddate,
+        startdate=pd.Timestamp("2000-04-01"),
+        enddate=pd.Timestamp(enddate),
         allow_below_zero=True,
     )
     return (cumdf.max() - cumdf.min()).rename("DIapr1")
 
 
 def deficit_gdd(
-    deficit: pd.Series, temp: pd.Series, threshold: float = 440.0
+    deficit: pd.Series,
+    temp: pd.Series,
+    threshold: float = 440.0,
+    enddate: pd.Timestamp | str = "2000-09-30",
 ) -> pd.Series:
-    """
-    Calculate the maximum change in cumulative deficit starting from the
-    first day when the temperature sum (growing degree days; GDD)
-    exceeds a specified threshold.
+    """Compute the maximum change in cumulative deficit.
 
-    Parameters:
-    -----------
+    Starts from the first day when the temperature sum
+    (growing degree days; GDD) exceeds a specified threshold.
+
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the daily deficit values.
     temp : pd.Series
         A pandas Series representing the daily temperature values.
     threshold : float, optional
-        The temperature sum GDD threshold to determine the starting date for the calculation.
-        Defaults to 440.0.
+        The temperature sum GDD threshold to determine the starting date for
+        the calculation. Defaults to 440.0 degrees Celsius.
+    enddate : pd.Timestamp, optional
+        The end date for the cumulative deficit calculation. Defaults to
+        September 30th, 2000.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.Series
         A pandas Series containing the maximum change in cumulative deficit,
         labeled as "DIgdd".
+
     """
     temp = validate_series(temp)
     startdate = get_yearly_temp_date(temp=temp, threshold=threshold)
-    enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
         deficit=deficit,
         startdate=startdate,
-        enddate=enddate,
+        enddate=pd.Timestamp(enddate),
         allow_below_zero=True,
     )
-    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIgdd")
+    return (cumdf.max() - cumdf.min()).rename("DIgdd")
 
 
-def deficit_wet(deficit: pd.Series) -> pd.Series:
-    """
-    Calculate the maximum change in cumulative deficit for a specified period.
+def deficit_wet(
+    deficit: pd.Series, enddate: pd.Timestamp | str = "2000-09-30"
+) -> pd.Series:
+    """Compute the maximum change in cumulative deficit for a specified period.
 
     This function computes the maximum change in  cumulative deficit from
     January 1st to September 30th of a given year. The cumulative deficit
     is calculated using the `get_cumulative_deficit` function, allowing
     values below zero.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     deficit : pd.Series
         A pandas Series representing the deficit values over time.
+    enddate : pd.Timestamp, optional
+        The end date for the cumulative deficit calculation. Defaults to
+        September 30th, 2000.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.Series
         A pandas Series containing the maximum change in cumulative deficit
         for the specified period, labeled as "DIwet".
+
     """
-    startdate = pd.Timestamp("2000-01-01")
-    enddate = pd.Timestamp("2000-09-30")
     cumdf = get_cumulative_deficit(
         deficit=deficit,
-        startdate=startdate,
-        enddate=enddate,
+        startdate=pd.Timestamp("2000-01-01"),
+        enddate=pd.Timestamp(enddate),
         allow_below_zero=True,
     )
-    return (cumdf.max() - cumdf.min()).rename("DIapr1").rename("DIwet")
+    return (cumdf.max() - cumdf.min()).rename("DIwet")
