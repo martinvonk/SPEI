@@ -1,4 +1,7 @@
+"""Module for fitting distributions to data and performing statistical tests."""
+
 from dataclasses import dataclass, field
+from functools import partial
 from typing import Literal
 
 from numpy import std
@@ -40,6 +43,7 @@ class Dist:
     The `fit_dist` method uses the `dist.fit` function from Scipy to estimate
     distribution parameters. If the fitted distribution requires additional
     parameters beyond `loc` and `scale`, they are stored in the `pars` attribute.
+
     """
 
     data: Series = field(init=True, repr=False)
@@ -53,9 +57,7 @@ class Dist:
     fit_method: Literal["MLE", "MM"] = field(default="MLE", init=True, repr=False)
 
     def __post_init__(self):
-        """
-        Post initializes the Dist class by fitting the distribution.
-        """
+        """Post initializes the Dist class by fitting the distribution."""
         data_fit = self.data_window if self.data_window is not None else self.data
         pars, loc, scale = self.fit_dist(
             data=data_fit, dist=self.dist, fit_method=self.fit_method
@@ -71,8 +73,7 @@ class Dist:
     def fit_dist(
         data: Series, dist: ContinuousDist, fit_method: Literal["MLE", "MM"] = "MLE"
     ) -> tuple[list[float] | None, float, float]:
-        """
-        Fits a Scipy continuous distribution to the data.
+        """Fits a Scipy continuous distribution to the data.
 
         Parameters
         ----------
@@ -89,6 +90,7 @@ class Dist:
         -------
         Tuple
             Tuple containing distribution parameters (pars, loc, scale).
+
         """
         fit_tuple = dist.fit(
             data,
@@ -103,7 +105,7 @@ class Dist:
         return pars, loc, scale
 
     def cdf(self) -> Series:
-        """Compute cumulative density function of a Scipy Continuous Distribution"""
+        """Compute cumulative density function of a Scipy Continuous Distribution."""
         if self.pars is not None:
             cdf = self.dist.cdf(
                 self.data.values, *self.pars, loc=self.loc, scale=self.scale
@@ -118,6 +120,7 @@ class Dist:
         return Series(cdf, index=self.data.index, dtype=float)
 
     def pdf(self) -> Series:
+        """Compute probability density function of a Scipy Continuous Distribution."""
         data_pdf = self.data.sort_values()
         if self.pars is not None:
             pdf = self.dist.pdf(
@@ -133,7 +136,7 @@ class Dist:
         return Series(pdf, index=data_pdf.index, dtype=float)
 
     def ppf(self, q: float) -> Series:
-        """Compute percent point function (inverse of cdf) at q"""
+        """Compute the percent point function (inverse of cdf) at q."""
         if self.pars is not None:
             ppf = self.dist.ppf(q, *self.pars, loc=self.loc, scale=self.scale)
         else:
@@ -145,11 +148,11 @@ class Dist:
         self,
         method: Literal["auto", "exact", "approx", "asymp"] = "auto",
     ) -> float:
-        """Fit a distribution and perform the two-sided
-        Kolmogorov-Smirnov test for goodness of fit. The
-        null hypothesis is that the data and distributions
-        are identical, the alternative is that they are
-        not identical.
+        """Fit a distribution and perform the two-sided Kolmogorov-Smirnov test.
+
+        The two-sided test is usefull to asses the  goodness of fit of a distribution.
+        The null hypothesis is that the data and distributions are identical, the
+        alternative is that they are not identical.
 
         Parameters
         ----------
@@ -167,17 +170,22 @@ class Dist:
             p-value
 
         References
-        -------
+        ----------
         Onnen, H.: Intro to Probability Distributions and Distribution
         Fitting with Pythons  SciPy, 2021.
+
         """
-        args = (
-            (self.pars, self.loc, self.scale)
-            if self.pars is not None
-            else (self.loc, self.scale)
-        )
-        kstest_result = kstest(
-            rvs=self.data, cdf=self.dist.name, args=args, method=method
-        )
+        # Create a callable CDF with parameters bound
+        # In scipy >= 1.18.0, passing distribution name as string with args
+        # no longer works for distributions like norm where loc/scale are
+        # keyword-only arguments in the underlying implementation
+        if self.pars is not None:
+            cdf_func = partial(
+                self.dist.cdf, *self.pars, loc=self.loc, scale=self.scale
+            )
+        else:
+            cdf_func = partial(self.dist.cdf, loc=self.loc, scale=self.scale)
+
+        kstest_result = kstest(rvs=self.data, cdf=cdf_func, method=method)
         # rej_h0 = kstest_result.pvalue < alpha
         return kstest_result.pvalue

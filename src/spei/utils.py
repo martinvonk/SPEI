@@ -1,5 +1,8 @@
+"""Some utility functions for the SPEI package."""
+
 import logging
 from calendar import isleap
+from typing import cast
 
 from numpy import array, nan
 from packaging.version import parse as parse_version
@@ -10,6 +13,7 @@ from pandas import (
     Index,
     Series,
     Timedelta,
+    Timestamp,
     concat,
     infer_freq,
     to_datetime,
@@ -17,14 +21,17 @@ from pandas import (
 
 pd_version = parse_version(__import__("pandas").__version__)
 
+logger = logging.getLogger(__name__)
+
 
 def validate_series(series: Series) -> Series:
+    """Validate series to see if it is a Series and has a DatetimeIndex."""
     series = series.copy()
 
     if not isinstance(series, Series):
         if isinstance(series, DataFrame):
             if len(series.columns) == 1:
-                logging.warning(
+                logger.warning(
                     "Please convert series of type pandas.DataFrame to a"
                     "pandas.Series using DataFrame.squeeze(). Now done automatically."
                 )
@@ -42,10 +49,11 @@ def validate_series(series: Series) -> Series:
 
 
 def validate_index(index: Index) -> DatetimeIndex:
+    """Validate index to see if it is a DatetimeIndex and has no duplicates."""
     index = index.copy()
 
     if not isinstance(index, DatetimeIndex):
-        logging.info(
+        logger.info(
             f"Expected the index to be a DatetimeIndex. Automatically converted "
             f"{type(index)} using pd.to_datetime(Index)"
         )
@@ -57,29 +65,28 @@ def validate_index(index: Index) -> DatetimeIndex:
             " using `series = "
             "series.loc[~series.index.duplicated(keep='first/last')]`"
         )
-        logging.error(msg)
+        logger.error(msg)
         raise ValueError(msg)
 
     return index
 
 
 def infer_frequency(index: Index | DatetimeIndex) -> str:
-    """Infer frequency"""
-
+    """Infer frequency of DatetimeIndex."""
     index = validate_index(index)
 
     inf_freq = infer_freq(index)
 
     if inf_freq is None:
-        logging.info(
+        logger.info(
             "Could not infer frequency from index, using monthly frequency instead"
         )
         inf_freq = "MS" if pd_version >= parse_version("2.2.0") else "M"
     else:
-        logging.info(f"Inferred frequency '{inf_freq}' from index")
+        logger.info(f"Inferred frequency '{inf_freq}' from index")
 
     if "W-" in inf_freq:
-        logging.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
+        logger.info(f"Converted frequncy weekly '{inf_freq}' to 'W'")
         inf_freq = "W"
 
     return inf_freq
@@ -92,14 +99,15 @@ def group_yearly_df(series: Series) -> DataFrame:
     column corresponds to a year (as int). The index of the DataFrame is set to
     the corresponding dates (in the year 2000).
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     series : pd.Series
         A pandas Series with a DateTime index.
 
-    Returns:
-    --------
+    Returns
+    -------
     pd.DataFrame
+
     """
     strfstr: str = "%m-%d %H:%M:%S"
     grs = {}
@@ -109,7 +117,7 @@ def group_yearly_df(series: Series) -> DataFrame:
         gry.index = to_datetime(
             "2000-" + index.strftime(strfstr), format="%Y-" + strfstr
         )
-        year = getattr(year_timestamp, "year")  # type: str
+        year: int = cast(Timestamp, year_timestamp).year
         grs[year] = gry
     return concat(grs, axis=1, sort=True)
 
@@ -136,9 +144,7 @@ def get_data_series(group_df: DataFrame) -> Series:
 
 
 def daily_window_group_yearly_df(dfval: DataFrame, period: int) -> DataFrame:
-    """Fill a period of daily values in grouped by yearly DataFrame to get
-    cyclic rolling window.
-    """
+    """Fill a period of daily values in grouped by yearly DataFrame to get cyclic rolling window."""
     dfval_window_index_start = [
         dfval.index[0] + Timedelta(value=-i, unit="D")
         for i in reversed(range(1, period + 1))
