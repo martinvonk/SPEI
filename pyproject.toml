@@ -30,7 +30,7 @@ homepage = "https://github.com/martinvonk/spei"
 repository = "https://github.com/martinvonk/spei"
 
 [project.optional-dependencies]
-notebook = ["ipykernel", "pastas", "rpy2", "standard-precip", "pandas<3.0"]
+notebook = ["ipykernel", "pastas", "rpy2", "standard-precip", "pandas"]
 documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs", "ty"]
@@ -63,7 +63,16 @@ ignore = ["D213", "D203"]
 
 [tool.tox]
 requires = ["tox-uv>=1.0"]
-env_list = ["py311", "py312", "py313", "py314", "py315", "type", "typety", "ruff"]
+env_list = [
+        "py311",
+        "py312",
+        "py313",
+        "py314",
+        "py315",
+        "type",
+        "typety",
+        "ruff",
+]
 
 [tool.tox.env_run_base]
 description = "run unit tests"
