@@ -10,7 +10,7 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.10816741-ff6600?style=flat-square)](https://doi.org/10.5281/zenodo.10816741)
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/martinvonk/spei/tests.yml?style=flat-square&color=green)](https://github.com/martinvonk/SPEI/actions/workflows/tests.yml)
-![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/martinvonk/baa3c060b7ea0f9a83cf76d3be67ab01/raw/coverage.json)
+[![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/martinvonk/baa3c060b7ea0f9a83cf76d3be67ab01/raw/coverage.json&style=flat-square&color=green)](https://github.com/martinvonk/spei/actions/workflows/tests.yml)
 [![Formatter and Linter: ruff](https://img.shields.io/badge/linter-ruff-darkgreen?style=flat-square)](https://github.com/charliermarsh/ruff)
 [![Typed: mypy](https://img.shields.io/badge/typed-mypy-darkgreen?style=flat-square)](https://mypy-lang.org/)
 [![Typed: ty](https://img.shields.io/badge/typed-ty-darkgreen?style=flat-square)](https://docs.astral.sh/ty/)
