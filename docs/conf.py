@@ -9,7 +9,7 @@
 from spei import __version__
 
 project = "SPEI"
-copyright = "2025, Martin Vonk"
+copyright = "Martin Vonk (2022-today)"
 author = "Martin Vonk"
 release = __version__
 
