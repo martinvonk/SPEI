@@ -52,14 +52,10 @@ jobs:
             os: ubuntu-latest
             toxenv: ruff
             experimental: false
-          - name: Codacy Coverage Report
-            python: "3.13"
-            os: ubuntu-latest
-            toxenv: coverage
-            experimental: false
 
     name: ${{ matrix.name }}
     env:
+      BADGE_GIST_COVERAGE_TOKEN: ${{ secrets.BADGE_GIST_COVERAGE_TOKEN }}
       # Color Output
       # Rich (pip)
       FORCE_COLOR: 1
@@ -71,6 +67,7 @@ jobs:
       MYPY_FORCE_TERMINAL_WIDTH: 200
       # Pytest
       PYTEST_ADDOPTS: "--color=yes"
+
     steps:
       - uses: actions/checkout@v7
 
@@ -93,9 +90,27 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
         run: uv run tox -e ${{ matrix.toxenv }} --skip-pkg-install
 
-      - name: Run codacy-coverage-reporter
-        if: ${{ matrix.toxenv == 'coverage' && github.repository == 'martinvonk/spei' && success() }}
-        uses: codacy/codacy-coverage-reporter-action@master
+      - name: Export Coverage Percent
+        if: matrix.toxenv == 'py313'
+        id: coverage
+        run: |
+          uv run python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          data = json.loads(Path("coverage.json").read_text())
+          coverage = data["totals"]["percent_covered_display"]
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a") as fh:
+              fh.write(f"coverage={coverage}\n")
+          PY
+
+      - name: Update Coverage Badge
+        if: matrix.toxenv == 'py313' && github.event_name == 'push' && github.ref == 'refs/heads/dev' && env.BADGE_GIST_COVERAGE_TOKEN != ''
+        uses: Schneegans/dynamic-badges-action@v1.7.0
         with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+          auth: ${{ secrets.BADGE_GIST_COVERAGE_TOKEN }}
+          gistID: "baa3c060b7ea0f9a83cf76d3be67ab01"
+          filename: coverage.json
+          label: coverage
+          message: ${{ steps.coverage.outputs.coverage }}

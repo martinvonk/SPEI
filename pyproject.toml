@@ -35,8 +35,7 @@ documentation = ["sphinx>=8.2", "myst-parser", "nbsphinx"]
 ruffing = ["ruff"]
 typing = ["mypy", "pandas-stubs", "ty"]
 pytesting = ["pytest>=7", "pytest-cov", "pytest-sugar"]
-coveraging = ["coverage"]
-dev = ["spei[ruffing,typing,pytesting,coveraging]", "tox-uv", "pre-commit"]
+dev = ["spei[ruffing,typing,pytesting]", "tox-uv", "pre-commit"]
 
 [tool.setuptools.dynamic]
 version = { attr = "spei._version.__version__" }
@@ -50,6 +49,7 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+addopts = "--cov=spei --cov-report=term-missing --cov-report=json --cov-branch"
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
@@ -110,8 +110,3 @@ commands = [
 description = "build documentation"
 extras = ["documentation", "notebook"]
 commands = [["sphinx-build", "-M", "html", "docs", "docs/_build"]]
-
-[tool.tox.env.coverage]
-description = "get coverage report xml"
-extras = ["coveraging", "pytesting"]
-commands = [["coverage", "run", "-m", "pytest", "tests"], ["coverage", "xml"]]
