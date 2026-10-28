@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>spei.utils module &#8212; SPEI 0.8.2 documentation</title>
+    <title>spei.utils module &#8212; SPEI 0.8.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
-    <script src="../_static/documentation_options.js?v=dbee5847"></script>
+    <script src="../_static/documentation_options.js?v=7f96dc5e"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -35,11 +35,11 @@
             
   <section id="module-spei.utils">
 <span id="spei-utils-module"></span><h1>spei.utils module<a class="headerlink" href="#module-spei.utils" title="Link to this heading">¶</a></h1>
+<p>Some utility functions for the SPEI package.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="spei.utils.daily_window_group_yearly_df">
 <span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">daily_window_group_yearly_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#spei.utils.daily_window_group_yearly_df" title="Link to this definition">¶</a></dt>
-<dd><p>Fill a period of daily values in grouped by yearly DataFrame to get
-cyclic rolling window.</p>
+<dd><p>Fill a period of daily values in grouped by yearly DataFrame to get cyclic rolling window.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -55,34 +55,33 @@ cyclic rolling window.</p>
 <p>This function groups a time series by year, creating a DataFrame where each
 column corresponds to a year (as int). The index of the DataFrame is set to
 the corresponding dates (in the year 2000).</p>
-<section id="parameters">
-<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>series<span class="classifier">pd.Series</span></dt><dd><p>A pandas Series with a DateTime index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>series</strong> (<em>pd.Series</em>) – A pandas Series with a DateTime index.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
-</section>
-<section id="returns">
-<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
-<p>pd.DataFrame</p>
-</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spei.utils.infer_frequency">
 <span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">infer_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Index</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatetimeIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#spei.utils.infer_frequency" title="Link to this definition">¶</a></dt>
-<dd><p>Infer frequency</p>
+<dd><p>Infer frequency of DatetimeIndex.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spei.utils.validate_index">
 <span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">validate_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatetimeIndex</span></span></span><a class="headerlink" href="#spei.utils.validate_index" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Validate index to see if it is a DatetimeIndex and has no duplicates.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="spei.utils.validate_series">
 <span class="sig-prename descclassname"><span class="pre">spei.utils.</span></span><span class="sig-name descname"><span class="pre">validate_series</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Series</span></span></span><a class="headerlink" href="#spei.utils.validate_series" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Validate series to see if it is a Series and has a DatetimeIndex.</p>
+</dd></dl>
 
 </section>
 
