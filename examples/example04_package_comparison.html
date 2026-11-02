@@ -475,7 +475,7 @@ Trying to import in ABI mode.
 </section>
 <section id="Compute-Standardized-Groundwater-Index">
 <h2>Compute Standardized Groundwater Index<a class="headerlink" href="#Compute-Standardized-Groundwater-Index" title="Link to this heading">¶</a></h2>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
@@ -486,48 +486,6 @@ Trying to import in ABI mode.
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ImportError</span>                               Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[10]</span><span class="ansi-green-fg">, line 1</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> <span class="ansi-bold" style="color: rgb(0,135,0)">import</span> pastas <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> ps
-<span class="ansi-green-fg">      2</span>
-<span class="ansi-green-fg">      3</span> sgi = si.sgi(head, fit_freq=<span class="ansi-yellow-fg">&#34;ME&#34;</span>)
-<span class="ansi-green-fg">      4</span> sgi_pastas = ps.stats.sgi(head)
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/work/SPEI/SPEI/.tox/docu/lib/python3.11/site-packages/pastas/__init__.py:40</span>
-<span class="ansi-green-fg">     27</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">pastas</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">rcparams</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> rcParams
-<span class="ansi-green-fg">     28</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">pastas</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">rfunc</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> (
-<span class="ansi-green-fg">     29</span>     DoubleExponential,
-<span class="ansi-green-fg">     30</span>     Exponential,
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">     38</span>     Spline,
-<span class="ansi-green-fg">     39</span> )
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">40</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">pastas</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">solver</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> objective, timer
-<span class="ansi-green-fg">     41</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">pastas</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">solver</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">trackers</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> TrackSolve
-<span class="ansi-green-fg">     42</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">pastas</span><span class="ansi-blue-intense-fg ansi-bold">.</span><span class="ansi-blue-intense-fg ansi-bold">stressmodels</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> (
-<span class="ansi-green-fg">     43</span>     ChangeModel,
-<span class="ansi-green-fg">     44</span>     Constant,
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">     50</span>     WellModel,
-<span class="ansi-green-fg">     51</span> )
-
-<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/work/SPEI/SPEI/.tox/docu/lib/python3.11/site-packages/pastas/solver/timer.py:41</span>
-<span class="ansi-green-fg">     39</span> <span class="ansi-bold" style="color: rgb(0,135,0)">except</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>:
-<span class="ansi-green-fg">     40</span>     msg = <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">SolveTimer requires </span><span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">tqdm</span><span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg"> to be installed.</span><span class="ansi-yellow-fg">&#34;</span>
-<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">41</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">ImportError</span>(msg) <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-fg">     44</span> <span class="ansi-bold" style="color: rgb(0,135,0)">class</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-blue-intense-fg ansi-bold">SolveTimer</span>(tqdm):
-<span class="ansi-green-fg">     45</span> <span style="color: rgb(188,188,188)">    </span><span class="ansi-yellow-fg">&#34;&#34;&#34;Progress indicator for model optimization.</span>
-<span class="ansi-green-fg">     46</span>
-<span class="ansi-green-fg">     47</span> <span class="ansi-yellow-fg">    Notes</span>
-<span class="ansi-green-fg">   (...)</span><span class="ansi-green-fg">     61</span> <span class="ansi-yellow-fg">        Optimization progress: 73it [00:01, 67.68it/s]</span>
-<span class="ansi-green-fg">     62</span> <span class="ansi-yellow-fg">    &#34;&#34;&#34;</span>
-
-<span class="ansi-red-fg">ImportError</span>: SolveTimer requires &#39;tqdm&#39; to be installed.
-</pre></div></div>
-</div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -537,17 +495,97 @@ Trying to import in ABI mode.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
 </div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[11]</span><span class="ansi-green-fg">, line 1</span>
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> pd.concat([sgi, sgi_pastas], axis=<span class="ansi-green-fg">1</span>).rename(columns={<span class="ansi-green-fg">0</span>: <span class="ansi-yellow-fg">&#34;SGI&#34;</span>, <span class="ansi-yellow-fg">&#34;head&#34;</span>: <span class="ansi-yellow-fg">&#34;Pastas&#34;</span>})
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="ansi-red-fg">NameError</span>: name &#39;sgi&#39; is not defined
-</pre></div></div>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SGI</th>
+      <th>B32C0572</th>
+    </tr>
+    <tr>
+      <th>date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1968-12-13</th>
+      <td>0.510073</td>
+      <td>0.510073</td>
+    </tr>
+    <tr>
+      <th>1968-12-24</th>
+      <td>0.398855</td>
+      <td>0.398855</td>
+    </tr>
+    <tr>
+      <th>1969-01-14</th>
+      <td>0.220807</td>
+      <td>0.220807</td>
+    </tr>
+    <tr>
+      <th>1969-01-28</th>
+      <td>0.744936</td>
+      <td>0.744936</td>
+    </tr>
+    <tr>
+      <th>1969-02-14</th>
+      <td>0.650837</td>
+      <td>0.650837</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-10-28</th>
+      <td>-0.052796</td>
+      <td>-0.052796</td>
+    </tr>
+    <tr>
+      <th>2020-11-15</th>
+      <td>-0.628006</td>
+      <td>-0.628006</td>
+    </tr>
+    <tr>
+      <th>2020-11-27</th>
+      <td>-0.510073</td>
+      <td>-0.510073</td>
+    </tr>
+    <tr>
+      <th>2020-12-14</th>
+      <td>-0.823894</td>
+      <td>-0.823894</td>
+    </tr>
+    <tr>
+      <th>2020-12-28</th>
+      <td>0.345126</td>
+      <td>0.345126</td>
+    </tr>
+  </tbody>
+</table>
+<p>1225 rows × 2 columns</p>
+</div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -576,31 +614,11 @@ Trying to import in ABI mode.
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[12]</span><span class="ansi-green-fg">, line 7</span>
-<span class="ansi-green-fg">      3</span>     figsize=(<span class="ansi-green-fg">8</span>, <span class="ansi-green-fg">4</span>),
-<span class="ansi-green-fg">      4</span>     sharex=<span class="ansi-bold" style="color: rgb(0,135,0)">True</span>,
-<span class="ansi-green-fg">      5</span>     height_ratios=[<span class="ansi-green-fg">2</span>, <span class="ansi-green-fg">1</span>],
-<span class="ansi-green-fg">      6</span> )
-<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">7</span> sgi.plot(ax=ax[<span class="ansi-yellow-fg">&#34;SGI&#34;</span>], grid=<span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, linestyle=<span class="ansi-yellow-fg">&#34;-&#34;</span>, label=<span class="ansi-yellow-fg">&#34;SGI&#34;</span>)
-<span class="ansi-green-fg">      8</span> sgi_pastas.plot(ax=ax[<span class="ansi-yellow-fg">&#34;SGI&#34;</span>], color=<span class="ansi-yellow-fg">&#34;C1&#34;</span>, grid=<span class="ansi-bold" style="color: rgb(0,135,0)">True</span>, linestyle=<span class="ansi-yellow-fg">&#34;--&#34;</span>, label=<span class="ansi-yellow-fg">&#34;pastas&#34;</span>)
-<span class="ansi-green-fg">      9</span> (ax[<span class="ansi-yellow-fg">&#34;SGI&#34;</span>].set_ylim(-<span class="ansi-green-fg">3.5</span>, <span class="ansi-green-fg">3.5</span>),)
-<span class="ansi-green-fg">     10</span> (ax[<span class="ansi-yellow-fg">&#34;SGI&#34;</span>].set_title(<span class="ansi-yellow-fg">&#34;Comparison&#34;</span>),)
-
-<span class="ansi-red-fg">NameError</span>: name &#39;sgi&#39; is not defined
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_example04_package_comparison_20_1.png" src="../_images/examples_example04_package_comparison_20_1.png" />
+<img alt="../_images/examples_example04_package_comparison_20_0.png" src="../_images/examples_example04_package_comparison_20_0.png" />
 </div>
 </div>
 </section>
